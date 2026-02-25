@@ -558,6 +558,147 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
 .fade-in{animation:fadeUp 0.35s cubic-bezier(0.4,0,0.2,1) both}
 #app-layer{display:none;position:fixed;inset:0;z-index:500;background:#0E0D0B}
 #app-layer.visible{display:flex}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE  (max-width: 768px)
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── LANDING NAV ── */
+  nav { padding: 16px 20px; }
+  .n-links { display: none; }
+  .n-cta { padding: 10px 18px; font-size: 12px; }
+
+  /* ── HERO ── */
+  #hero { padding: 100px 24px 60px; min-height: 100svh; }
+  .hero-h1 { font-size: clamp(64px, 18vw, 88px); }
+  .hero-lower { grid-template-columns: 1fr; gap: 32px; margin-top: 28px; }
+  .hero-actions { align-items: flex-start; }
+  .hero-btn-row { flex-direction: column; gap: 10px; width: 100%; }
+  .hero-btn, .hero-btn-ghost { width: 100%; text-align: center; justify-content: center; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+  .hero-copy { font-size: 15px; }
+
+  /* ── SECTIONS ── */
+  .s { padding: 64px 24px; }
+  .divider { margin: 0 24px; }
+
+  /* ── WHAT IS SHRUG ── */
+  .what-grid { grid-template-columns: 1fr; gap: 40px; }
+
+  /* ── HOW IT WORKS ── */
+  .steps { grid-template-columns: 1fr; }
+  .step { border-right: none !important; border-bottom: 1px solid var(--bd); }
+  .step:last-child { border-bottom: none; }
+
+  /* ── HOBBY SCROLL ── */
+  .hobby-scroll-outer { margin: 32px -24px 0; padding: 0 24px; }
+  .hsc { width: 150px; padding: 18px 16px 40px; }
+
+  /* ── QUIZ PREVIEW ── */
+  .quiz-preview-grid { grid-template-columns: 1fr; gap: 40px; margin-top: 40px; }
+  .profile-type-grid { grid-template-columns: 1fr 1fr; }
+
+  /* ── CHAPTER MOCKUP ── */
+  .chapter-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+
+  /* ── PROFILES ── */
+  .profiles-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── CTA ── */
+  #cta { padding: 80px 24px; min-height: auto; }
+  .cta-h2 { font-size: clamp(52px, 14vw, 80px); }
+  .cta-main-btn { padding: 18px 36px; font-size: 15px; width: 100%; }
+
+  /* ── QUIZ MODAL ── */
+  .qbox { padding: 28px 20px; margin: 12px; border-radius: 20px; }
+  .rbox { padding: 24px 20px; margin: 12px; border-radius: 20px; max-height: 90vh; overflow-y: auto; }
+  .rbhr { padding: 10px 12px; }
+
+  /* ── SIGNUP FORM ── */
+  .form-row { grid-template-columns: 1fr !important; }
+
+  /* ── APP LAYER ── */
+  #app-layer { flex-direction: column; }
+
+  /* ── SIDEBAR → BOTTOM NAV ON MOBILE ── */
+  .sidebar {
+    position: fixed;
+    top: auto !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    height: 64px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 8px !important;
+    border-right: none !important;
+    border-top: 1px solid var(--border);
+    z-index: 600;
+    overflow: hidden;
+  }
+  .sb-logo { display: none; }
+  .sb-user-block { display: none; }
+  .sb-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+  .sb-item {
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 9px;
+    padding: 8px 4px;
+    border-radius: 10px;
+    min-width: 0;
+  }
+  .sb-item svg { width: 18px; height: 18px; }
+  .sb-divider { display: none; }
+  .sb-footer { display: none; }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: 0 !important;
+    padding-bottom: 80px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  /* ── HOME VIEW ── */
+  .home-layout { grid-template-columns: 1fr; gap: 16px; }
+  .home-right { display: none; }
+  #webHomeGreet div:last-child { font-size: 36px !important; }
+  .home-week { padding: 24px 20px 64px; }
+  .home-pills { gap: 8px; }
+  .home-pill { min-width: 100px; }
+
+  /* ── EXPLORE VIEW ── */
+  .hobby-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hobby-card { padding: 18px 16px 48px; min-height: 130px; }
+
+  /* ── PANEL (hobby deep dive) ── */
+  .panel { width: 100% !important; top: 0; }
+  .panel-hero { padding: 24px 20px 20px; }
+  .panel-tabs { padding: 0 20px; }
+  .panel-scroll { padding: 20px; }
+
+  /* ── SECTION HEADERS ── */
+  .s-h2 { font-size: clamp(40px, 10vw, 64px); }
+}
+
+/* ── SMALL PHONES ── */
+@media (max-width: 400px) {
+  #hero { padding: 90px 18px 50px; }
+  .s { padding: 48px 18px; }
+  .profiles-grid { grid-template-columns: 1fr; }
+  .hobby-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
