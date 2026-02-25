@@ -345,7 +345,7 @@ footer{border-top:1px solid var(--bd);padding:36px 80px;display:flex;justify-con
 .sb-foot{padding:0 20px;font-size:10px;color:rgba(255,255,255,0.15);letter-spacing:1.5px;line-height:1.8}
 
 /* ── MAIN ── */
-.main{margin-left:var(--sidebar);min-height:100vh}
+.main{margin-left:var(--sidebar);height:100vh;overflow-y:auto;overflow-x:hidden}
 .view{display:none}.view.active{display:block}
 
 /* ── SECTION ── */
@@ -368,7 +368,7 @@ footer{border-top:1px solid var(--bd);padding:36px 80px;display:flex;justify-con
 .btn-outline-full:hover{border-color:rgba(255,255,255,0.25);color:var(--off)}
 
 /* ── HOBBY GRID ── */
-.hobby-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.hobby-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding-bottom:40px}
 .hobby-card{border-radius:18px;padding:24px 24px 56px;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;min-height:150px}
 .hobby-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(0,0,0,0.45)}
 .hc-icon{font-size:28px;margin-bottom:12px;display:block}
@@ -556,7 +556,7 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
 .fade-in{animation:fadeUp 0.35s cubic-bezier(0.4,0,0.2,1) both}
-#app-layer{display:none;position:fixed;inset:0;z-index:50;background:#0E0D0B}
+#app-layer{display:none;position:fixed;inset:0;z-index:500;background:#0E0D0B}
 #app-layer.visible{display:flex}
 </style>
 </head>
@@ -2734,8 +2734,10 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
 <!-- HOME -->
 <div class="view active" id="view-home">
   <div class="section">
-    <div style="font-size:11px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Good morning,</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;margin-bottom:28px">ALEX 👋</div>
+    <div id="webHomeGreet">
+      <div style="font-size:11px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Good morning,</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;margin-bottom:28px">— 👋</div>
+    </div>
     <div class="home-layout">
       <div>
         <div class="sec-lbl">This week</div>
