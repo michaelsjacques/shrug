@@ -252,6 +252,78 @@ footer{border-top:1px solid var(--bd);padding:36px 80px;display:flex;justify-con
 .rbox-btn-ghost{flex:1;background:rgba(255,255,255,.05);color:rgba(255,255,255,.45);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s}
 .rbox-btn-ghost:hover{color:var(--off);border-color:rgba(255,255,255,.25)}
 
+/* ── SIGNUP FLOW ── */
+.rbox-step{display:none}.rbox-step.active{display:block}
+/* step indicator */
+.rbox-steps-indicator{display:flex;align-items:center;gap:8px;margin-bottom:32px}
+.rsi-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .3s}
+.rsi-dot.active{background:var(--off);width:24px;border-radius:4px}
+.rsi-dot.done{background:rgba(255,255,255,.35)}
+/* result step */
+.rbox-profile-banner{border-radius:16px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden;display:flex;align-items:center;gap:16px}
+.rbox-profile-banner::before{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08)}
+.rpb-emoji{font-size:40px;flex-shrink:0}
+.rpb-type{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1;margin-bottom:4px}
+.rpb-sub{font-size:12px;font-weight:600;opacity:.6}
+.rbox-desc-text{font-size:14px;color:rgba(255,255,255,.5);line-height:1.72;margin-bottom:22px}
+.rbox-desc-text strong{color:var(--off)}
+.rbox-matched-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:12px}
+.rbox-hobby-row{display:flex;gap:8px;margin-bottom:20px}
+.rbhr{flex:1;border-radius:13px;padding:14px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;cursor:default}
+.rbhr-icon{font-size:22px}
+.rbhr-name{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;line-height:1;color:var(--ink)}
+.rbhr-tag{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(0,0,0,.4)}
+/* signup step */
+.signup-hero{text-align:center;margin-bottom:28px}
+.signup-icon{font-size:48px;margin-bottom:12px;display:block}
+.signup-h{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:1px;line-height:1;margin-bottom:8px}
+.signup-sub{font-size:14px;color:rgba(255,255,255,.42);line-height:1.6}
+.signup-week-preview{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:14px;padding:16px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.swp-label{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:6px}
+.swp-hobbies{display:flex;gap:6px;flex-wrap:wrap}
+.swp-tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:7px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px;display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:11px;padding:13px 15px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--off);outline:none;transition:border-color .2s}
+.form-input::placeholder{color:rgba(255,255,255,.2)}
+.form-input:focus{border-color:rgba(255,255,255,.35)}
+.form-input.error{border-color:var(--coral)}
+.form-error{font-size:11px;color:var(--coral);margin-top:4px;display:none}
+.form-error.show{display:block}
+.form-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:rgba(255,255,255,.2);font-size:12px;font-weight:600}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+.form-terms{font-size:11px;color:rgba(255,255,255,.25);line-height:1.6;margin-top:12px;text-align:center}
+.form-terms a{color:rgba(255,255,255,.4);text-decoration:underline;cursor:pointer}
+.signup-submit-btn{width:100%;background:var(--off);color:var(--ink);border:none;border-radius:12px;padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px}
+.signup-submit-btn:hover{background:#fff;transform:translateY(-1px)}
+.signup-submit-btn.loading{opacity:.6;pointer-events:none}
+.signup-submit-btn .btn-spinner{width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;display:none}
+.signup-submit-btn.loading .btn-spinner{display:block}
+.signup-submit-btn.loading .btn-text{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* welcome step */
+.welcome-confetti{text-align:center;font-size:48px;margin-bottom:4px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0) rotate(-10deg);opacity:0}}
+.welcome-h{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:1px;line-height:1;text-align:center;margin-bottom:8px}
+.welcome-sub{font-size:14px;color:rgba(255,255,255,.42);text-align:center;line-height:1.65;margin-bottom:28px}
+.welcome-week-card{background:var(--off);border-radius:18px;padding:24px;margin-bottom:16px;color:var(--ink);position:relative;overflow:hidden}
+.wwc::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(0,0,0,.05)}
+.wwc-eyebrow{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(0,0,0,.35);margin-bottom:8px}
+.wwc-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1;color:var(--ink);margin-bottom:4px}
+.wwc-concept{font-size:13px;color:rgba(0,0,0,.45);font-weight:600;margin-bottom:18px}
+.wwc-dots{display:flex;gap:5px;margin-bottom:18px}
+.wwc-dot{width:7px;height:7px;border-radius:3.5px;background:rgba(0,0,0,.1)}
+.wwc-dot.filled{width:18px;background:var(--ink)}
+.wwc-btn{background:var(--ink);color:var(--off);border:none;border-radius:10px;padding:12px 22px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s}
+.wwc-btn:hover{background:#222}
+.welcome-email-confirm{background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:12px;padding:14px 18px;font-size:13px;color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start}
+.wec-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.welcome-launch-btn{width:100%;background:var(--off);color:var(--ink);border:none;border-radius:12px;padding:17px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s}
+.welcome-launch-btn:hover{background:#fff;transform:translateY(-1px)}
+.welcome-skip{width:100%;background:none;border:none;padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,.28);cursor:pointer;transition:color .2s;margin-top:4px}
+.welcome-skip:hover{color:rgba(255,255,255,.55)}
+
 /* SCROLL REVEAL */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
@@ -567,9 +639,11 @@ footer{border-top:1px solid var(--bd);padding:36px 80px;display:flex;justify-con
   </div>
 </div>
 
-<!-- RESULT MODAL -->
+<!-- RESULT + SIGNUP MODAL -->
 <div class="modal-bg" id="resultModal">
-  <div class="rbox" id="resultBox"></div>
+  <div class="rbox" id="resultBox">
+    <!-- Step 1: result, Step 2: signup, Step 3: welcome — rendered by JS -->
+  </div>
 </div>
 
 <script>
@@ -1024,45 +1098,227 @@ function quizNext() {
   }
 }
 
-// ── RESULT ───────────────────────────────────────────────────
+// ── RESULT + SIGNUP FLOW ─────────────────────────────────────
+let resultProfile = null; // stores { key, p, col } after quiz
+
 function showResult() {
-  // tally votes
   const counts = {};
   answers.forEach(a => counts[a] = (counts[a] || 0) + 1);
   const topKey = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'creative';
   const p = PROFILES_DATA[topKey] || PROFILES_DATA.creative;
   const col = PROFILE_COLORS[topKey] || { bg: '#F0C93A', text: '#0E0D0B' };
-
-  const hobbiesHTML = p.hobbies.map(h => {
-    const hd = HOBBIES[h];
-    return `<div class="rbox-hc" style="background:${hd.color}" onclick="closeResult()">
-      <div class="rbox-hc-icon">${hd.icon}</div>
-      <div style="flex:1">
-        <div class="rbox-hc-name">${h.toUpperCase()}</div>
-        <div class="rbox-hc-sub" style="color:rgba(0,0,0,.4)">${hd.tagline}</div>
-      </div>
-      <div class="rbox-hc-arr">›</div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('resultBox').innerHTML = `
-    <button class="qbox-x" onclick="closeResult()" style="position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.06);border:none;color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:sans-serif">✕</button>
-    <div class="rbox-eyebrow">Your curiosity type</div>
-    <div class="rbox-type" style="color:${col.text === 'white' ? 'var(--off)' : col.bg}">${p.type.replace('\n', '<br>')}</div>
-    <span class="rbox-emoji">${p.emoji}</span>
-    <div class="rbox-desc">${p.desc}</div>
-    <div class="rbox-hl">Your matched hobbies</div>
-    <div class="rbox-hobbies">${hobbiesHTML}</div>
-    <div class="rbox-btns">
-      <button class="rbox-btn-main" onclick="closeResult();scrollToSection('hobbies')">Explore All Hobbies →</button>
-      <button class="rbox-btn-ghost" onclick="closeResult();openQuiz()">Retake Quiz</button>
-    </div>`;
-
+  resultProfile = { key: topKey, p, col };
+  renderResultStep();
   document.getElementById('resultModal').classList.add('open');
 }
 
 function closeResult() {
   document.getElementById('resultModal').classList.remove('open');
+}
+
+function stepIndicator(current) {
+  return `<div class="rbox-steps-indicator">
+    ${[0,1,2].map(i => `<div class="rsi-dot ${i < current ? 'done' : i === current ? 'active' : ''}"></div>`).join('')}
+  </div>`;
+}
+
+// ── STEP 1: RESULT ────────────────────────────────────────────
+function renderResultStep() {
+  const { key, p, col } = resultProfile;
+  const textOnBg = col.text === 'white' ? 'white' : '#0E0D0B';
+
+  const hobbiesHTML = p.hobbies.map(h => {
+    const hd = HOBBIES[h];
+    return `<div class="rbhr" style="background:${hd.color}">
+      <span class="rbhr-icon">${hd.icon}</span>
+      <div class="rbhr-name">${h.toUpperCase()}</div>
+      <div class="rbhr-tag" style="color:rgba(0,0,0,.4)">${hd.tagline}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('resultBox').innerHTML = `
+    <button class="qbox-x" onclick="closeResult()">✕</button>
+    ${stepIndicator(0)}
+    <div class="rbox-profile-banner" style="background:${col.bg};color:${textOnBg}">
+      <span class="rpb-emoji">${p.emoji}</span>
+      <div>
+        <div class="rpb-type">${p.type.replace('\n', ' ')}</div>
+        <div class="rpb-sub">Your curiosity type</div>
+      </div>
+    </div>
+    <div class="rbox-desc-text">${p.desc}</div>
+    <div class="rbox-matched-label">Your matched hobbies</div>
+    <div class="rbox-hobby-row">${hobbiesHTML}</div>
+    <button class="signup-submit-btn" onclick="renderSignupStep()">
+      <span class="btn-text">Create My Account →</span>
+    </button>
+    <div style="text-align:center;margin-top:10px">
+      <button style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;padding:6px" onclick="closeResult();openQuiz()">Retake the quiz</button>
+    </div>`;
+}
+
+// ── STEP 2: SIGNUP ────────────────────────────────────────────
+function renderSignupStep() {
+  const { key, p, col } = resultProfile;
+  const firstHobby = p.hobbies[0];
+  const hd = HOBBIES[firstHobby];
+  const weekTagsHTML = p.hobbies.map(h => {
+    const hob = HOBBIES[h];
+    // For light-colored hobby cards, use a readable dark text on pastel background
+    const lightColors = ['#F0C93A','#B8D96E','#ACD8F0','#F4A261','#D4956A','#84CC16','#F59E0B','#F472B6','#A78BFA'];
+    const isLight = lightColors.includes(hob.color);
+    const tagBg = hob.color + '25';
+    const tagColor = isLight ? 'rgba(255,255,255,0.75)' : hob.color;
+    return `<span class="swp-tag" style="background:${tagBg};color:${tagColor}">${hob.icon} ${h}</span>`;
+  }).join('');
+
+  document.getElementById('resultBox').innerHTML = `
+    <button class="qbox-x" onclick="closeResult()">✕</button>
+    ${stepIndicator(1)}
+    <div class="signup-hero">
+      <span class="signup-icon">${p.emoji}</span>
+      <div class="signup-h">YOU'RE A<br>${p.type.replace('\n', ' ')}</div>
+      <div class="signup-sub">Create your free account to save your profile, track your progress, and start your first week.</div>
+    </div>
+    <div class="signup-week-preview">
+      <div style="flex:1">
+        <div class="swp-label">Your Week 1 lineup</div>
+        <div class="swp-hobbies">${weekTagsHTML}</div>
+      </div>
+      <div style="font-size:24px">📅</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input class="form-input" id="inp-first" type="text" placeholder="Alex" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input class="form-input" id="inp-last" type="text" placeholder="Chen" autocomplete="family-name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" id="inp-email" type="email" placeholder="you@example.com" autocomplete="email">
+      <div class="form-error" id="err-email">Please enter a valid email address.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="inp-pass" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+      <div class="form-error" id="err-pass">Password must be at least 8 characters.</div>
+    </div>
+    <button class="signup-submit-btn" id="signupBtn" onclick="submitSignup()">
+      <div class="btn-spinner"></div>
+      <span class="btn-text">Start My SHRUG Journey →</span>
+    </button>
+    <div class="form-terms">By creating an account you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a>. No spam, ever.</div>
+    <div style="text-align:center;margin-top:10px">
+      <button style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;padding:6px" onclick="renderResultStep()">← Back to your results</button>
+    </div>`;
+
+  // Autofocus first name
+  setTimeout(() => document.getElementById('inp-first')?.focus(), 100);
+}
+
+// ── SUBMIT SIGNUP ─────────────────────────────────────────────
+function submitSignup() {
+  const first = document.getElementById('inp-first')?.value.trim() || '';
+  const last  = document.getElementById('inp-last')?.value.trim() || '';
+  const email = document.getElementById('inp-email')?.value.trim() || '';
+  const pass  = document.getElementById('inp-pass')?.value || '';
+
+  let valid = true;
+
+  // Email validation
+  const emailEl = document.getElementById('inp-email');
+  const emailErr = document.getElementById('err-email');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    emailEl?.classList.add('error');
+    emailErr?.classList.add('show');
+    valid = false;
+  } else {
+    emailEl?.classList.remove('error');
+    emailErr?.classList.remove('show');
+  }
+
+  // Password validation
+  const passEl = document.getElementById('inp-pass');
+  const passErr = document.getElementById('err-pass');
+  if (pass.length < 8) {
+    passEl?.classList.add('error');
+    passErr?.classList.add('show');
+    valid = false;
+  } else {
+    passEl?.classList.remove('error');
+    passErr?.classList.remove('show');
+  }
+
+  if (!valid) return;
+
+  // Simulate loading
+  const btn = document.getElementById('signupBtn');
+  btn?.classList.add('loading');
+
+  // Store to localStorage (simulated backend)
+  const userData = {
+    name: first || 'Explorer',
+    email,
+    profile: resultProfile?.key || 'creative',
+    signedUpAt: new Date().toISOString(),
+    hobbies: resultProfile?.p?.hobbies || [],
+  };
+  try { localStorage.setItem('shrug_user', JSON.stringify(userData)); } catch(e) {}
+
+  // Simulate async signup (1.2s)
+  setTimeout(() => {
+    renderWelcomeStep(first || 'Explorer', email);
+  }, 1200);
+}
+
+// ── STEP 3: WELCOME ───────────────────────────────────────────
+function renderWelcomeStep(name, email) {
+  const { key, p, col } = resultProfile;
+  const firstHobby = p.hobbies[0];
+  const hd = HOBBIES[firstHobby];
+
+  document.getElementById('resultBox').innerHTML = `
+    ${stepIndicator(2)}
+    <div class="welcome-confetti">🎉</div>
+    <div class="welcome-h">YOU'RE IN,<br>${name.toUpperCase()}.</div>
+    <div class="welcome-sub">Your account is ready. Your first week is queued. The only thing left to do is start.</div>
+    <div class="welcome-week-card wwc" style="background:${hd.color}">
+      <div class="wwc-eyebrow" style="color:${hd.textColor === 'white' ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.4)'}">📅 Week 1 — Starting now</div>
+      <div class="wwc-title" style="color:${hd.textColor}">${firstHobby.toUpperCase()}</div>
+      <div class="wwc-concept" style="color:${hd.textColor === 'white' ? 'rgba(255,255,255,.6)' : 'rgba(0,0,0,.5)'}">Chapter 01 · ${hd.project.ccTitle}</div>
+      <div class="wwc-dots" style="margin-bottom:18px">
+        <div class="wwc-dot" style="width:18px;background:${hd.textColor === 'white' ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.4)'}"></div>
+        <div class="wwc-dot" style="background:${hd.textColor === 'white' ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.12)'}"></div>
+        <div class="wwc-dot" style="background:${hd.textColor === 'white' ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.12)'}"></div>
+        <div class="wwc-dot" style="background:${hd.textColor === 'white' ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.12)'}"></div>
+      </div>
+    </div>
+    <div class="welcome-email-confirm">
+      <span class="wec-icon">📬</span>
+      <span>We sent a welcome note to <strong style="color:var(--off)">${email}</strong>. Your profile, matched hobbies, and first challenge are waiting inside.</span>
+    </div>
+    <button class="welcome-launch-btn" onclick="launchApp()">Launch SHRUG →</button>
+    <button class="welcome-skip" onclick="closeResult()">Maybe later</button>`;
+}
+
+function launchApp() {
+  closeResult();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast('Account created! The full app is coming soon. 🚀');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--off);color:var(--ink);padding:14px 24px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;z-index:9999;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 12px 32px rgba(0,0,0,.4)`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; }, 50);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)'; setTimeout(() => t.remove(), 400); }, 4000);
 }
 
 // close modals on overlay click
