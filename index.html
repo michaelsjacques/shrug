@@ -699,6 +699,263 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
   .hobby-grid { grid-template-columns: 1fr; }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   HOBBY PAGE — full-screen view replacing the side panel
+   ═══════════════════════════════════════════════════════════════ */
+#hobby-page {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: #0E0D0B;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#hobby-page.open { display: block; }
+
+/* ── Hero ── */
+.hp-hero {
+  min-height: 52vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 48px 44px;
+  position: relative;
+  overflow: hidden;
+}
+.hp-hero-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 30% 40%, rgba(255,255,255,0.06), transparent);
+  pointer-events: none;
+}
+.hp-back {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  background: rgba(0,0,0,0.25);
+  border: none;
+  color: inherit;
+  border-radius: 50px;
+  padding: 9px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .2s;
+  backdrop-filter: blur(8px);
+}
+.hp-back:hover { background: rgba(0,0,0,0.4); }
+.hp-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
+.hp-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 8vw, 110px);
+  letter-spacing: 2px;
+  line-height: 0.9;
+  margin-bottom: 14px;
+}
+.hp-tagline {
+  font-size: 16px;
+  opacity: 0.65;
+  font-weight: 500;
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+/* ── Body ── */
+.hp-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 48px 80px;
+}
+
+/* ── Section ── */
+.hp-section {
+  margin-bottom: 52px;
+}
+.hp-section-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hp-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+
+/* ── Overview text ── */
+.hp-overview {
+  font-size: 17px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.8;
+}
+
+/* ── Free tools ── */
+.hp-free-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.hp-free-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px 18px;
+  transition: border-color .2s, background .2s;
+}
+.hp-free-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.16);
+}
+.hp-free-icon { font-size: 26px; margin-bottom: 10px; display: block; }
+.hp-free-name { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.9); margin-bottom: 5px; }
+.hp-free-note { font-size: 11px; color: rgba(255,255,255,0.38); line-height: 1.5; }
+.hp-free-badge {
+  display: inline-block;
+  background: rgba(184,217,110,0.15);
+  color: #B8D96E;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 50px;
+  margin-top: 8px;
+}
+
+/* ── Budget tools ── */
+.hp-budget-list { display: flex; flex-direction: column; gap: 10px; }
+.hp-budget-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 16px 18px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+  cursor: pointer;
+}
+.hp-budget-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+}
+.hp-budget-price {
+  background: rgba(240,201,58,0.12);
+  color: #F0C93A;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.hp-budget-info { flex: 1; min-width: 0; }
+.hp-budget-name { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.85); margin-bottom: 2px; }
+.hp-budget-note { font-size: 11px; color: rgba(255,255,255,0.35); }
+.hp-budget-arr {
+  color: rgba(255,255,255,0.2);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Pro tip ── */
+.hp-tip {
+  background: rgba(240,201,58,0.06);
+  border: 1px solid rgba(240,201,58,0.2);
+  border-left: 3px solid #F0C93A;
+  border-radius: 0 14px 14px 0;
+  padding: 18px 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.65;
+  font-style: italic;
+}
+
+/* ── Chapter card ── */
+.hp-chapter-card {
+  border-radius: 20px;
+  padding: 28px 28px 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.hp-chapter-card:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.hp-chapter-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 8px;
+}
+.hp-chapter-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.hp-chapter-desc {
+  font-size: 13px;
+  opacity: 0.6;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.hp-chapter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,0,0,0.25);
+  border: none;
+  color: inherit;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 11px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background .2s;
+}
+.hp-chapter-btn:hover { background: rgba(0,0,0,0.4); }
+
+/* ── Stats mini ── */
+.hp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.hp-stat { background: rgba(255,255,255,0.04); border-radius: 14px; padding: 18px; text-align: center; }
+.hp-stat-n { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; margin-bottom: 4px; }
+.hp-stat-l { font-size: 10px; color: rgba(255,255,255,0.38); font-weight: 600; line-height: 1.4; }
+
+@media (max-width: 768px) {
+  .hp-hero { padding: 80px 20px 36px; min-height: 44vh; }
+  .hp-title { font-size: clamp(52px, 14vw, 80px); }
+  .hp-body { padding: 32px 20px 100px; }
+  .hp-free-grid { grid-template-columns: 1fr; gap: 10px; }
+  .hp-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .hp-stat-n { font-size: 26px; }
+}
+
 </style>
 </head>
 <body>
@@ -1380,6 +1637,9 @@ const HOBBIES = {
 
 const HOBBY_ORDER = ['photography','painting','writing','cooking','baking','yoga','ceramics','gardening','birdwatching','reading','piano','collage','drawing','fitness','dancing','knitting','journaling','woodworking','film','language'];
 
+const HOBBY_TOOLS = {"photography": {"free": [{"name": "Smartphone Camera", "note": "You already have one. iPhone/Android cameras are excellent.", "icon": "📱"}, {"name": "Snapseed", "note": "Free editing app by Google. Professional results.", "icon": "✨"}, {"name": "Unsplash / Pexels", "note": "Free reference photos to study composition.", "icon": "🖼️"}], "budget": [{"name": "Camera strap", "price": "~$10", "search": "camera+strap", "note": "Keeps your phone/camera ready"}, {"name": "Mini tripod", "price": "~$12", "search": "mini+tripod+phone", "note": "For stable shots & self-portraits"}, {"name": "Clip-on lens kit", "price": "~$15", "search": "clip+on+phone+lens+kit", "note": "Wide angle, macro, fisheye for your phone"}], "tip": "The best camera is the one you have. A $1000 camera won't make you a better photographer — learning will."}, "painting": {"free": [{"name": "Autodesk Sketchbook", "note": "Free digital painting app — professional grade.", "icon": "🎨"}, {"name": "YouTube — Proko / Ctrl+Paint", "note": "Best free painting tutorials on the internet.", "icon": "▶️"}, {"name": "Procreate Pocket (iPhone)", "note": "$5 one-time, best mobile painting app.", "icon": "📱"}], "budget": [{"name": "Acrylic paint starter set", "price": "~$12", "search": "acrylic+paint+set+beginner", "note": "12 colors to start"}, {"name": "Canvas boards (10 pack)", "price": "~$14", "search": "canvas+board+pack+acrylic", "note": "Cheap to practice on"}, {"name": "Brush set", "price": "~$8", "search": "acrylic+paint+brush+set", "note": "5-10 brushes covers everything"}], "tip": "Start with acrylics — they dry fast, clean up with water, and are the most forgiving for beginners."}, "writing": {"free": [{"name": "Google Docs", "note": "Free, cloud-synced, distraction-free writing.", "icon": "📝"}, {"name": "Hemingway App", "note": "Free web tool that improves readability instantly.", "icon": "✍️"}, {"name": "r/writing community", "note": "Free prompts, feedback and encouragement.", "icon": "💬"}], "budget": [{"name": "Dotted notebook", "price": "~$8", "search": "dotted+notebook+writing", "note": "Great for freewriting sessions"}, {"name": "Pilot G2 pens (12 pack)", "price": "~$10", "search": "pilot+g2+pens+pack", "note": "The gold standard of pens"}, {"name": "Scrivener", "price": "~$49 one-time", "search": "scrivener+writing+software", "note": "Best long-form writing software"}], "tip": "All you need to start is Google Docs and 30 minutes. Write 500 words a day for 30 days."}, "cooking": {"free": [{"name": "YouTube — Joshua Weissman", "note": "Best free cooking channel for beginners.", "icon": "▶️"}, {"name": "NYT Cooking (free recipes)", "note": "Hundreds of free recipes with technique guides.", "icon": "🍴"}, {"name": "Yummly / AllRecipes app", "note": "Free apps with step-by-step instructions.", "icon": "📱"}], "budget": [{"name": "Chef's knife (8\")", "price": "~$25", "search": "chef+knife+8+inch+beginner", "note": "One good knife beats a full block"}, {"name": "Cast iron skillet (10\")", "price": "~$20", "search": "cast+iron+skillet+lodge", "note": "Lasts forever, great for everything"}, {"name": "Cutting board", "price": "~$12", "search": "wood+cutting+board", "note": "Wood is gentler on knives"}], "tip": "Master 5 dishes before buying any equipment. Skill over tools, always."}, "baking": {"free": [{"name": "YouTube — Binging with Babish", "note": "Beautiful, clear baking tutorials.", "icon": "▶️"}, {"name": "King Arthur Flour website", "note": "Free recipes with obsessive detail.", "icon": "🌾"}, {"name": "Sally's Baking Addiction blog", "note": "Free blog with foolproof instructions.", "icon": "📖"}], "budget": [{"name": "Digital kitchen scale", "price": "~$11", "search": "digital+kitchen+scale+baking", "note": "Weight beats volume for accuracy"}, {"name": "Hand mixer", "price": "~$20", "search": "hand+mixer+baking+beginner", "note": "Good enough for 95% of baking"}, {"name": "Half sheet pans (2 pack)", "price": "~$18", "search": "half+sheet+baking+pan", "note": "The most useful pan you will own"}], "tip": "Baking is chemistry. A $11 kitchen scale will improve your results more than any other single purchase."}, "yoga": {"free": [{"name": "YouTube — Yoga with Adriene", "note": "30M+ subscribers. Best free yoga channel.", "icon": "▶️"}, {"name": "Down Dog App", "note": "Free for students and teachers. Generates new flows daily.", "icon": "📱"}, {"name": "Glo (free trial)", "note": "Studio-quality classes free for 7 days.", "icon": "✨"}], "budget": [{"name": "Yoga mat (6mm)", "price": "~$20", "search": "yoga+mat+6mm+non+slip", "note": "Do not go thinner than 4mm"}, {"name": "Yoga blocks (2 pack)", "price": "~$12", "search": "yoga+blocks+2+pack", "note": "Essential for alignment"}, {"name": "Yoga strap", "price": "~$8", "search": "yoga+strap+stretch", "note": "Extends your reach in poses"}], "tip": "YouTube + a $20 mat is all you need for a year. Don't buy anything else until you're practicing 3x/week."}, "ceramics": {"free": [{"name": "YouTube — Simon Leach Pottery", "note": "One of the best free pottery channels online.", "icon": "▶️"}, {"name": "Community pottery studios", "note": "Many offer drop-in sessions with clay included.", "icon": "🏺"}, {"name": "Air-dry clay (start here)", "note": "No kiln needed. Great way to feel the medium.", "icon": "🤲"}], "budget": [{"name": "Air-dry clay (5 lbs)", "price": "~$14", "search": "air+dry+clay+modeling", "note": "Start before renting a wheel"}, {"name": "Clay tool set", "price": "~$12", "search": "clay+sculpting+tool+set", "note": "Wire, ribbon, loop tools included"}, {"name": "Community class (4 weeks)", "price": "~$80", "search": "ceramics+class+near+me", "note": "Cheapest way to access a real wheel"}], "tip": "Book one community class first. You will know within 2 hours if you want to invest in equipment."}, "gardening": {"free": [{"name": "r/gardening community", "note": "Massive free community. Ask any question.", "icon": "💬"}, {"name": "Old Farmer's Almanac website", "note": "Free planting calendars by zip code.", "icon": "📅"}, {"name": "YouTube — Epic Gardening", "note": "Best free gardening channel on YouTube.", "icon": "▶️"}], "budget": [{"name": "Seed starter kit", "price": "~$15", "search": "seed+starter+kit+garden", "note": "Everything to sprout indoors"}, {"name": "Basic tool set (3pc)", "price": "~$16", "search": "garden+tool+set+beginner", "note": "Trowel, cultivator, transplanter"}, {"name": "Grow bags (5 pack)", "price": "~$14", "search": "fabric+grow+bags+garden", "note": "Perfect for patios or small spaces"}], "tip": "Start with herbs on a windowsill. Basil, mint, chives. They grow fast and reward you within weeks."}, "birdwatching": {"free": [{"name": "Merlin Bird ID (Cornell Lab)", "note": "100% free. Identifies birds by sound in real time.", "icon": "🐦"}, {"name": "eBird app", "note": "Free app to log sightings and find hotspots near you.", "icon": "📍"}, {"name": "Audubon Society website", "note": "Free guides, maps, and beginner resources.", "icon": "📖"}], "budget": [{"name": "Binoculars 8x42", "price": "~$35", "search": "binoculars+8x42+birdwatching", "note": "8x42 is the perfect birding spec"}, {"name": "Sibley's Field Guide", "price": "~$20", "search": "sibley+birds+field+guide", "note": "The definitive North American guide"}, {"name": "Bird feeder + seed", "price": "~$18", "search": "bird+feeder+suet+seed", "note": "Bring birds to you first"}], "tip": "Download Merlin Bird ID right now. It identifies birds by sound. You'll be hooked in 10 minutes."}, "reading": {"free": [{"name": "Libby App", "note": "Free ebooks and audiobooks from your public library.", "icon": "📚"}, {"name": "Project Gutenberg", "note": "50,000+ free public domain books.", "icon": "📖"}, {"name": "StoryGraph", "note": "Free Goodreads alternative with better recommendations.", "icon": "⭐"}], "budget": [{"name": "Kindle Paperwhite", "price": "~$100", "search": "kindle+paperwhite", "note": "Best reading device made. Worth every cent."}, {"name": "Clip-on book light", "price": "~$10", "search": "book+light+clip+reading", "note": "For reading without disturbing others"}, {"name": "Reading journal", "price": "~$12", "search": "reading+journal+book+log", "note": "Track what you read and your thoughts"}], "tip": "Libby + your library card = unlimited free books. You likely already have everything you need."}, "piano": {"free": [{"name": "Simply Piano (free tier)", "note": "Listens as you play. Free basics cover 3 months.", "icon": "🎹"}, {"name": "YouTube — PianoTV (Allysia)", "note": "Best free structured piano lessons for beginners.", "icon": "▶️"}, {"name": "musictheory.net", "note": "Free music theory fundamentals. Essential companion.", "icon": "🎵"}], "budget": [{"name": "61-key keyboard (Casio)", "price": "~$65", "search": "casio+61+key+keyboard+beginner", "note": "Enough keys to start. Avoid 49-key."}, {"name": "Sustain pedal", "price": "~$12", "search": "sustain+pedal+keyboard+piano", "note": "Makes piano sound like piano"}, {"name": "Simply Piano subscription", "price": "~$10/mo", "search": "simply+piano+app", "note": "Best $10/month in music education"}], "tip": "A $65 Casio + Simply Piano app is a better start than expensive lessons. Build the habit first."}, "collage": {"free": [{"name": "Canva (free tier)", "note": "Free digital collage tool with massive asset library.", "icon": "✂️"}, {"name": "Old magazines", "note": "Ask friends, check thrift stores, dentist waiting rooms.", "icon": "📰"}, {"name": "Pinterest", "note": "Free inspiration and reference boards.", "icon": "📌"}], "budget": [{"name": "Mod Podge (8oz)", "price": "~$8", "search": "mod+podge+collage+glue", "note": "Glues and seals collages perfectly"}, {"name": "Craft scissors set", "price": "~$10", "search": "craft+scissors+set+decorative", "note": "Includes pattern-edge scissors"}, {"name": "Mixed media sketchbook", "price": "~$12", "search": "mixed+media+sketchbook+collage", "note": "Heavy enough for glue and paint"}], "tip": "Start with a free Canva account. Make stunning digital collages before spending a cent."}, "drawing": {"free": [{"name": "YouTube — Proko", "note": "Best free figure drawing instruction on the internet.", "icon": "▶️"}, {"name": "Line of Action (website)", "note": "Free timed gesture drawing practice. Use daily.", "icon": "⏱️"}, {"name": "Autodesk Sketchbook", "note": "Free professional digital drawing app.", "icon": "✏️"}], "budget": [{"name": "Strathmore sketch pad", "price": "~$9", "search": "strathmore+sketch+pad", "note": "Best paper for the price"}, {"name": "Mechanical pencil set", "price": "~$10", "search": "mechanical+pencil+set+drawing", "note": "0.3, 0.5, 0.7mm covers everything"}, {"name": "Blending stumps + kneaded eraser", "price": "~$7", "search": "blending+stumps+kneaded+eraser", "note": "Enables smooth shading"}], "tip": "Gesture drawing on line-of-action.com for 20 min/day will improve your drawing faster than anything else."}, "fitness": {"free": [{"name": "YouTube — Athlean-X / Jeff Nippard", "note": "Science-based training. Completely free.", "icon": "▶️"}, {"name": "Nike Training Club app", "note": "Free workouts, no equipment required to start.", "icon": "📱"}, {"name": "StrengthLog app", "note": "Free workout tracker with progressive overload built in.", "icon": "📊"}], "budget": [{"name": "Resistance bands set", "price": "~$20", "search": "resistance+bands+set+workout", "note": "Replace a full gym for home workouts"}, {"name": "Pull-up bar (doorframe)", "price": "~$25", "search": "doorframe+pull+up+bar", "note": "Best ROI in home fitness equipment"}, {"name": "Adjustable dumbbells (pair)", "price": "~$35", "search": "adjustable+dumbbells+home+gym", "note": "5-25lb range handles most exercises"}], "tip": "Bodyweight + YouTube is a full program. Don't join a gym until you're training 4x/week at home."}, "dancing": {"free": [{"name": "YouTube — dance channels", "note": "Search your style: salsa, hip-hop, ballroom, etc.", "icon": "▶️"}, {"name": "TikTok / Instagram Reels", "note": "The best way to learn trending dances. Really.", "icon": "📱"}, {"name": "Community studio trial class", "note": "Most studios offer one free trial class.", "icon": "🏫"}], "budget": [{"name": "Dance shoes (split-sole)", "price": "~$25", "search": "dance+shoes+split+sole+beginner", "note": "The right sole changes everything"}, {"name": "Floor mat for home", "price": "~$18", "search": "dance+floor+mat+home", "note": "Protects your joints on hard floors"}, {"name": "Studio class (4 weeks)", "price": "~$60", "search": "dance+class+beginner+near+me", "note": "Nothing replaces in-person feedback"}], "tip": "Clear a 6x6 space in your home. That's your studio. YouTube + space is all you need for month one."}, "knitting": {"free": [{"name": "YouTube — VeryPink Knits", "note": "Best free beginner knitting instruction. Clear and calm.", "icon": "▶️"}, {"name": "Ravelry.com", "note": "Free pattern library with thousands of beginner projects.", "icon": "🧶"}, {"name": "LionBrand website", "note": "Free patterns and technique videos from yarn brand.", "icon": "📖"}], "budget": [{"name": "Yarn starter kit", "price": "~$15", "search": "yarn+starter+kit+knitting", "note": "Multiple weights and colors"}, {"name": "Bamboo needle set", "price": "~$18", "search": "bamboo+knitting+needle+set", "note": "Sizes 4-15, covers all beginner patterns"}, {"name": "Row counter + stitch markers", "price": "~$8", "search": "row+counter+stitch+markers+knitting", "note": "Never lose your place again"}], "tip": "Your first project should be a dishcloth. Fast, forgiving, and useful. Cast on 20 stitches today."}, "journaling": {"free": [{"name": "Day One app (free tier)", "note": "Best journaling app. Free version is excellent.", "icon": "📓"}, {"name": "Google Docs / Notion", "note": "Free, searchable, and accessible everywhere.", "icon": "☁️"}, {"name": "750words.com", "note": "Free morning pages tool. Simple and effective.", "icon": "✍️"}], "budget": [{"name": "Leuchtturm1917 notebook", "price": "~$22", "search": "leuchtturm1917+notebook+dotted", "note": "The best journaling notebook made"}, {"name": "Pilot G2 pens (12 pack)", "price": "~$12", "search": "pilot+g2+pen+pack", "note": "Smooth, reliable, perfect for journaling"}, {"name": "Washi tape + stickers", "price": "~$10", "search": "washi+tape+journal+decoration", "note": "Makes your journal feel like yours"}], "tip": "Start with 3 sentences a day. Not 3 pages — 3 sentences. Build the habit before buying any supplies."}, "woodworking": {"free": [{"name": "YouTube — Paul Sellers", "note": "Best free hand-tool woodworking instruction online.", "icon": "▶️"}, {"name": "Ana White website", "note": "Free plans for furniture and home projects.", "icon": "📐"}, {"name": "r/woodworking community", "note": "Welcoming community, free advice and inspiration.", "icon": "💬"}], "budget": [{"name": "Beginner chisel set (4pc)", "price": "~$25", "search": "wood+chisel+set+beginner", "note": "Narex brand punches above its price"}, {"name": "Hand saw", "price": "~$20", "search": "hand+saw+woodworking+beginner", "note": "Start here before power tools"}, {"name": "Combination square", "price": "~$15", "search": "combination+square+woodworking", "note": "The most used measuring tool in any shop"}], "tip": "Paul Sellers on YouTube + a $25 chisel set + cheap pine from a hardware store. That's a complete starting kit."}, "film": {"free": [{"name": "DaVinci Resolve", "note": "Free professional video editing. Industry standard.", "icon": "🎬"}, {"name": "YouTube — Film Riot / Corridor Crew", "note": "Best free filmmaking education online.", "icon": "▶️"}, {"name": "Smartphone native camera", "note": "Modern phones shoot 4K. You already have a camera.", "icon": "📱"}], "budget": [{"name": "Rode VideoMicro (mic)", "price": "~$59", "search": "rode+videomicro+microphone", "note": "Audio matters more than video quality"}, {"name": "ND filter kit (phone)", "price": "~$25", "search": "variable+nd+filter+phone+clip", "note": "Controls exposure in bright light"}, {"name": "Flexible mini tripod", "price": "~$18", "search": "flexible+tripod+phone+gorilla", "note": "Mount anywhere, any angle"}], "tip": "Sound beats image quality, always. A $59 microphone will transform your films more than a $1000 camera upgrade."}, "language": {"free": [{"name": "Duolingo", "note": "Free, gamified, great for building the daily habit.", "icon": "🦆"}, {"name": "Anki", "note": "Free spaced repetition flashcards. The most effective memorization tool.", "icon": "🃏"}, {"name": "Language Transfer (audio)", "note": "Free audio course. Extraordinary for Spanish, French, and more.", "icon": "🎧"}], "budget": [{"name": "Pimsleur (1 month)", "price": "~$20", "search": "pimsleur+language+learning", "note": "Best audio-based method for beginners"}, {"name": "Assimil course book", "price": "~$35", "search": "assimil+language+course", "note": "Most effective self-study method"}, {"name": "iTalki lesson (1hr)", "price": "~$15", "search": "italki+language+tutor", "note": "One hour with a tutor = weeks of solo study"}], "tip": "Duolingo + Language Transfer + Anki is a completely free, research-backed language learning system."}};
+
+
 const PROFILES_DATA = {
   creative:{ type:'CALM\nCREATOR', emoji:'🎨', bg:'#F0C93A22', desc:'You feel most alive when you\'re <strong>making, exploring, or noticing things others miss.</strong> You don\'t need a big project — you need small sparks that build meaning over time.', hobbies:['photography','painting','drawing'] },
   active:{ type:'BOLD\nMOVER', emoji:'⚡', bg:'#FF6B6B22', desc:'You\'re energized by <strong>doing, not watching.</strong> You want hobbies that make your body and mind feel alive — things you can feel, not just think about.', hobbies:['fitness','dancing','yoga'] },
@@ -1746,8 +2006,107 @@ function openHobby(key) {
   currentHobby = key;
   activeHobbyKey = key;
   const h = HOBBIES[key];
+  const t = HOBBY_TOOLS[key] || { free:[], budget:[], tip:'' };
+  const p = h.project;
+  const dark = h.textColor === 'white';
 
   // Hero
+  const heroDiv = document.getElementById('hp-hero-div');
+  heroDiv.style.background = h.color;
+  heroDiv.style.color = h.textColor;
+  document.getElementById('hp-eyebrow').textContent = key.toUpperCase() + ' · CHAPTER 01';
+  document.getElementById('hp-title').textContent = key.toUpperCase();
+  document.getElementById('hp-tagline').textContent = h.tagline;
+
+  // Build body
+  const body = document.getElementById('hp-body');
+
+  // Stats
+  const statsHTML = h.stats.map(s =>
+    '<div class="hp-stat">'
+    + '<div class="hp-stat-n" style="color:'+s.color+'">'+s.num+'</div>'
+    + '<div class="hp-stat-l">'+s.label+'</div>'
+    + '</div>'
+  ).join('');
+
+  // Free tools
+  const freeHTML = t.free.map(item =>
+    '<div class="hp-free-card">'
+    + '<span class="hp-free-icon">'+item.icon+'</span>'
+    + '<div class="hp-free-name">'+item.name+'</div>'
+    + '<div class="hp-free-note">'+item.note+'</div>'
+    + '<span class="hp-free-badge">FREE</span>'
+    + '</div>'
+  ).join('');
+
+  // Budget tools
+  const budgetHTML = t.budget.map(item => {
+    const url = 'https://www.amazon.com/s?k=' + item.search;
+    return '<a href="'+url+'" target="_blank" rel="noopener" class="hp-budget-item">'
+      + '<div class="hp-budget-price">'+item.price+'</div>'
+      + '<div class="hp-budget-info">'
+      + '<div class="hp-budget-name">'+item.name+'</div>'
+      + '<div class="hp-budget-note">'+item.note+'</div>'
+      + '</div>'
+      + '<div class="hp-budget-arr">↗</div>'
+      + '</a>';
+  }).join('');
+
+  body.innerHTML =
+    // Overview
+    '<div class="hp-section">'
+    + '<div class="hp-section-label">About</div>'
+    + '<div class="hp-overview">'+h.overview+'</div>'
+    + '</div>'
+
+    // Stats
+    + '<div class="hp-section">'
+    + '<div class="hp-section-label">By the numbers</div>'
+    + '<div class="hp-stats">'+statsHTML+'</div>'
+    + '</div>'
+
+    // Free tools
+    + '<div class="hp-section">'
+    + '<div class="hp-section-label">Start for free — right now</div>'
+    + '<div class="hp-free-grid">'+freeHTML+'</div>'
+    + '</div>'
+
+    // Budget tools
+    + '<div class="hp-section">'
+    + '<div class="hp-section-label">When you\'re ready to invest</div>'
+    + '<div class="hp-budget-list">'+budgetHTML+'</div>'
+    + '</div>'
+
+    // Pro tip
+    + (t.tip ? '<div class="hp-section"><div class="hp-tip">💡 '+t.tip+'</div></div>' : '')
+
+    // Chapter 1 card
+    + '<div class="hp-section">'
+    + '<div class="hp-section-label">Your first challenge</div>'
+    + '<div class="hp-chapter-card" style="background:'+h.color+';color:'+h.textColor+'" onclick="openPanelFromPage(\"'+key+'\")">'
+    + '<div style="position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07)"></div>'
+    + '<div class="hp-chapter-num">'+p.num+'</div>'
+    + '<div class="hp-chapter-title">'+p.title.replace('\n',' ')+'</div>'
+    + '<div class="hp-chapter-desc">'+p.desc+'</div>'
+    + '<button class="hp-chapter-btn">Start Chapter 01 →</button>'
+    + '</div>'
+    + '</div>';
+
+  // Show page
+  const page = document.getElementById('hobby-page');
+  page.classList.add('open');
+  page.scrollTop = 0;
+}
+
+function closeHobbyPage() {
+  document.getElementById('hobby-page').classList.remove('open');
+}
+
+function openPanelFromPage(key) {
+  // Opens the original chapter panel on top of the hobby page
+  currentHobby = key;
+  activeHobbyKey = key;
+  const h = HOBBIES[key];
   document.getElementById('panelHero').style.background = h.color;
   document.getElementById('panelEye').style.color = h.textColor;
   document.getElementById('panelEye').textContent = key.toUpperCase() + ' · CHAPTER 01';
@@ -1756,22 +2115,18 @@ function openHobby(key) {
   document.getElementById('panelName').style.color = h.textColor;
   document.getElementById('panelTagline').textContent = h.tagline;
   document.getElementById('panelTagline').style.color = h.textColor;
-
-  // Reset tabs
   document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelector('.panel-tab').classList.add('active');
   document.getElementById('tab-overview').classList.add('active');
-
-  // Render overview
-  renderPanelTab('overview');
-
+  renderPanelTab('project');
+  document.getElementById('tab-project').classList.add('active');
+  document.querySelector('.panel-tab[onclick*="project"]').classList.add('active');
   document.getElementById('overlay').classList.add('open');
   document.getElementById('detailPanel').classList.add('open');
-  document.getElementById('panelScroll') && (document.getElementById('panelScroll').scrollTop = 0);
+  document.getElementById('detailPanel').style.zIndex = '700';
   document.querySelector('.panel-scroll').scrollTop = 0;
 }
-
 function closePanel() {
   document.getElementById('overlay').classList.remove('open');
   document.getElementById('detailPanel').classList.remove('open');
@@ -3126,5 +3481,18 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
   </div>
 </div>
 </div>
+
+<!-- HOBBY PAGE — full screen -->
+<div id="hobby-page">
+  <div id="hp-hero-div" class="hp-hero">
+    <div class="hp-hero-glow"></div>
+    <button class="hp-back" onclick="closeHobbyPage()">← Back</button>
+    <div id="hp-eyebrow" class="hp-eyebrow"></div>
+    <div id="hp-title" class="hp-title"></div>
+    <div id="hp-tagline" class="hp-tagline"></div>
+  </div>
+  <div class="hp-body" id="hp-body"></div>
+</div>
+
 </body>
 </html>
