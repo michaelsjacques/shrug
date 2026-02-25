@@ -8,14 +8,14 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#0E0D0B;--dark:#111110;--off:#F0EDE8;--mid:#8A8580;
+  --ink:#0E0D0B;--off:#F0EDE8;--mid:#8A8580;
   --gold:#F0C93A;--coral:#E8453C;--lime:#B8D96E;--sky:#ACD8F0;
   --teal:#3D9E8C;--purple:#6B4EFF;--peach:#F4A261;--rose:#E76F8A;
   --bd:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.07);
-  --sidebar:220px;
+  --dark:#111110;--sidebar:220px;
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
-/* body rule set by screen router below */
+body{background:var(--ink);color:var(--off);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 ::selection{background:var(--gold);color:var(--ink)}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
@@ -326,16 +326,10 @@ footer{border-top:1px solid var(--bd);padding:36px 80px;display:flex;justify-con
 .welcome-skip:hover{color:rgba(255,255,255,.55)}
 
 /* SCROLL REVEAL */
-.reveal{opacity:1;transform:translateY(0)}
-.reveal.in{opacity:1;transform:translateY(0)}
+.reveal{opacity:1}.reveal.in{opacity:1}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-/* app vars merged into :root above */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
-
+/* ── APP LAYER CSS ── */
 /* ── SIDEBAR ── */
 .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);background:rgba(15,15,14,0.97);backdrop-filter:blur(20px);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;padding:28px 0 24px}
 .sb-logo{padding:0 20px 32px;display:flex;align-items:center;gap:10px;cursor:pointer}
@@ -562,72 +556,12 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}}
 .fade-in{animation:fadeUp 0.35s cubic-bezier(0.4,0,0.2,1) both}
-
-/* ── SCREEN ROUTER ──────────────────────────── */
-/* body never scrolls itself — screens handle their own scroll */
-body{overflow:hidden;height:100vh}
-.screen{position:fixed;inset:0;display:none;overflow-y:auto;overflow-x:hidden;background:var(--ink)}
-.screen.active{display:block}
-/* Landing scrolls; app is a fixed layout */
-#s-app{overflow:hidden;display:none}
-#s-app.active{display:flex}
-@keyframes sIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.screen.active{animation:sIn .3s ease forwards}
-
-/* ── AUTH SCREEN ────────────────────────────── */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;position:relative}
-.auth-glow{position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 40%,rgba(240,201,58,.08),transparent 60%);pointer-events:none}
-.auth-box{background:rgba(22,21,19,.9);border:1px solid var(--bd);border-radius:24px;width:100%;max-width:460px;padding:42px;position:relative;z-index:1;backdrop-filter:blur(20px)}
-.auth-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px;cursor:pointer}
-.auth-logo-sq{width:34px;height:34px;background:var(--off);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.auth-logo-w{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px}
-.auth-tabs{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:24px;gap:3px}
-.auth-tab{flex:1;padding:10px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.38);cursor:pointer;border-radius:9px;transition:all .2s}
-.auth-tab.active{background:var(--off);color:var(--ink)}
-.auth-profile-banner{border-radius:14px;padding:15px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;overflow:hidden;position:relative}
-.auth-profile-banner::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08)}
-.apb-emoji{font-size:28px;flex-shrink:0;position:relative;z-index:1}
-.apb-type{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;line-height:1;position:relative;z-index:1}
-.apb-sub{font-size:10px;font-weight:700;opacity:.5;margin-top:3px;position:relative;z-index:1}
-.f-group{margin-bottom:13px}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.f-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:5px;display:block}
-.f-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:11px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--off);outline:none;transition:border-color .2s}
-.f-input::placeholder{color:rgba(255,255,255,.2)}
-.f-input:focus{border-color:rgba(255,255,255,.3)}
-.f-input.err{border-color:var(--coral)}
-.f-err{font-size:11px;color:var(--coral);margin-top:4px;display:none}
-.f-err.show{display:block}
-.auth-err-banner{background:rgba(232,69,60,.12);border:1px solid rgba(232,69,60,.25);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--coral);margin-bottom:14px;display:none}
-.auth-err-banner.show{display:block}
-.auth-btn{width:100%;background:var(--off);color:var(--ink);border:none;border-radius:12px;padding:15px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;margin-top:5px;display:flex;align-items:center;justify-content:center;gap:8px}
-.auth-btn:hover{background:#fff;transform:translateY(-1px)}
-.auth-btn.loading{opacity:.55;pointer-events:none}
-.auth-btn .spinner{width:15px;height:15px;border:2px solid rgba(0,0,0,.15);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;display:none}
-.auth-btn.loading .spinner{display:block}
-.auth-btn.loading .btn-lbl{display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-.f-terms{font-size:11px;color:rgba(255,255,255,.22);line-height:1.6;text-align:center;margin-top:10px}
-.f-terms a{color:rgba(255,255,255,.38);text-decoration:underline;cursor:pointer}
-.auth-switch{text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.28)}
-.auth-switch button{background:none;border:none;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:underline}
-
-/* ── TOAST ──────────────────────────────────── */
-#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--off);color:var(--ink);padding:12px 22px;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;z-index:9999;opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── APP sign out button ────────────────────── */
-.sb-signout-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,.22);font-size:11px;font-weight:700;letter-spacing:.5px;border:none;background:none;width:100%;font-family:'DM Sans',sans-serif;transition:all .18s}
-.sb-signout-btn:hover{color:var(--coral);background:rgba(232,69,60,.07)}
-.sb-user-block{padding:10px 14px;margin:0 10px 6px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:12px}
-.sb-user-block .sb-user-name{font-size:13px;font-weight:800;color:var(--off)}
-.sb-user-block .sb-user-type{font-size:10px;color:rgba(255,255,255,.28);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+#app-layer{display:none;position:fixed;inset:0;z-index:50;background:#0E0D0B}
+#app-layer.visible{display:flex}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ SCREEN: LANDING ═══════════════ -->
-<div class="screen active" id="s-landing">
 <!-- NAV -->
 <nav id="sitenav">
   <div class="n-logo" onclick="scrollToSection('hero')">
@@ -671,7 +605,7 @@ body{overflow:hidden;height:100vh}
 </section>
 
 <!-- ── TICKER ── -->
-<div class="ticker-outer" id="tickerEl"></div>
+<div class="ticker-outer" id="tickerEl"><div class="ticker-track"><div class="tick-item"><span class="tick-icon">📸</span><span class="tick-name">PHOTOGRAPHY</span></div><div class="tick-item"><span class="tick-icon">🎨</span><span class="tick-name">PAINTING</span></div><div class="tick-item"><span class="tick-icon">✍️</span><span class="tick-name">WRITING</span></div><div class="tick-item"><span class="tick-icon">🍳</span><span class="tick-name">COOKING</span></div><div class="tick-item"><span class="tick-icon">🥐</span><span class="tick-name">BAKING</span></div><div class="tick-item"><span class="tick-icon">🧘</span><span class="tick-name">YOGA</span></div><div class="tick-item"><span class="tick-icon">🏺</span><span class="tick-name">CERAMICS</span></div><div class="tick-item"><span class="tick-icon">🌱</span><span class="tick-name">GARDENING</span></div><div class="tick-item"><span class="tick-icon">🐦</span><span class="tick-name">BIRDWATCHING</span></div><div class="tick-item"><span class="tick-icon">📚</span><span class="tick-name">READING</span></div><div class="tick-item"><span class="tick-icon">🎹</span><span class="tick-name">PIANO</span></div><div class="tick-item"><span class="tick-icon">✂️</span><span class="tick-name">COLLAGE</span></div><div class="tick-item"><span class="tick-icon">✏️</span><span class="tick-name">DRAWING</span></div><div class="tick-item"><span class="tick-icon">💪</span><span class="tick-name">FITNESS</span></div><div class="tick-item"><span class="tick-icon">💃</span><span class="tick-name">DANCING</span></div><div class="tick-item"><span class="tick-icon">🧶</span><span class="tick-name">KNITTING</span></div><div class="tick-item"><span class="tick-icon">📓</span><span class="tick-name">JOURNALING</span></div><div class="tick-item"><span class="tick-icon">🪵</span><span class="tick-name">WOODWORKING</span></div><div class="tick-item"><span class="tick-icon">🎬</span><span class="tick-name">FILM</span></div><div class="tick-item"><span class="tick-icon">🗣️</span><span class="tick-name">LANGUAGE</span></div><div class="tick-item"><span class="tick-icon">📸</span><span class="tick-name">PHOTOGRAPHY</span></div><div class="tick-item"><span class="tick-icon">🎨</span><span class="tick-name">PAINTING</span></div><div class="tick-item"><span class="tick-icon">✍️</span><span class="tick-name">WRITING</span></div><div class="tick-item"><span class="tick-icon">🍳</span><span class="tick-name">COOKING</span></div><div class="tick-item"><span class="tick-icon">🥐</span><span class="tick-name">BAKING</span></div><div class="tick-item"><span class="tick-icon">🧘</span><span class="tick-name">YOGA</span></div><div class="tick-item"><span class="tick-icon">🏺</span><span class="tick-name">CERAMICS</span></div><div class="tick-item"><span class="tick-icon">🌱</span><span class="tick-name">GARDENING</span></div><div class="tick-item"><span class="tick-icon">🐦</span><span class="tick-name">BIRDWATCHING</span></div><div class="tick-item"><span class="tick-icon">📚</span><span class="tick-name">READING</span></div><div class="tick-item"><span class="tick-icon">🎹</span><span class="tick-name">PIANO</span></div><div class="tick-item"><span class="tick-icon">✂️</span><span class="tick-name">COLLAGE</span></div><div class="tick-item"><span class="tick-icon">✏️</span><span class="tick-name">DRAWING</span></div><div class="tick-item"><span class="tick-icon">💪</span><span class="tick-name">FITNESS</span></div><div class="tick-item"><span class="tick-icon">💃</span><span class="tick-name">DANCING</span></div><div class="tick-item"><span class="tick-icon">🧶</span><span class="tick-name">KNITTING</span></div><div class="tick-item"><span class="tick-icon">📓</span><span class="tick-name">JOURNALING</span></div><div class="tick-item"><span class="tick-icon">🪵</span><span class="tick-name">WOODWORKING</span></div><div class="tick-item"><span class="tick-icon">🎬</span><span class="tick-name">FILM</span></div><div class="tick-item"><span class="tick-icon">🗣️</span><span class="tick-name">LANGUAGE</span></div></div></div>
 
 <!-- ── WHAT IS SHRUG ── -->
 <section class="s" id="what">
@@ -752,7 +686,7 @@ body{overflow:hidden;height:100vh}
     <p class="s-sub reveal d2" style="max-width:340px;text-align:right;margin-top:0">From photography to woodworking, yoga to language learning — every hobby comes with a full chapter and a challenge built to surprise you.</p>
   </div>
   <div class="hobby-scroll-outer">
-    <div class="hobby-scroll" id="hobbyScrollEl"></div>
+    <div class="hobby-scroll" id="hobbyScrollEl"><div class="hsc" style="background:#F0C93A" onclick="scrollToSection('cta')"><span class="hsc-icon">📸</span><div class="hsc-name" style="color:#1A1A1A">PHOTOGRAPHY</div><div class="hsc-tag" style="color:#1A1A1A">See the world differently</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#E8453C" onclick="scrollToSection('cta')"><span class="hsc-icon">🎨</span><div class="hsc-name" style="color:white">PAINTING</div><div class="hsc-tag" style="color:white">Make something from nothing</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#6B4EFF" onclick="scrollToSection('cta')"><span class="hsc-icon">✍️</span><div class="hsc-name" style="color:white">WRITING</div><div class="hsc-tag" style="color:white">Find your voice</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#F4A261" onclick="scrollToSection('cta')"><span class="hsc-icon">🍳</span><div class="hsc-name" style="color:#1A1A1A">COOKING</div><div class="hsc-tag" style="color:#1A1A1A">Create with your hands</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#D4956A" onclick="scrollToSection('cta')"><span class="hsc-icon">🥐</span><div class="hsc-name" style="color:white">BAKING</div><div class="hsc-tag" style="color:white">Science you can eat</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#ACD8F0" onclick="scrollToSection('cta')"><span class="hsc-icon">🧘</span><div class="hsc-name" style="color:#1A1A1A">YOGA</div><div class="hsc-tag" style="color:#1A1A1A">Move with intention</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#B8A89A" onclick="scrollToSection('cta')"><span class="hsc-icon">🏺</span><div class="hsc-name" style="color:#1A1A1A">CERAMICS</div><div class="hsc-tag" style="color:#1A1A1A">Shape something real</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#B8D96E" onclick="scrollToSection('cta')"><span class="hsc-icon">🌱</span><div class="hsc-name" style="color:#1A1A1A">GARDENING</div><div class="hsc-tag" style="color:#1A1A1A">Grow something alive</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#3D9E8C" onclick="scrollToSection('cta')"><span class="hsc-icon">🐦</span><div class="hsc-name" style="color:white">BIRDWATCHING</div><div class="hsc-tag" style="color:white">Slow down and notice</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#2C3E6B" onclick="scrollToSection('cta')"><span class="hsc-icon">📚</span><div class="hsc-name" style="color:white">READING</div><div class="hsc-tag" style="color:white">Live other lives</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#1A1A2E" onclick="scrollToSection('cta')"><span class="hsc-icon">🎹</span><div class="hsc-name" style="color:white">PIANO</div><div class="hsc-tag" style="color:white">Think in sound</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#E76F8A" onclick="scrollToSection('cta')"><span class="hsc-icon">✂️</span><div class="hsc-name" style="color:white">COLLAGE</div><div class="hsc-tag" style="color:white">Remix the world</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#F0EDE8" onclick="scrollToSection('cta')"><span class="hsc-icon">✏️</span><div class="hsc-name" style="color:#1A1A1A">DRAWING</div><div class="hsc-tag" style="color:#1A1A1A">See before you draw</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#E8453C" onclick="scrollToSection('cta')"><span class="hsc-icon">💪</span><div class="hsc-name" style="color:white">FITNESS</div><div class="hsc-tag" style="color:white">Build the body you want</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#9B59B6" onclick="scrollToSection('cta')"><span class="hsc-icon">💃</span><div class="hsc-name" style="color:white">DANCING</div><div class="hsc-tag" style="color:white">Move like nobody's watching</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#E8A598" onclick="scrollToSection('cta')"><span class="hsc-icon">🧶</span><div class="hsc-name" style="color:#1A1A1A">KNITTING</div><div class="hsc-tag" style="color:#1A1A1A">Make something warm</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#F5E6C8" onclick="scrollToSection('cta')"><span class="hsc-icon">📓</span><div class="hsc-name" style="color:#1A1A1A">JOURNALING</div><div class="hsc-tag" style="color:#1A1A1A">Know yourself better</div><div class="hsc-arr" style="color:#1A1A1A">›</div></div><div class="hsc" style="background:#8B6914" onclick="scrollToSection('cta')"><span class="hsc-icon">🪵</span><div class="hsc-name" style="color:white">WOODWORKING</div><div class="hsc-tag" style="color:white">Build things that last</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#0D1117" onclick="scrollToSection('cta')"><span class="hsc-icon">🎬</span><div class="hsc-name" style="color:white">FILM</div><div class="hsc-tag" style="color:white">Tell stories with light</div><div class="hsc-arr" style="color:white">›</div></div><div class="hsc" style="background:#0EA5E9" onclick="scrollToSection('cta')"><span class="hsc-icon">🗣️</span><div class="hsc-name" style="color:white">LANGUAGE</div><div class="hsc-tag" style="color:white">Unlock another world</div><div class="hsc-arr" style="color:white">›</div></div></div>
   </div>
   <div class="hobby-scroll-hint reveal">← Scroll to explore all 20 →</div>
 </section>
@@ -900,7 +834,7 @@ body{overflow:hidden;height:100vh}
   <div class="s-label reveal">Curiosity types</div>
   <h2 class="s-h2 reveal d1">WHICH ONE<br>ARE YOU?</h2>
   <p class="s-sub reveal d2">The quiz places you in one of five curiosity types. Each one comes with matched hobbies, a description that's a little too accurate, and a path forward.</p>
-  <div class="profiles-grid" id="profilesGridEl"></div>
+  <div class="profiles-grid" id="profilesGridEl"><div class="pcard" style="background:#F0C93A;color:#0E0D0B"><span class="pcard-emoji">🎨</span><div class="pcard-type">The Creative Soul</div><div class="pcard-desc">You process the world through making things. Ideas come faster than you can execute them.</div></div><div class="pcard" style="background:#E8453C;color:white"><span class="pcard-emoji">⚡</span><div class="pcard-type">The Active Explorer</div><div class="pcard-desc">You learn by doing. Sitting still is your enemy. You want to feel it in your body.</div></div><div class="pcard" style="background:#3D9E8C;color:white"><span class="pcard-emoji">🌿</span><div class="pcard-type">The Nature Seeker</div><div class="pcard-desc">You recharge outdoors. You notice things others walk past. Slowness is your superpower.</div></div><div class="pcard" style="background:#0EA5E9;color:white"><span class="pcard-emoji">🔬</span><div class="pcard-type">The Deep Learner</div><div class="pcard-desc">You want to understand how things work at a fundamental level. Mastery over novelty.</div></div><div class="pcard" style="background:#D4956A;color:white"><span class="pcard-emoji">☁️</span><div class="pcard-type">The Calm Creator</div><div class="pcard-desc">You create to decompress. Repetitive, meditative crafts are your happy place.</div></div></div>
 </section>
 
 <div class="divider"></div>
@@ -922,323 +856,10 @@ body{overflow:hidden;height:100vh}
   <div class="ft-logo">SHRUG</div>
   <div class="ft-note">Discover what makes you, you. One tiny hobby at a time.</div>
 </footer>
-</div><!-- /s-landing -->
-
-<!-- ═══════════════ SCREEN: AUTH ═══════════════ -->
-<div class="screen" id="s-auth">
-  <div class="auth-wrap">
-    <div class="auth-glow"></div>
-    <div class="auth-box">
-      <div class="auth-logo" onclick="goTo('landing')">
-        <div class="auth-logo-sq"><svg width="18" height="18" viewBox="0 0 100 100" fill="none"><path d="M68 26H40C34 26 29 31 29 37s5 11 11 11h18c6 0 11 5 11 11s-5 11-11 11H30" stroke="#0E0D0B" stroke-width="11" stroke-linecap="round"/></svg></div>
-        <div class="auth-logo-w">SHRUG</div>
-      </div>
-      <div id="auth-content"><!-- rendered by JS --></div>
-    </div>
-  </div>
-</div><!-- /s-auth -->
-
-<!-- ═══════════════ SCREEN: APP ═══════════════ -->
-<div class="screen" id="s-app">
-<!-- SIDEBAR -->
-<nav class="sidebar">
-  <div class="sb-logo" onclick="showView('home')">
-    <div class="sb-logo-icon">
-      <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
-        <path d="M68 26H40C34 26 29 31 29 37s5 11 11 11h18c6 0 11 5 11 11s-5 11-11 11H30" stroke="#111110" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="sb-logo-word">SHRUG</div>
-  </div>
-  <div class="sb-user-block" id="sb-user-block">
-    <div class="sb-user-name" id="sb-user-name">—</div>
-    <div class="sb-user-type" id="sb-user-type">—</div>
-  </div>
-  <div class="sb-nav">
-    <button class="sb-item active" id="nav-home" onclick="showView('home')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Home
-    </button>
-    <button class="sb-item" id="nav-explore" onclick="showView('explore')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      Explore Hobbies
-    </button>
-    <button class="sb-item" id="nav-memoir" onclick="showView('memoir')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      Memoir
-    </button>
-    <div class="sb-divider"></div>
-    <button class="sb-item" onclick="openQuizModal()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-      Take the Quiz
-    </button>
-    <button class="sb-item" id="nav-profile" onclick="showView('profile')" style="display:none">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      My Profile
-    </button>
-  </div>
-  <div class="sb-foot">20 HOBBIES<br>ONE CHAPTER AT A TIME</div>
-</nav>
-
-<!-- MAIN -->
-<main class="main">
-
-<!-- HOME -->
-<div class="view active" id="view-home">
-  <div class="section">
-    <div id="webHomeGreet"><div style="font-size:11px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Good morning,</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;margin-bottom:28px">ALEX 👋</div></div>
-    <div class="home-layout">
-      <div>
-        <div class="sec-lbl">This week</div>
-        <div class="home-week" id="home-active-card" onclick="openHobby('photography')">
-          <div class="hw-eye">📸 Active hobby</div>
-          <div class="hw-hobby">PHOTOGRAPHY</div>
-          <div class="hw-concept">Rule of Thirds</div>
-          <div class="hw-dots">
-            <div class="hw-dot done"></div><div class="hw-dot"></div><div class="hw-dot"></div><div class="hw-dot"></div>
-          </div>
-          <button class="hw-btn">Continue Learning →</button>
-        </div>
-        <div class="sec-lbl">Your hobbies</div>
-        <div class="home-pills" id="home-pills">
-          <div class="home-pill" style="background:#F0C93A" onclick="openHobby('photography')">
-            <div class="hp-n">PHOTOGRAPHY</div><div class="hp-s" style="color:rgba(0,0,0,0.4)">Active</div>
-          </div>
-          <div class="home-pill" style="background:#E8453C" onclick="openHobby('cooking')">
-            <div class="hp-n" style="color:white">COOKING</div><div class="hp-s" style="color:rgba(255,255,255,0.45)">Queued</div>
-          </div>
-          <div class="home-pill" style="background:#B8D96E" onclick="openHobby('writing')">
-            <div class="hp-n">WRITING</div><div class="hp-s" style="color:rgba(0,0,0,0.4)">Queued</div>
-          </div>
-          <div class="home-pill" style="background:rgba(255,255,255,0.05);border:1px solid var(--border)" onclick="showView('explore')">
-            <div class="hp-n" style="color:rgba(255,255,255,0.45)">+ ADD</div><div class="hp-s" style="color:rgba(255,255,255,0.22)">Explore</div>
-          </div>
-        </div>
-      </div>
-      <div class="home-right">
-        <div class="home-widget">
-          <div class="hw-lbl">Recent Memoir</div>
-          <div class="hw-entry" onclick="showView('memoir')">
-            <div class="hw-e-hobby" style="color:#F0C93A">📸 PHOTOGRAPHY</div>
-            <div class="hw-e-concept">Rule of Thirds · Week 1</div>
-            <div class="hw-e-quote">"The morning light made the cup look almost alive."</div>
-          </div>
-          <div class="hw-entry" onclick="showView('memoir')">
-            <div class="hw-e-hobby" style="color:#E8453C">🍳 COOKING</div>
-            <div class="hw-e-concept">Salt & Flavor · Feb 7</div>
-            <div class="hw-e-quote">"I finally understand why restaurant food tastes different."</div>
-          </div>
-        </div>
-        <div class="home-widget">
-          <div class="hw-lbl">Your Curiosity Profile</div>
-          <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px">
-            <div style="font-size:26px">🎨</div>
-            <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px">CALM CREATOR</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.28)">Week 3 · 3 hobbies</div>
-            </div>
-          </div>
-          <button class="btn btn-full btn-outline-full" onclick="openQuizModal()">Retake the Quiz →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- EXPLORE -->
-<div class="view" id="view-explore">
-  <div class="section">
-    <div class="sec-head">
-      <div><div class="sec-title">EXPLORE</div><div class="sec-sub">20 hobbies · find your next obsession</div></div>
-    </div>
-    <div class="hobby-grid" id="webHobbyGrid"></div>
-  </div>
-</div>
-
-<!-- MEMOIR -->
-<div class="view" id="view-memoir">
-  <div class="section">
-    <div class="sec-head">
-      <div><div class="sec-title">MEMOIR</div><div class="sec-sub">Your journey so far · 3 chapters written</div></div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">03</div>
-    </div>
-    <div class="memoir-layout">
-      <div>
-        <div class="mem-entry" onclick="openHobby('photography')">
-          <div class="mem-hdr"><div class="mem-dot" style="background:#F0C93A"></div><div class="mem-hobby" style="color:#F0C93A">PHOTOGRAPHY</div><div class="mem-date">Feb 14</div></div>
-          <div class="mem-concept">Rule of Thirds</div>
-          <div class="mem-reflect">"The morning light made the cup look almost alive. I didn't expect to feel that way about a coffee mug."</div>
-          <div class="mem-pills">
-            <div class="mem-pill" style="background:#F0C93A22;color:#c8a420">Comp 8/10</div>
-            <div class="mem-pill" style="background:#ACD8F022;color:#4a90b0">Light 9/10</div>
-            <div class="mem-pill" style="background:#B8D96E22;color:#5a8020">Story 8/10</div>
-          </div>
-        </div>
-        <div class="mem-entry" onclick="openHobby('cooking')">
-          <div class="mem-hdr"><div class="mem-dot" style="background:#E8453C"></div><div class="mem-hobby" style="color:#E8453C">COOKING</div><div class="mem-date">Feb 7</div></div>
-          <div class="mem-concept">Salting & Flavor</div>
-          <div class="mem-reflect">"I finally understand why restaurant food tastes different. It was always the salt. I feel robbed of years."</div>
-          <div class="mem-pills">
-            <div class="mem-pill" style="background:#E8453C22;color:#b03020">Flavor 9/10</div>
-            <div class="mem-pill" style="background:#F0C93A22;color:#c8a420">Technique 7/10</div>
-          </div>
-        </div>
-        <div class="mem-entry" onclick="openHobby('writing')">
-          <div class="mem-hdr"><div class="mem-dot" style="background:#B8D96E"></div><div class="mem-hobby" style="color:#B8D96E">WRITING</div><div class="mem-date">Feb 1</div></div>
-          <div class="mem-concept">Your First Paragraph</div>
-          <div class="mem-reflect">"I rewrote the same opening 6 times and the last one was actually good. That surprised me more than anything."</div>
-          <div class="mem-pills">
-            <div class="mem-pill" style="background:#B8D96E22;color:#5a8020">Voice 8/10</div>
-            <div class="mem-pill" style="background:#ACD8F022;color:#4a90b0">Clarity 7/10</div>
-          </div>
-        </div>
-        <div class="mem-add" onclick="showView('explore')">
-          <div style="font-size:22px;margin-bottom:6px;color:rgba(255,255,255,0.18)">✦</div>
-          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.4);margin-bottom:3px">Start a new hobby</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.22)">Add another chapter to your story</div>
-        </div>
-      </div>
-      <div class="mem-aside">
-        <div class="mem-aside-card">
-          <div style="font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:14px">Your Profile</div>
-          <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px">
-            <div style="font-size:26px">🎨</div>
-            <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px">CALM CREATOR</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.28)">Week 3 · 3 hobbies explored</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.3);line-height:1.65;margin-bottom:12px">You feel most alive when you're making, exploring, or noticing things others miss.</div>
-          <button class="btn btn-full btn-outline-full" onclick="showView('explore')">Explore More →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PROFILE RESULT -->
-<div class="view" id="view-profile">
-  <div class="prof-wrap fade-in">
-    <button class="fb-back" onclick="showView('home')">← Back to home</button>
-    <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:6px">Your Curiosity Profile</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:1px;line-height:1;margin-bottom:28px" id="webProfTypeBig">CALM CREATOR</div>
-    <div class="prof-grid">
-      <div class="prof-card">
-        <div class="prof-eyebrow">Profile</div>
-        <span class="prof-emoji" id="webProfEmoji">🎨</span>
-        <div class="prof-desc" id="webProfDesc"></div>
-      </div>
-      <div>
-        <div class="sec-lbl" style="margin-bottom:12px">Matched Hobbies</div>
-        <div id="webProfMatches"></div>
-      </div>
-    </div>
-    <div class="prof-ctas">
-      <button class="btn btn-full btn-dark-full" onclick="showView('home')">Start My First Week →</button>
-      <button class="btn btn-full btn-outline-full" onclick="showView('explore')">Browse All 20 Hobbies</button>
-    </div>
-  </div>
-</div>
-
-<!-- FEEDBACK -->
-<div class="view" id="view-feedback">
-  <div class="fb-wrap fade-in">
-    <button class="fb-back" onclick="goBackFromFeedback()">← Back</button>
-    <div class="fb-head">
-      <div class="fb-eyebrow">Project Feedback</div>
-      <div class="fb-title">YOUR RESULTS</div>
-      <div class="fb-badge" id="fbBadgeWeb"></div>
-    </div>
-    <div class="fb-grid">
-      <div class="fb-card">
-        <div class="fb-card-lbl">Scores</div>
-        <div id="fbScoresWeb"></div>
-      </div>
-      <div class="fb-card">
-        <div class="fb-card-lbl">AI Feedback</div>
-        <div class="ai-text" id="fbAIWeb"></div>
-      </div>
-    </div>
-    <div class="fb-next">
-      <button class="fb-nb" onclick="showView('memoir')">
-        <span class="fb-nb-icon">📖</span>
-        <span class="fb-nb-title">Save to Memoir</span>
-        <span class="fb-nb-sub">Keep this moment</span>
-      </button>
-      <button class="fb-nb" id="fbNextChallengeBtn" onclick="openProjectFromFeedback()">
-        <span class="fb-nb-icon" id="fbNextIcon">📸</span>
-        <span class="fb-nb-title">Next Challenge</span>
-        <span class="fb-nb-sub" id="fbNextSub">Continue this hobby</span>
-      </button>
-      <button class="fb-nb" onclick="openCareersFromFeedback()">
-        <span class="fb-nb-icon">🔭</span>
-        <span class="fb-nb-title">Explore Careers</span>
-        <span class="fb-nb-sub">Where this could go</span>
-      </button>
-      <button class="fb-nb" onclick="showView('home')">
-        <span class="fb-nb-icon">🏠</span>
-        <span class="fb-nb-title">Back to Home</span>
-        <span class="fb-nb-sub">See all your hobbies</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-</main><!-- /main -->
-
-<!-- PANEL OVERLAY -->
-<div class="overlay" id="overlay" onclick="closePanel()"></div>
-
-<!-- DETAIL PANEL -->
-<div class="panel" id="detailPanel">
-  <div class="panel-scroll">
-    <div class="panel-hero" id="panelHero">
-      <button class="panel-close" onclick="closePanel()">✕</button>
-      <div class="panel-eye" id="panelEye"></div>
-      <span class="panel-icon" id="panelIcon"></span>
-      <div class="panel-name" id="panelName"></div>
-      <div class="panel-tagline" id="panelTagline"></div>
-    </div>
-    <div class="panel-tabs" id="panelTabs">
-      <button class="panel-tab active" onclick="switchTab(this,'overview')">Overview</button>
-      <button class="panel-tab" onclick="switchTab(this,'stats')">Stats</button>
-      <button class="panel-tab" onclick="switchTab(this,'prompts')">Try It</button>
-      <button class="panel-tab" onclick="switchTab(this,'careers')">Careers</button>
-      <button class="panel-tab" onclick="switchTab(this,'project')">This Week →</button>
-    </div>
-    <div class="panel-body">
-      <div class="tab-pane active" id="tab-overview"></div>
-      <div class="tab-pane" id="tab-stats"></div>
-      <div class="tab-pane" id="tab-prompts"></div>
-      <div class="tab-pane" id="tab-careers"></div>
-      <div class="tab-pane" id="tab-project"></div>
-    </div>
-  </div>
-  <div class="panel-foot">
-    <button class="btn btn-full btn-dark-full" onclick="switchTab(document.querySelector('.panel-tab:last-child'),'project');setTimeout(injectProjectSubmitBtn,50)">Start This Week's Challenge →</button>
-    <button class="btn btn-full btn-outline-full" onclick="closePanel()">Close</button>
-  </div>
-</div>
 
 <!-- QUIZ MODAL -->
-<div class="modal-bg" id="appQuizModal">
-  <div class="quiz-box">
-    <button class="quiz-x" onclick="closeQuizModal()">✕</button>
-    <div class="quiz-prog"><div class="quiz-fill" id="qFillW" style="width:16%"></div></div>
-    <div class="quiz-qnum" id="qNumW">01</div>
-    <div class="quiz-q" id="qTextW"></div>
-    <div class="quiz-opts" id="qOptsW"></div>
-    <div class="quiz-foot">
-      <button class="btn btn-solid" id="qNextW" style="opacity:.3;pointer-events:none" onclick="quizNextW()">Continue →</button>
-    </div>
-  </div>
-</div>
-</div><!-- /s-app -->
-
-<!-- LANDING QUIZ MODAL (lives outside screens, overlays everything) -->
 <div class="modal-bg" id="quizModal">
-  <div class="qbox" id="qBoxEl">
+  <div class="qbox">
     <button class="qbox-x" onclick="closeQuiz()">✕</button>
     <div class="qbox-prog"><div class="qbox-fill" id="qFill" style="width:16%"></div></div>
     <div class="qbox-num" id="qNum">01 / 06</div>
@@ -1250,16 +871,60 @@ body{overflow:hidden;height:100vh}
 
 <!-- RESULT + SIGNUP MODAL -->
 <div class="modal-bg" id="resultModal">
-  <div class="rbox" id="resultBox"></div>
+  <div class="rbox" id="resultBox">
+    <!-- Step 1: result, Step 2: signup, Step 3: welcome — rendered by JS -->
+  </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast"></div>
-
 <script>
-// ═══════════════════════════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════════════════════════
+const DB = {
+  _all()   { try { return JSON.parse(localStorage.getItem('shrug_users')||'{}'); } catch { return {}; } },
+  _save(u) { try { localStorage.setItem('shrug_users', JSON.stringify(u)); } catch {} },
+
+  create(data) {
+    const users = this._all();
+    const k = data.email.toLowerCase();
+    if (users[k]) return { error: 'An account with this email already exists.' };
+    users[k] = { ...data, email: k, createdAt: Date.now() };
+    this._save(users);
+    return { ok: true, user: users[k] };
+  },
+
+  login(email, password) {
+    const u = this._all()[email.toLowerCase()];
+    if (!u)              return { error: 'No account found with that email.' };
+    if (u.password !== password) return { error: 'Incorrect password.' };
+    return { ok: true, user: u };
+  },
+
+  saveSession(user) { try { localStorage.setItem('shrug_session', JSON.stringify(user)); } catch {} },
+  loadSession()     { try { return JSON.parse(localStorage.getItem('shrug_session')); } catch { return null; } },
+  clearSession()    { try { localStorage.removeItem('shrug_session'); } catch {} },
+
+  addMemoirEntry(email, entry) {
+    const k = 'shrug_memoir_' + email.toLowerCase();
+    const entries = this.getMemoirEntries(email);
+    entries.unshift({ ...entry, savedAt: Date.now() });
+    try { localStorage.setItem(k, JSON.stringify(entries.slice(0,100))); } catch {}
+  },
+  getMemoirEntries(email) {
+    try { return JSON.parse(localStorage.getItem('shrug_memoir_' + email.toLowerCase())) || []; } catch { return []; }
+  },
+};
+
+
+
+const PROFILE_COLORS = {
+  creative: { bg: '#F0C93A', text: '#0E0D0B' },
+  active:   { bg: '#E8453C', text: 'white' },
+  nature:   { bg: '#3D9E8C', text: 'white' },
+  learn:    { bg: '#0EA5E9', text: 'white' },
+  calm:     { bg: '#D4956A', text: 'white' },
+};
+
+let currentUser = null;
+
+// ── DATA ──────────────────────────────────────────────────────
 const HOBBIES = {
   photography: {
     color:'#F0C93A', textColor:'#1A1A1A', icon:'📸', tagline:'See Differently',
@@ -1591,387 +1256,39 @@ const QUESTIONS = [
   { q:'What\'s your social energy for hobbies?', opts:[{i:'🙋',t:'I prefer solo',v:'calm'},{i:'🙌',t:'I like both solo and group',v:'creative'},{i:'👥',t:'I prefer group or shared',v:'active'},{i:'💻',t:'Online community is perfect',v:'learn'}] },
 ];
 
-
-// ═══════════════════════════════════════════════════════════════
-// ROUTER — one screen active at a time, body never reloads
-// ═══════════════════════════════════════════════════════════════
-function goTo(screen) {
-  ['s-landing','s-auth','s-app'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const active = id === 's-' + screen;
-    el.classList.toggle('active', active);
-    if (active) el.scrollTop = 0;
-  });
-}
-
-// ═══════════════════════════════════════════════════════════════
-// DB — simulated local backend; swap these 4 methods for real API
-// ═══════════════════════════════════════════════════════════════
-const DB = {
-  _getAll()   { try { return JSON.parse(localStorage.getItem('shrug_users')||'{}'); } catch { return {}; } },
-  _saveAll(u) { try { localStorage.setItem('shrug_users', JSON.stringify(u)); } catch {} },
-
-  // TODO: replace with POST /api/auth/signup
-  createUser(data) {
-    const users = this._getAll();
-    const key = data.email.toLowerCase();
-    if (users[key]) return { error: 'An account with this email already exists.' };
-    users[key] = { ...data, email: key, createdAt: Date.now() };
-    this._saveAll(users);
-    return { ok: true, user: users[key] };
-  },
-
-  // TODO: replace with POST /api/auth/login
-  loginUser(email, password) {
-    const users = this._getAll();
-    const user = users[email.toLowerCase()];
-    if (!user)             return { error: 'No account found with that email.' };
-    if (user.password !== password) return { error: 'Incorrect password.' };
-    return { ok: true, user };
-  },
-
-  // TODO: replace with httpOnly cookie or JWT stored in memory (not localStorage)
-  saveSession(user) { try { localStorage.setItem('shrug_session', JSON.stringify(user)); } catch {} },
-  loadSession()     { try { return JSON.parse(localStorage.getItem('shrug_session')); }    catch { return null; } },
-  clearSession()    { try { localStorage.removeItem('shrug_session'); } catch {} },
-
-  // TODO: replace with POST /api/memoir
-  addMemoirEntry(email, entry) {
-    const k = 'shrug_memoir_' + email.toLowerCase();
-    let entries = this.getMemoirEntries(email);
-    entries.unshift({ ...entry, savedAt: Date.now() });
-    try { localStorage.setItem(k, JSON.stringify(entries.slice(0, 100))); } catch {}
-  },
-  getMemoirEntries(email) {
-    try { return JSON.parse(localStorage.getItem('shrug_memoir_' + email.toLowerCase())) || []; } catch { return []; }
-  },
-};
-
-// ═══════════════════════════════════════════════════════════════
-// SESSION STATE
-// ═══════════════════════════════════════════════════════════════
-let currentUser   = null;
-let currentHobby  = null;
-let _prevView     = 'home';
-let _pendingProfile = null; // set by landing quiz before signup
-
-const PROFILE_COLORS = {
-  creative:{ bg:'#F0C93A', text:'#0E0D0B' },
-  active:  { bg:'#E8453C', text:'white'   },
-  nature:  { bg:'#3D9E8C', text:'white'   },
-  learn:   { bg:'#0EA5E9', text:'white'   },
-  calm:    { bg:'#D4956A', text:'white'   },
-};
-
-// ═══════════════════════════════════════════════════════════════
-// AUTH SCREENS
-// ═══════════════════════════════════════════════════════════════
-function showAuth(mode, pendingProfile) {
-  if (pendingProfile) _pendingProfile = pendingProfile;
-  _authMode = mode || 'signup';
-  renderAuth();
-  goTo('auth');
-}
-
-let _authMode = 'signup';
-
-function renderAuth() {
-  const box = document.getElementById('auth-content');
-  if (!box) return;
-  const p = _pendingProfile;
-  const profileBanner = p ? `
-    <div class="auth-profile-banner" style="background:${PROFILE_COLORS[p.key]?.bg||'#F0C93A'};color:${PROFILE_COLORS[p.key]?.text||'#0E0D0B'}">
-      <span class="apb-emoji">${p.emoji}</span>
-      <div><div class="apb-type">${p.type}</div><div class="apb-sub">Your curiosity type — saving your result</div></div>
-    </div>` : '';
-
-  if (_authMode === 'signup') {
-    box.innerHTML = `
-      ${profileBanner}
-      <div class="auth-tabs">
-        <button class="auth-tab active">Create Account</button>
-        <button class="auth-tab" onclick="switchAuthMode('login')">Log In</button>
-      </div>
-      <div class="auth-err-banner" id="auth-err"></div>
-      <div class="f-row">
-        <div class="f-group"><label class="f-label">First Name</label><input class="f-input" id="f-first" type="text" placeholder="Alex" autocomplete="given-name"></div>
-        <div class="f-group"><label class="f-label">Last Name</label><input class="f-input" id="f-last" type="text" placeholder="Chen" autocomplete="family-name"></div>
-      </div>
-      <div class="f-group"><label class="f-label">Email</label><input class="f-input" id="f-email" type="email" placeholder="you@example.com" autocomplete="email"><div class="f-err" id="e-email">Please enter a valid email.</div></div>
-      <div class="f-group"><label class="f-label">Password</label><input class="f-input" id="f-pass" type="password" placeholder="At least 8 characters" autocomplete="new-password"><div class="f-err" id="e-pass">Must be at least 8 characters.</div></div>
-      <button class="auth-btn" id="auth-btn" onclick="submitSignup()"><div class="spinner"></div><span class="btn-lbl">Create My Account →</span></button>
-      <div class="f-terms">By signing up you agree to our <a>Terms</a> and <a>Privacy Policy</a>.</div>
-      <div class="auth-switch">Already have an account? <button onclick="switchAuthMode('login')">Log in</button></div>`;
-    setTimeout(() => document.getElementById('f-first')?.focus(), 80);
-  } else {
-    box.innerHTML = `
-      <div class="auth-tabs">
-        <button class="auth-tab" onclick="switchAuthMode('signup')">Create Account</button>
-        <button class="auth-tab active">Log In</button>
-      </div>
-      <div class="auth-err-banner" id="auth-err"></div>
-      <div class="f-group"><label class="f-label">Email</label><input class="f-input" id="f-email" type="email" placeholder="you@example.com" autocomplete="email"></div>
-      <div class="f-group"><label class="f-label">Password</label><input class="f-input" id="f-pass" type="password" placeholder="Your password" autocomplete="current-password"></div>
-      <button class="auth-btn" id="auth-btn" onclick="submitLogin()"><div class="spinner"></div><span class="btn-lbl">Log In →</span></button>
-      <div class="auth-switch">No account yet? <button onclick="switchAuthMode('signup')">Sign up free</button></div>`;
-    setTimeout(() => document.getElementById('f-email')?.focus(), 80);
-    document.getElementById('f-pass')?.addEventListener('keydown', e => { if (e.key==='Enter') submitLogin(); });
-  }
-}
-
-function switchAuthMode(mode) { _authMode = mode; renderAuth(); }
-
-function submitSignup() {
-  const first = (document.getElementById('f-first')?.value||'').trim();
-  const email = (document.getElementById('f-email')?.value||'').trim().toLowerCase();
-  const pass  = document.getElementById('f-pass')?.value || '';
-  let valid   = true;
-
-  const setErr = (inputId, errId, show) => {
-    document.getElementById(inputId)?.classList.toggle('err', show);
-    const e = document.getElementById(errId); if (e) e.classList.toggle('show', show);
-    if (show) valid = false;
-  };
-  setErr('f-email','e-email', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-  setErr('f-pass', 'e-pass',  pass.length < 8);
-  if (!valid) return;
-
-  const btn = document.getElementById('auth-btn');
-  btn?.classList.add('loading');
-
-  const userData = {
-    name:    first || 'Explorer',
-    email,
-    password: pass,
-    profile: _pendingProfile?.key  || 'creative',
-    hobbies: _pendingProfile?.hobbies || PROFILES_DATA.creative.hobbies,
-  };
-
-  setTimeout(() => {
-    const res = DB.createUser(userData);
-    btn?.classList.remove('loading');
-    if (res.error) { showAuthErr(res.error); return; }
-    DB.saveSession(res.user);
-    _pendingProfile = null;
-    enterApp(res.user);
-  }, 700);
-}
-
-function submitLogin() {
-  const email = (document.getElementById('f-email')?.value||'').trim().toLowerCase();
-  const pass  = document.getElementById('f-pass')?.value || '';
-  if (!email || !pass) { showAuthErr('Please enter your email and password.'); return; }
-
-  const btn = document.getElementById('auth-btn');
-  btn?.classList.add('loading');
-
-  setTimeout(() => {
-    const res = DB.loginUser(email, pass);
-    btn?.classList.remove('loading');
-    if (res.error) { showAuthErr(res.error); return; }
-    DB.saveSession(res.user);
-    enterApp(res.user);
-  }, 600);
-}
-
-function showAuthErr(msg) {
-  const e = document.getElementById('auth-err');
-  if (e) { e.textContent = msg; e.classList.add('show'); }
-}
-
-function signOut() {
-  DB.clearSession();
-  currentUser = null;
-  showToast('Signed out. See you soon! 👋');
-  setTimeout(() => goTo('landing'), 400);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// ENTER APP — the one place that transitions to the app screen
-// ═══════════════════════════════════════════════════════════════
-function enterApp(user) {
-  currentUser = user;
-
-  // Close any open modals
-  document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('open'));
-
-  // Personalise sidebar
-  const nameEl = document.getElementById('sb-user-name');
-  const typeEl = document.getElementById('sb-user-type');
-  if (nameEl) nameEl.textContent = user.name;
-  if (typeEl) typeEl.textContent = (PROFILES_DATA[user.profile]?.type || 'Explorer').replace('\n', ' ');
-
-  // Build all views
-  buildHomeDashboard(user);
-  buildExploreGrid();
-  buildProfileView(user);
-  buildMemoirView(user);
-
-  // Switch screen — this is all that's needed
-  goTo('app');
-  showView('home');
-  showToast('Welcome, ' + user.name + '! 👋');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// HOME DASHBOARD
-// ═══════════════════════════════════════════════════════════════
-function buildHomeDashboard(user) {
-  const hobbies   = user.hobbies || [];
-  const firstKey  = hobbies[0];
-  const hd        = firstKey ? HOBBIES[firstKey] : null;
-  const hr        = new Date().getHours();
-  const greet     = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
-
-  // Greeting
-  const greetEl = document.getElementById('webHomeGreet');
-  if (greetEl) greetEl.innerHTML = `
-    <div style="font-size:10px;color:rgba(255,255,255,.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px">${greet},</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:1px;margin-bottom:22px">${user.name.toUpperCase()} 👋</div>`;
-
-  // Active hobby card
-  const card = document.getElementById('home-active-card');
-  if (card && hd) {
-    const w = hd.textColor === 'white';
-    card.style.background = hd.color;
-    card.innerHTML = `
-      <div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
-      <div class="hw-eye" style="color:${w?'rgba(255,255,255,.5)':'rgba(0,0,0,.4)'}">${hd.icon} Active hobby</div>
-      <div class="hw-hobby" style="color:${hd.textColor}">${firstKey.toUpperCase()}</div>
-      <div class="hw-concept" style="color:${w?'rgba(255,255,255,.6)':'rgba(0,0,0,.5)'}">${hd.project.ccTitle}</div>
-      <div class="hw-dots">
-        <div class="hw-dot done" style="width:18px;background:${w?'rgba(255,255,255,.6)':'rgba(0,0,0,.45)'}"></div>
-        <div class="hw-dot" style="background:${w?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)'}"></div>
-        <div class="hw-dot" style="background:${w?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)'}"></div>
-        <div class="hw-dot" style="background:${w?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)'}"></div>
-      </div>
-      <button class="hw-btn" onclick="event.stopPropagation();openHobby('${firstKey}')"
-        style="background:${w?'rgba(0,0,0,.25)':'rgba(0,0,0,.12)'};color:${hd.textColor}">Start Chapter 01 →</button>`;
-    card.onclick = () => openHobby(firstKey);
-  }
-
-  // Hobby pills
-  const pillsEl = document.getElementById('home-pills');
-  if (pillsEl) {
-    pillsEl.innerHTML = hobbies.map((h, i) => {
-      const hob = HOBBIES[h];
-      return `<div class="home-pill" style="background:${hob.color}" onclick="openHobby('${h}')">
-        <div class="hp-n" style="color:${hob.textColor}">${h.toUpperCase()}</div>
-        <div class="hp-s" style="color:${hob.textColor==='white'?'rgba(255,255,255,.4)':'rgba(0,0,0,.4)'}">${i===0?'Active':'Queued'}</div>
-      </div>`;
-    }).join('') + `<div class="home-pill" style="background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.1)" onclick="showView('explore')">
-      <div class="hp-n" style="color:rgba(255,255,255,.35)">+ EXPLORE</div>
-      <div class="hp-s" style="color:rgba(255,255,255,.2)">All 20</div>
-    </div>`;
-  }
-}
-
-function buildProfileView(user) {
-  const p   = PROFILES_DATA[user.profile];
-  const col = PROFILE_COLORS[user.profile] || { bg:'#F0C93A', text:'#0E0D0B' };
-  if (!p) return;
-
-  const banner = document.getElementById('webProfBanner');
-  if (banner) { banner.style.background = col.bg; banner.style.color = col.text; }
-  const typeEl = document.getElementById('webProfTypeBig');
-  if (typeEl) typeEl.textContent = p.type.replace('\n',' ');
-  const emojiEl = document.getElementById('webProfEmoji');
-  if (emojiEl) emojiEl.textContent = p.emoji;
-  const descEl = document.getElementById('webProfDesc');
-  if (descEl) descEl.innerHTML = p.desc;
-
-  const matchesEl = document.getElementById('webProfMatches');
-  if (matchesEl) {
-    matchesEl.innerHTML = p.hobbies.map(h => {
-      const hd = HOBBIES[h];
-      return `<div class="rec-card" style="background:${hd.color}" onclick="openHobby('${h}')">
-        <div class="rec-icon">${hd.icon}</div>
-        <div style="flex:1"><div class="rec-name">${h.toUpperCase()}</div><div class="rec-sub" style="color:rgba(0,0,0,.4)">${hd.tagline}</div></div>
-        <div class="rec-arr">›</div>
-      </div>`;
-    }).join('');
-  }
-}
-
-function buildMemoirView(user) {
-  const entries = DB.getMemoirEntries(user.email);
-  const el = document.getElementById('memoirFeed');
-  if (!el) return;
-  if (!entries.length) {
-    el.innerHTML = `<div style="padding:40px 20px;text-align:center;color:rgba(255,255,255,.25);font-size:14px;font-style:italic">Complete your first challenge to start your memoir.</div>`;
-    return;
-  }
-  el.innerHTML = entries.map(e => {
-    const hd = HOBBIES[e.hobby] || {};
-    return `<div class="memoir-entry">
-      <div class="me-top"><div class="me-dot" style="background:${hd.color||'var(--off)'}"></div>
-        <div class="me-hobby">${(e.hobby||'').toUpperCase()}</div>
-        <div class="me-date">${new Date(e.savedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
-      </div>
-      <div class="me-concept">${e.concept||''}</div>
-      <div class="me-quote">"${e.reflection||''}"</div>
-      ${Object.keys(e.scores||{}).length?`<div class="me-scores">${Object.entries(e.scores).map(([k,v])=>
-        `<div class="me-score" style="background:${hd.color||'rgba(255,255,255,.08)'}22;color:${hd.color||'var(--off)'}">${k} ${v}/10</div>`
-      ).join('')}</div>`:''}
-    </div>`;
-  }).join('');
-}
-
-
-// ═══════════════════════════════════════════════════════════════
-// LANDING — nav scroll, ticker, hobby scroll, profiles, quiz
-// ═══════════════════════════════════════════════════════════════
-const landingEl = document.getElementById('s-landing');
-if (landingEl) {
-  landingEl.addEventListener('scroll', () => {
-    const nav = document.getElementById('sitenav');
-    if (nav) nav.classList.toggle('stuck', landingEl.scrollTop > 60);
-  });
-}
+// ── NAV SCROLL ──────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('sitenav');
+  nav.classList.toggle('stuck', window.scrollY > 60);
+});
 
 function scrollToSection(id) {
   const el = document.getElementById(id);
-  const screen = document.getElementById('s-landing');
-  if (el && screen) screen.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Reveal on scroll — uses s-landing as root (it's the scroll container, not the viewport)
+// ── SCROLL REVEAL ────────────────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
 function initReveal() {
-  const root = document.getElementById('s-landing');
-  if (!root) return;
-
-  function checkReveals() {
-    const rootRect = root.getBoundingClientRect();
-    document.querySelectorAll('.reveal:not(.in)').forEach(el => {
-      const r = el.getBoundingClientRect();
-      // Element is within the visible portion of the screen div
-      if (r.top < rootRect.bottom - 40 && r.bottom > rootRect.top) {
-        el.classList.add('in');
-      }
-    });
-  }
-
-  // Check on scroll
-  root.addEventListener('scroll', checkReveals, { passive: true });
-  // Check immediately and after a tick (for elements in viewport on load)
-  checkReveals();
-  setTimeout(checkReveals, 100);
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 }
-initReveal();
 
+// ── TICKER ──────────────────────────────────────────────────
 function buildTicker() {
   const items = HOBBY_ORDER.map(k => {
     const h = HOBBIES[k];
     return `<div class="tick-item"><span class="tick-icon">${h.icon}</span><span class="tick-name">${k.toUpperCase()}</span></div>`;
   }).join('');
-  const el = document.getElementById('tickerEl');
-  if (el) el.innerHTML = `<div class="ticker-track">${items}${items}</div>`;
+  // duplicate for infinite loop
+  document.getElementById('tickerEl').innerHTML = `<div class="ticker-track">${items}${items}</div>`;
 }
 
+// ── HOBBY SCROLL ─────────────────────────────────────────────
 function buildHobbyScroll() {
   const el = document.getElementById('hobbyScrollEl');
-  if (!el) return;
   el.innerHTML = HOBBY_ORDER.map(k => {
     const h = HOBBIES[k];
     return `<div class="hsc" style="background:${h.color}" onclick="scrollToSection('cta')">
@@ -1983,43 +1300,45 @@ function buildHobbyScroll() {
   }).join('');
 }
 
+// ── PROFILES GRID ────────────────────────────────────────────
 function buildProfilesGrid() {
   const el = document.getElementById('profilesGridEl');
-  if (!el) return;
   el.innerHTML = Object.entries(PROFILES_DATA).map(([key, p], i) => {
-    const col = PROFILE_COLORS[key] || { bg:'#555', text:'white' };
-    const tags = p.hobbies.map(h => `<div class="pcard-htag">${HOBBIES[h]?.icon||''} ${h}</div>`).join('');
-    return `<div class="pcard reveal d${Math.min(i+1,5)}" style="background:${col.bg};color:${col.text}">
+    const col = PROFILE_COLORS[key] || { bg: '#555', text: 'white' };
+    const tags = p.hobbies.map(h => `<div class="pcard-htag">${HOBBIES[h]?.icon || ''} ${h}</div>`).join('');
+    return `<div class="pcard reveal d${i+1}" style="background:${col.bg};color:${col.text}">
       <span class="pcard-emoji">${p.emoji}</span>
-      <div class="pcard-type">${p.type.replace('\n','<br>')}</div>
-      <div class="pcard-desc">${p.desc.replace(/<[^>]+>/g,'')}</div>
+      <div class="pcard-type">${p.type.replace('\n', '<br>')}</div>
+      <div class="pcard-desc">${p.desc.replace(/<[^>]+>/g, '')}</div>
       <div class="pcard-hobbies">${tags}</div>
     </div>`;
   }).join('');
-  document.querySelectorAll('.pcard').forEach(el => revealObs.observe(el));
+  // re-observe newly added elements
+  document.querySelectorAll('.pcard').forEach(el => revealObserver.observe(el));
 }
 
-// Landing quiz
-let lqIdx = 0, lqAnswers = [], lqSelected = null;
+// ── QUIZ ─────────────────────────────────────────────────────
+let qIdx = 0, answers = [], selected = null;
 
 function openQuiz() {
-  lqIdx = 0; lqAnswers = []; lqSelected = null;
-  renderLQ(0);
-  document.getElementById('quizModal')?.classList.add('open');
+  qIdx = 0; answers = []; selected = null;
+  renderQ(0);
+  document.getElementById('quizModal').classList.add('open');
 }
 
 function closeQuiz() {
-  document.getElementById('quizModal')?.classList.remove('open');
+  document.getElementById('quizModal').classList.remove('open');
 }
 
-function renderLQ(i) {
+function renderQ(i) {
   const q = QUESTIONS[i];
-  document.getElementById('qNum').textContent = String(i+1).padStart(2,'0') + ' / ' + QUESTIONS.length;
-  document.getElementById('qFill').style.width = `${((i+1)/QUESTIONS.length)*100}%`;
+  document.getElementById('qNum').textContent = String(i + 1).padStart(2, '0') + ' / ' + QUESTIONS.length;
+  document.getElementById('qFill').style.width = `${((i + 1) / QUESTIONS.length) * 100}%`;
   document.getElementById('qText').textContent = q.q;
-  lqSelected = null;
-  const next = document.getElementById('qNext');
-  next.classList.remove('ready');
+  selected = null;
+  const nextBtn = document.getElementById('qNext');
+  nextBtn.classList.remove('ready');
+
   const opts = document.getElementById('qOpts');
   opts.innerHTML = '';
   q.opts.forEach(o => {
@@ -2029,86 +1348,209 @@ function renderLQ(i) {
     btn.addEventListener('click', () => {
       opts.querySelectorAll('.qbox-opt').forEach(b => b.classList.remove('sel'));
       btn.classList.add('sel');
-      lqSelected = o.v;
-      next.classList.add('ready');
+      selected = o.v;
+      nextBtn.classList.add('ready');
     });
     opts.appendChild(btn);
   });
 }
 
 function quizNext() {
-  if (!lqSelected) return;
-  lqAnswers.push(lqSelected);
-  if (lqIdx < QUESTIONS.length - 1) { lqIdx++; renderLQ(lqIdx); }
-  else { closeQuiz(); showResult(); }
+  if (!selected) return;
+  answers.push(selected);
+  if (qIdx < QUESTIONS.length - 1) {
+    qIdx++;
+    renderQ(qIdx);
+  } else {
+    closeQuiz();
+    showResult();
+  }
 }
 
-// Landing result + signup flow
-let resultProfile = null;
+// ── RESULT + SIGNUP FLOW ─────────────────────────────────────
+let resultProfile = null; // stores { key, p, col } after quiz
 
 function showResult() {
   const counts = {};
-  lqAnswers.forEach(a => counts[a] = (counts[a]||0)+1);
-  const topKey = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'creative';
-  const p = PROFILES_DATA[topKey];
-  const col = PROFILE_COLORS[topKey];
-  resultProfile = { key: topKey, p, col,
-    type: p.type.replace('\n',' '),
-    emoji: p.emoji,
-    hobbies: p.hobbies };
+  answers.forEach(a => counts[a] = (counts[a] || 0) + 1);
+  const topKey = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'creative';
+  const p = PROFILES_DATA[topKey] || PROFILES_DATA.creative;
+  const col = PROFILE_COLORS[topKey] || { bg: '#F0C93A', text: '#0E0D0B' };
+  resultProfile = { key: topKey, p, col };
   renderResultStep();
-  document.getElementById('resultModal')?.classList.add('open');
+  document.getElementById('resultModal').classList.add('open');
 }
 
-function closeResult() { document.getElementById('resultModal')?.classList.remove('open'); }
-
-function stepDots(cur) {
-  return `<div style="display:flex;gap:7px;margin-bottom:28px">${[0,1,2].map(i=>
-    `<div style="width:${i===cur?22:7}px;height:7px;border-radius:4px;background:${i<cur?'rgba(255,255,255,.35)':i===cur?'var(--off)':'rgba(255,255,255,.12)'}"></div>`
-  ).join('')}</div>`;
+function closeResult() {
+  document.getElementById('resultModal').classList.remove('open');
 }
 
+function stepIndicator(current) {
+  return `<div class="rbox-steps-indicator">
+    ${[0,1,2].map(i => `<div class="rsi-dot ${i < current ? 'done' : i === current ? 'active' : ''}"></div>`).join('')}
+  </div>`;
+}
+
+// ── STEP 1: RESULT ────────────────────────────────────────────
 function renderResultStep() {
-  const { key, p, col, type, emoji } = resultProfile;
-  const textW = col.text === 'white';
+  const { key, p, col } = resultProfile;
+  const textOnBg = col.text === 'white' ? 'white' : '#0E0D0B';
+
   const hobbiesHTML = p.hobbies.map(h => {
     const hd = HOBBIES[h];
-    return `<div style="flex:1;border-radius:13px;padding:16px 13px;background:${hd.color}">
-      <div style="font-size:22px;margin-bottom:7px">${hd.icon}</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:var(--ink)">${h.toUpperCase()}</div>
-      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.45;color:var(--ink)">${hd.tagline}</div>
+    return `<div class="rbhr" style="background:${hd.color}">
+      <span class="rbhr-icon">${hd.icon}</span>
+      <div class="rbhr-name">${h.toUpperCase()}</div>
+      <div class="rbhr-tag" style="color:rgba(0,0,0,.4)">${hd.tagline}</div>
     </div>`;
   }).join('');
+
   document.getElementById('resultBox').innerHTML = `
-    <button class="qbox-x" onclick="closeResult()" style="position:absolute;top:14px;right:14px">✕</button>
-    ${stepDots(0)}
-    <div style="border-radius:16px;padding:22px 20px;margin-bottom:20px;background:${col.bg};color:${col.text};display:flex;align-items:center;gap:14px;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-18px;right:-18px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
-      <span style="font-size:38px">${emoji}</span>
+    <button class="qbox-x" onclick="closeResult()">✕</button>
+    ${stepIndicator(0)}
+    <div class="rbox-profile-banner" style="background:${col.bg};color:${textOnBg}">
+      <span class="rpb-emoji">${p.emoji}</span>
       <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;line-height:1">${type}</div>
-        <div style="font-size:11px;font-weight:700;opacity:.55;margin-top:3px">Your curiosity type</div>
+        <div class="rpb-type">${p.type.replace('\n', ' ')}</div>
+        <div class="rpb-sub">Your curiosity type</div>
       </div>
     </div>
-    <div style="font-size:14px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:18px">${p.desc}</div>
-    <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:10px">Your matched hobbies</div>
-    <div style="display:flex;gap:8px;margin-bottom:22px">${hobbiesHTML}</div>
-    <button style="width:100%;background:var(--off);color:var(--ink);border:none;border-radius:12px;padding:15px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s" onclick="closeResult();showAuth('signup',resultProfile)">
-      Create My Account →
+    <div class="rbox-desc-text">${p.desc}</div>
+    <div class="rbox-matched-label">Your matched hobbies</div>
+    <div class="rbox-hobby-row">${hobbiesHTML}</div>
+    <button class="signup-submit-btn" onclick="renderSignupStep()">
+      <span class="btn-text">Create My Account →</span>
     </button>
     <div style="text-align:center;margin-top:10px">
       <button style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;padding:6px" onclick="closeResult();openQuiz()">Retake the quiz</button>
     </div>`;
 }
 
-// Close modals on overlay click
-document.getElementById('quizModal')?.addEventListener('click', e => { if (e.target===e.currentTarget) closeQuiz(); });
-document.getElementById('resultModal')?.addEventListener('click', e => { if (e.target===e.currentTarget) closeResult(); });
+// ── STEP 2: SIGNUP ────────────────────────────────────────────
+function renderSignupStep() {
+  const { key, p, col } = resultProfile;
+  const firstHobby = p.hobbies[0];
+  const hd = HOBBIES[firstHobby];
+  const weekTagsHTML = p.hobbies.map(h => {
+    const hob = HOBBIES[h];
+    // For light-colored hobby cards, use a readable dark text on pastel background
+    const lightColors = ['#F0C93A','#B8D96E','#ACD8F0','#F4A261','#D4956A','#84CC16','#F59E0B','#F472B6','#A78BFA'];
+    const isLight = lightColors.includes(hob.color);
+    const tagBg = hob.color + '25';
+    const tagColor = isLight ? 'rgba(255,255,255,0.75)' : hob.color;
+    return `<span class="swp-tag" style="background:${tagBg};color:${tagColor}">${hob.icon} ${h}</span>`;
+  }).join('');
+
+  document.getElementById('resultBox').innerHTML = `
+    <button class="qbox-x" onclick="closeResult()">✕</button>
+    ${stepIndicator(1)}
+    <div class="signup-hero">
+      <span class="signup-icon">${p.emoji}</span>
+      <div class="signup-h">YOU'RE A<br>${p.type.replace('\n', ' ')}</div>
+      <div class="signup-sub">Create your free account to save your profile, track your progress, and start your first week.</div>
+    </div>
+    <div class="signup-week-preview">
+      <div style="flex:1">
+        <div class="swp-label">Your Week 1 lineup</div>
+        <div class="swp-hobbies">${weekTagsHTML}</div>
+      </div>
+      <div style="font-size:24px">📅</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input class="form-input" id="inp-first" type="text" placeholder="Alex" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input class="form-input" id="inp-last" type="text" placeholder="Chen" autocomplete="family-name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" id="inp-email" type="email" placeholder="you@example.com" autocomplete="email">
+      <div class="form-error" id="err-email">Please enter a valid email address.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="inp-pass" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+      <div class="form-error" id="err-pass">Password must be at least 8 characters.</div>
+    </div>
+    <button class="signup-submit-btn" id="signupBtn" onclick="submitSignup()">
+      <div class="btn-spinner"></div>
+      <span class="btn-text">Start My SHRUG Journey →</span>
+    </button>
+    <div class="form-terms">By creating an account you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a>. No spam, ever.</div>
+    <div style="text-align:center;margin-top:10px">
+      <button style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;padding:6px" onclick="renderResultStep()">← Back to your results</button>
+    </div>`;
+
+  // Autofocus first name
+  setTimeout(() => document.getElementById('inp-first')?.focus(), 100);
+}
+
+// ── SUBMIT SIGNUP ─────────────────────────────────────────────
+// submitSignup defined below
+
+// ── STEP 3: WELCOME ───────────────────────────────────────────
+function renderWelcomeStep(name, email) {
+  const { key, p, col } = resultProfile;
+  const firstHobby = p.hobbies[0];
+  const hd = HOBBIES[firstHobby];
+
+  document.getElementById('resultBox').innerHTML = `
+    ${stepIndicator(2)}
+    <div class="welcome-confetti">🎉</div>
+    <div class="welcome-h">YOU'RE IN,<br>${name.toUpperCase()}.</div>
+    <div class="welcome-sub">Your account is ready. Your first week is queued. The only thing left to do is start.</div>
+    <div class="welcome-week-card wwc" style="background:${hd.color}">
+      <div class="wwc-eyebrow" style="color:${hd.textColor === 'white' ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.4)'}">📅 Week 1 — Starting now</div>
+      <div class="wwc-title" style="color:${hd.textColor}">${firstHobby.toUpperCase()}</div>
+      <div class="wwc-concept" style="color:${hd.textColor === 'white' ? 'rgba(255,255,255,.6)' : 'rgba(0,0,0,.5)'}">Chapter 01 · ${hd.project.ccTitle}</div>
+      <div class="wwc-dots" style="margin-bottom:18px">
+        <div class="wwc-dot" style="width:18px;background:${hd.textColor === 'white' ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.4)'}"></div>
+        <div class="wwc-dot" style="background:${hd.textColor === 'white' ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.12)'}"></div>
+        <div class="wwc-dot" style="background:${hd.textColor === 'white' ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.12)'}"></div>
+        <div class="wwc-dot" style="background:${hd.textColor === 'white' ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.12)'}"></div>
+      </div>
+    </div>
+    <div class="welcome-email-confirm">
+      <span class="wec-icon">📬</span>
+      <span>We sent a welcome note to <strong style="color:var(--off)">${email}</strong>. Your profile, matched hobbies, and first challenge are waiting inside.</span>
+    </div>
+    <button class="welcome-launch-btn" onclick="launchApp()">Launch SHRUG →</button>
+    <button class="welcome-skip" onclick="closeResult()">Maybe later</button>`;
+}
+
+// launchApp defined below
+
+// ── TOAST ─────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--off);color:var(--ink);padding:14px 24px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;z-index:9999;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 12px 32px rgba(0,0,0,.4)`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; }, 50);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)'; setTimeout(() => t.remove(), 400); }, 4000);
+}
+
+// close modals on overlay click
+document.getElementById('quizModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeQuiz();
+});
+document.getElementById('resultModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeResult();
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+buildTicker();
+buildHobbyScroll();
+buildProfilesGrid();
+initReveal();
 
 
-// ═══════════════════════════════════════════════════════════════
+
 // APP FUNCTIONS
-// ═══════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════
 // VIEW / NAV
 // ══════════════════════════════════════════════════════════════
@@ -3076,61 +2518,470 @@ function injectProjectSubmitBtn() {
 }
 
 // Patch switchTab to inject button after project renders
-const _origSwitchTab = switchTab;
-window.switchTab = function(el, tab) {
-  _origSwitchTab(el, tab);
-  if (tab === 'project') injectProjectSubmitBtn();
-};
 
-// ══════════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════════
-// TOAST
+// DB — localStorage backend (swap methods for real API calls)
 // ═══════════════════════════════════════════════════════════════
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+// ── Override landing's stub submitSignup with real version ────
+function submitSignup() {
+  const first = document.getElementById('inp-first')?.value.trim() || '';
+  const email = (document.getElementById('inp-email')?.value || '').trim().toLowerCase();
+  const pass  = document.getElementById('inp-pass')?.value || '';
+  let valid = true;
+
+  const emailEl  = document.getElementById('inp-email');
+  const emailErr = document.getElementById('err-email');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    emailEl?.classList.add('error'); emailErr?.classList.add('show'); valid = false;
+  } else { emailEl?.classList.remove('error'); emailErr?.classList.remove('show'); }
+
+  const passEl  = document.getElementById('inp-pass');
+  const passErr = document.getElementById('err-pass');
+  if (pass.length < 8) {
+    passEl?.classList.add('error'); passErr?.classList.add('show'); valid = false;
+  } else { passEl?.classList.remove('error'); passErr?.classList.remove('show'); }
+
+  if (!valid) return;
+
+  const btn = document.getElementById('signupBtn');
+  btn?.classList.add('loading');
+
+  const userData = {
+    name:     first || 'Explorer',
+    email,
+    password: pass,
+    profile:  resultProfile?.key          || 'creative',
+    hobbies:  resultProfile?.p?.hobbies   || PROFILES_DATA.creative.hobbies,
+  };
+
+  setTimeout(() => {
+    console.log('SHRUG: starting DB.create', userData);
+    let res;
+    try { res = DB.create(userData); } catch(e) { console.error('SHRUG: DB.create threw', e); btn?.classList.remove('loading'); return; }
+    console.log('SHRUG: DB.create result', res);
+    btn?.classList.remove('loading');
+    if (res.error) {
+      const errDiv = document.getElementById('err-email');
+      if (errDiv) { errDiv.textContent = res.error; errDiv.classList.add('show'); }
+      document.getElementById('inp-email')?.classList.add('error');
+      return;
+    }
+    try { DB.saveSession(res.user); console.log('SHRUG: session saved'); } catch(e) { console.error('SHRUG: saveSession threw', e); }
+    try { renderWelcomeStep(first || 'Explorer', email); console.log('SHRUG: renderWelcomeStep called'); } catch(e) { console.error('SHRUG: renderWelcomeStep threw', e); }
+  }, 800);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// MEMOIR SAVE (called from feedback submit)
-// ═══════════════════════════════════════════════════════════════
-function saveMemoirEntry(entry) {
-  if (!currentUser) return;
-  DB.addMemoirEntry(currentUser.email, entry);
+// ── Override landing's launchApp stub ─────────────────────────
+function launchApp() {
+  const session = DB.loadSession();
+  if (session) { closeResult(); enterApp(session); }
 }
 
-// ═══════════════════════════════════════════════════════════════
-// SIGN OUT
-// ═══════════════════════════════════════════════════════════════
+// ── Enter the app ─────────────────────────────────────────────
+function enterApp(user) {
+  currentUser = user;
+
+  // Personalise sidebar
+  const nameEl = document.getElementById('sb-user-name');
+  const typeEl = document.getElementById('sb-user-type');
+  if (nameEl) nameEl.textContent = user.name;
+  if (typeEl) typeEl.textContent = (PROFILES_DATA[user.profile]?.type || 'Explorer').replace('\n',' ');
+
+  // Build views
+  buildHomeDashboard(user);
+  buildExploreGrid();
+  buildProfileViewApp(user);
+
+  // Show app over landing
+  document.getElementById('app-layer').classList.add('visible');
+  showView('home');
+  showToast('Welcome, ' + user.name + '! 👋');
+}
+
 function signOut() {
   DB.clearSession();
   currentUser = null;
-  showToast('Signed out. See you soon! 👋');
-  setTimeout(() => goTo('landing'), 400);
+  document.getElementById('app-layer').classList.remove('visible');
+  showToast('Signed out. See you soon!');
 }
 
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
-buildTicker();
-buildHobbyScroll();
-buildProfilesGrid();
-renderLQ(0);
+// ── Build home dashboard ──────────────────────────────────────
+function buildHomeDashboard(user) {
+  const hobbies  = user.hobbies || [];
+  const firstKey = hobbies[0];
+  const hd       = firstKey ? HOBBIES[firstKey] : null;
+  const hr       = new Date().getHours();
+  const greet    = hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
 
-// Check for existing session
-(function boot() {
-  const session = DB.loadSession();
+  const greetEl = document.getElementById('webHomeGreet');
+  if (greetEl) greetEl.innerHTML = '<div style="font-size:10px;color:rgba(255,255,255,.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px">'+greet+',</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:44px;letter-spacing:1px;margin-bottom:22px">'+user.name.toUpperCase()+' 👋</div>';
+
+  const card = document.getElementById('home-active-card');
+  if (card && hd) {
+    const w = hd.textColor === 'white';
+    card.style.background = hd.color;
+    card.innerHTML = '<div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07)"></div>'
+      + '<div class="hw-eye" style="color:'+(w?'rgba(255,255,255,.5)':'rgba(0,0,0,.4)')+'">'+hd.icon+' Active hobby</div>'
+      + '<div class="hw-hobby" style="color:'+hd.textColor+'">'+firstKey.toUpperCase()+'</div>'
+      + '<div class="hw-concept" style="color:'+(w?'rgba(255,255,255,.6)':'rgba(0,0,0,.5)')+'">'+hd.project.ccTitle+'</div>'
+      + '<div class="hw-dots">'
+      + '<div class="hw-dot done" style="width:18px;background:'+(w?'rgba(255,255,255,.6)':'rgba(0,0,0,.45)')+'"></div>'
+      + '<div class="hw-dot" style="background:'+(w?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)')+'"></div>'
+      + '<div class="hw-dot" style="background:'+(w?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)')+'"></div>'
+      + '<div class="hw-dot" style="background:'+(w?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)')+'"></div>'
+      + '</div>'
+      + '<button class="hw-btn" onclick="event.stopPropagation();openHobby(\''+firstKey+'\')" style="background:'+(w?'rgba(0,0,0,.25)':'rgba(0,0,0,.12)')+';color:'+hd.textColor+'">Start Chapter 01 →</button>';
+    card.onclick = function() { openHobby(firstKey); };
+  }
+
+  const pillsEl = document.getElementById('home-pills');
+  if (pillsEl) {
+    pillsEl.innerHTML = hobbies.map(function(h,i) {
+      var hob = HOBBIES[h];
+      return '<div class="home-pill" style="background:'+hob.color+'" onclick="openHobby(\''+h+'\')">'
+        + '<div class="hp-n" style="color:'+hob.textColor+'">'+h.toUpperCase()+'</div>'
+        + '<div class="hp-s" style="color:'+(hob.textColor==='white'?'rgba(255,255,255,.4)':'rgba(0,0,0,.4)')+'">'+( i===0?'Active':'Queued')+'</div>'
+        + '</div>';
+    }).join('')
+    + '<div class="home-pill" style="background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.12)" onclick="showView(\'explore\')">'
+    + '<div class="hp-n" style="color:rgba(255,255,255,.35)">+ EXPLORE</div>'
+    + '<div class="hp-s" style="color:rgba(255,255,255,.2)">All 20</div></div>';
+  }
+}
+
+function buildProfileViewApp(user) {
+  var p   = PROFILES_DATA[user.profile];
+  var col = PROFILE_COLORS[user.profile] || { bg:'#F0C93A', text:'#0E0D0B' };
+  if (!p) return;
+  var banner = document.getElementById('webProfBanner');
+  if (banner) { banner.style.background = col.bg; banner.style.color = col.text; }
+  var typeEl = document.getElementById('webProfTypeBig');
+  if (typeEl) typeEl.textContent = p.type.replace('\n',' ');
+  var emojiEl = document.getElementById('webProfEmoji');
+  if (emojiEl) emojiEl.textContent = p.emoji;
+  var descEl = document.getElementById('webProfDesc');
+  if (descEl) descEl.innerHTML = p.desc;
+  var matchesEl = document.getElementById('webProfMatches');
+  if (matchesEl) matchesEl.innerHTML = p.hobbies.map(function(h) {
+    var hd = HOBBIES[h];
+    return '<div class="rec-card" style="background:'+hd.color+'" onclick="openHobby(\''+h+'\')">'
+      + '<div class="rec-icon">'+hd.icon+'</div>'
+      + '<div style="flex:1"><div class="rec-name">'+h.toUpperCase()+'</div>'
+      + '<div class="rec-sub" style="color:rgba(0,0,0,.4)">'+hd.tagline+'</div></div>'
+      + '<div class="rec-arr">›</div></div>';
+  }).join('');
+}
+
+// Fix app quiz modal references
+function openQuizModal()  { var m = document.getElementById('appQuizModal'); if(m) m.classList.add('open'); }
+function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(m) m.classList.remove('open'); }
+
+// Boot: restore session
+(function() {
+  var session = DB.loadSession();
   if (session && session.email) {
     enterApp(session);
+    var cta = document.querySelector('.n-cta');
+    if (cta) { cta.textContent = 'Open App →'; cta.onclick = function(){ enterApp(session); }; }
   }
 })();
 
 </script>
-</body>
 
-</script>
+
+<!-- APP LAYER -->
+<div id="app-layer">
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-logo" onclick="showView('home')">
+    <div class="sb-logo-icon">
+      <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+        <path d="M68 26H40C34 26 29 31 29 37s5 11 11 11h18c6 0 11 5 11 11s-5 11-11 11H30" stroke="#111110" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="sb-logo-word">SHRUG</div>
+  </div>
+  <div id="sb-user-block" style="padding:10px 14px;margin:0 10px 6px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px"><div id="sb-user-name" style="font-size:13px;font-weight:800;color:var(--off)">—</div><div id="sb-user-type" style="font-size:10px;color:rgba(255,255,255,.28);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-top:2px">—</div></div>
+  <div class="sb-nav">
+    <button class="sb-item active" id="nav-home" onclick="showView('home')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </button>
+    <button class="sb-item" id="nav-explore" onclick="showView('explore')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Explore Hobbies
+    </button>
+    <button class="sb-item" id="nav-memoir" onclick="showView('memoir')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Memoir
+    </button>
+    <div class="sb-divider"></div>
+    <button class="sb-item" onclick="openQuizModal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      Take the Quiz
+    </button>
+    <button class="sb-item" id="nav-profile" onclick="showView('profile')" style="display:none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      My Profile
+    </button>
+  </div>
+  <div class="sb-foot">20 HOBBIES<br>ONE CHAPTER AT A TIME</div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HOME -->
+<div class="view active" id="view-home">
+  <div class="section">
+    <div style="font-size:11px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Good morning,</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;margin-bottom:28px">ALEX 👋</div>
+    <div class="home-layout">
+      <div>
+        <div class="sec-lbl">This week</div>
+        <div class="home-week" id="home-active-card" onclick="openHobby('photography')">
+          <div class="hw-eye">📸 Active hobby</div>
+          <div class="hw-hobby">PHOTOGRAPHY</div>
+          <div class="hw-concept">Rule of Thirds</div>
+          <div class="hw-dots">
+            <div class="hw-dot done"></div><div class="hw-dot"></div><div class="hw-dot"></div><div class="hw-dot"></div>
+          </div>
+          <button class="hw-btn">Continue Learning →</button>
+        </div>
+        <div class="sec-lbl">Your hobbies</div>
+        <div class="home-pills" id="home-pills">
+          <div class="home-pill" style="background:#F0C93A" onclick="openHobby('photography')">
+            <div class="hp-n">PHOTOGRAPHY</div><div class="hp-s" style="color:rgba(0,0,0,0.4)">Active</div>
+          </div>
+          <div class="home-pill" style="background:#E8453C" onclick="openHobby('cooking')">
+            <div class="hp-n" style="color:white">COOKING</div><div class="hp-s" style="color:rgba(255,255,255,0.45)">Queued</div>
+          </div>
+          <div class="home-pill" style="background:#B8D96E" onclick="openHobby('writing')">
+            <div class="hp-n">WRITING</div><div class="hp-s" style="color:rgba(0,0,0,0.4)">Queued</div>
+          </div>
+          <div class="home-pill" style="background:rgba(255,255,255,0.05);border:1px solid var(--border)" onclick="showView('explore')">
+            <div class="hp-n" style="color:rgba(255,255,255,0.45)">+ ADD</div><div class="hp-s" style="color:rgba(255,255,255,0.22)">Explore</div>
+          </div>
+        </div>
+      </div>
+      <div class="home-right">
+        <div class="home-widget">
+          <div class="hw-lbl">Recent Memoir</div>
+          <div class="hw-entry" onclick="showView('memoir')">
+            <div class="hw-e-hobby" style="color:#F0C93A">📸 PHOTOGRAPHY</div>
+            <div class="hw-e-concept">Rule of Thirds · Week 1</div>
+            <div class="hw-e-quote">"The morning light made the cup look almost alive."</div>
+          </div>
+          <div class="hw-entry" onclick="showView('memoir')">
+            <div class="hw-e-hobby" style="color:#E8453C">🍳 COOKING</div>
+            <div class="hw-e-concept">Salt & Flavor · Feb 7</div>
+            <div class="hw-e-quote">"I finally understand why restaurant food tastes different."</div>
+          </div>
+        </div>
+        <div class="home-widget">
+          <div class="hw-lbl">Your Curiosity Profile</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px">
+            <div style="font-size:26px">🎨</div>
+            <div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px">CALM CREATOR</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.28)">Week 3 · 3 hobbies</div>
+            </div>
+          </div>
+          <button class="btn btn-full btn-outline-full" onclick="openQuizModal()">Retake the Quiz →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPLORE -->
+<div class="view" id="view-explore">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">EXPLORE</div><div class="sec-sub">20 hobbies · find your next obsession</div></div>
+    </div>
+    <div class="hobby-grid" id="webHobbyGrid"></div>
+  </div>
+</div>
+
+<!-- MEMOIR -->
+<div class="view" id="view-memoir">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">MEMOIR</div><div class="sec-sub">Your journey so far · 3 chapters written</div></div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">03</div>
+    </div>
+    <div class="memoir-layout">
+      <div>
+        <div class="mem-entry" onclick="openHobby('photography')">
+          <div class="mem-hdr"><div class="mem-dot" style="background:#F0C93A"></div><div class="mem-hobby" style="color:#F0C93A">PHOTOGRAPHY</div><div class="mem-date">Feb 14</div></div>
+          <div class="mem-concept">Rule of Thirds</div>
+          <div class="mem-reflect">"The morning light made the cup look almost alive. I didn't expect to feel that way about a coffee mug."</div>
+          <div class="mem-pills">
+            <div class="mem-pill" style="background:#F0C93A22;color:#c8a420">Comp 8/10</div>
+            <div class="mem-pill" style="background:#ACD8F022;color:#4a90b0">Light 9/10</div>
+            <div class="mem-pill" style="background:#B8D96E22;color:#5a8020">Story 8/10</div>
+          </div>
+        </div>
+        <div class="mem-entry" onclick="openHobby('cooking')">
+          <div class="mem-hdr"><div class="mem-dot" style="background:#E8453C"></div><div class="mem-hobby" style="color:#E8453C">COOKING</div><div class="mem-date">Feb 7</div></div>
+          <div class="mem-concept">Salting & Flavor</div>
+          <div class="mem-reflect">"I finally understand why restaurant food tastes different. It was always the salt. I feel robbed of years."</div>
+          <div class="mem-pills">
+            <div class="mem-pill" style="background:#E8453C22;color:#b03020">Flavor 9/10</div>
+            <div class="mem-pill" style="background:#F0C93A22;color:#c8a420">Technique 7/10</div>
+          </div>
+        </div>
+        <div class="mem-entry" onclick="openHobby('writing')">
+          <div class="mem-hdr"><div class="mem-dot" style="background:#B8D96E"></div><div class="mem-hobby" style="color:#B8D96E">WRITING</div><div class="mem-date">Feb 1</div></div>
+          <div class="mem-concept">Your First Paragraph</div>
+          <div class="mem-reflect">"I rewrote the same opening 6 times and the last one was actually good. That surprised me more than anything."</div>
+          <div class="mem-pills">
+            <div class="mem-pill" style="background:#B8D96E22;color:#5a8020">Voice 8/10</div>
+            <div class="mem-pill" style="background:#ACD8F022;color:#4a90b0">Clarity 7/10</div>
+          </div>
+        </div>
+        <div class="mem-add" onclick="showView('explore')">
+          <div style="font-size:22px;margin-bottom:6px;color:rgba(255,255,255,0.18)">✦</div>
+          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.4);margin-bottom:3px">Start a new hobby</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.22)">Add another chapter to your story</div>
+        </div>
+      </div>
+      <div class="mem-aside">
+        <div class="mem-aside-card">
+          <div style="font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:14px">Your Profile</div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px">
+            <div style="font-size:26px">🎨</div>
+            <div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px">CALM CREATOR</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.28)">Week 3 · 3 hobbies explored</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.3);line-height:1.65;margin-bottom:12px">You feel most alive when you're making, exploring, or noticing things others miss.</div>
+          <button class="btn btn-full btn-outline-full" onclick="showView('explore')">Explore More →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE RESULT -->
+<div class="view" id="view-profile">
+  <div class="prof-wrap fade-in">
+    <button class="fb-back" onclick="showView('home')">← Back to home</button>
+    <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:6px">Your Curiosity Profile</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:1px;line-height:1;margin-bottom:28px" id="webProfTypeBig">CALM CREATOR</div>
+    <div class="prof-grid">
+      <div class="prof-card">
+        <div class="prof-eyebrow">Profile</div>
+        <span class="prof-emoji" id="webProfEmoji">🎨</span>
+        <div class="prof-desc" id="webProfDesc"></div>
+      </div>
+      <div>
+        <div class="sec-lbl" style="margin-bottom:12px">Matched Hobbies</div>
+        <div id="webProfMatches"></div>
+      </div>
+    </div>
+    <div class="prof-ctas">
+      <button class="btn btn-full btn-dark-full" onclick="showView('home')">Start My First Week →</button>
+      <button class="btn btn-full btn-outline-full" onclick="showView('explore')">Browse All 20 Hobbies</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="view" id="view-feedback">
+  <div class="fb-wrap fade-in">
+    <button class="fb-back" onclick="goBackFromFeedback()">← Back</button>
+    <div class="fb-head">
+      <div class="fb-eyebrow">Project Feedback</div>
+      <div class="fb-title">YOUR RESULTS</div>
+      <div class="fb-badge" id="fbBadgeWeb"></div>
+    </div>
+    <div class="fb-grid">
+      <div class="fb-card">
+        <div class="fb-card-lbl">Scores</div>
+        <div id="fbScoresWeb"></div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-card-lbl">AI Feedback</div>
+        <div class="ai-text" id="fbAIWeb"></div>
+      </div>
+    </div>
+    <div class="fb-next">
+      <button class="fb-nb" onclick="showView('memoir')">
+        <span class="fb-nb-icon">📖</span>
+        <span class="fb-nb-title">Save to Memoir</span>
+        <span class="fb-nb-sub">Keep this moment</span>
+      </button>
+      <button class="fb-nb" id="fbNextChallengeBtn" onclick="openProjectFromFeedback()">
+        <span class="fb-nb-icon" id="fbNextIcon">📸</span>
+        <span class="fb-nb-title">Next Challenge</span>
+        <span class="fb-nb-sub" id="fbNextSub">Continue this hobby</span>
+      </button>
+      <button class="fb-nb" onclick="openCareersFromFeedback()">
+        <span class="fb-nb-icon">🔭</span>
+        <span class="fb-nb-title">Explore Careers</span>
+        <span class="fb-nb-sub">Where this could go</span>
+      </button>
+      <button class="fb-nb" onclick="showView('home')">
+        <span class="fb-nb-icon">🏠</span>
+        <span class="fb-nb-title">Back to Home</span>
+        <span class="fb-nb-sub">See all your hobbies</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+</main><!-- /main -->
+
+<!-- PANEL OVERLAY -->
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+
+<!-- DETAIL PANEL -->
+<div class="panel" id="detailPanel">
+  <div class="panel-scroll">
+    <div class="panel-hero" id="panelHero">
+      <button class="panel-close" onclick="closePanel()">✕</button>
+      <div class="panel-eye" id="panelEye"></div>
+      <span class="panel-icon" id="panelIcon"></span>
+      <div class="panel-name" id="panelName"></div>
+      <div class="panel-tagline" id="panelTagline"></div>
+    </div>
+    <div class="panel-tabs" id="panelTabs">
+      <button class="panel-tab active" onclick="switchTab(this,'overview')">Overview</button>
+      <button class="panel-tab" onclick="switchTab(this,'stats')">Stats</button>
+      <button class="panel-tab" onclick="switchTab(this,'prompts')">Try It</button>
+      <button class="panel-tab" onclick="switchTab(this,'careers')">Careers</button>
+      <button class="panel-tab" onclick="switchTab(this,'project')">This Week →</button>
+    </div>
+    <div class="panel-body">
+      <div class="tab-pane active" id="tab-overview"></div>
+      <div class="tab-pane" id="tab-stats"></div>
+      <div class="tab-pane" id="tab-prompts"></div>
+      <div class="tab-pane" id="tab-careers"></div>
+      <div class="tab-pane" id="tab-project"></div>
+    </div>
+  </div>
+  <div class="panel-foot">
+    <button class="btn btn-full btn-dark-full" onclick="switchTab(document.querySelector('.panel-tab:last-child'),'project');setTimeout(injectProjectSubmitBtn,50)">Start This Week's Challenge →</button>
+    <button class="btn btn-full btn-outline-full" onclick="closePanel()">Close</button>
+  </div>
+</div>
+
+<!-- QUIZ MODAL -->
+<div class="modal-bg" id="appQuizModal">
+  <div class="quiz-box">
+    <button class="quiz-x" onclick="closeQuizModal()">✕</button>
+    <div class="quiz-prog"><div class="quiz-fill" id="qFillW" style="width:16%"></div></div>
+    <div class="quiz-qnum" id="qNumW">01</div>
+    <div class="quiz-q" id="qTextW"></div>
+    <div class="quiz-opts" id="qOptsW"></div>
+    <div class="quiz-foot">
+      <button class="btn btn-solid" id="qNextW" style="opacity:.3;pointer-events:none" onclick="quizNextW()">Continue →</button>
+    </div>
+  </div>
+</div>
+</div>
 </body>
 </html>
