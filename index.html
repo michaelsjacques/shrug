@@ -2107,47 +2107,155 @@ function closeHobbyPage() {
 }
 
 function openPanelFromPage(key) {
-  // Scroll to chapter section and expand it inline
   const h = HOBBIES[key];
   const p = h.project;
-  const dark = h.textColor === 'white';
   const body = document.getElementById('hp-body');
-
-  // Remove old chapter expanded section if exists
   const old = document.getElementById('hp-chapter-expanded');
   if (old) old.remove();
 
-  // Build full chapter content
   const el = document.createElement('div');
   el.id = 'hp-chapter-expanded';
-  el.style.cssText = 'margin-top:24px;';
-
+  el.style.cssText = 'margin-top:24px';
   el.innerHTML =
-    '<div class="hp-section-label">Chapter 01 · ' + p.ccTitle + '</div>'
+    '<div class="hp-section-label" style="margin-bottom:20px">Chapter 01 \xb7 ' + p.ccTitle + '</div>'
     + '<div class="concept-card" style="margin-bottom:16px">'
     + '<div class="cc-hdr"><div class="cc-icon" style="background:'+h.color+'22">'+p.ccIcon+'</div>'
     + '<div><div class="cc-title">'+p.ccTitle+'</div><div class="cc-type">'+p.ccType+'</div></div></div>'
     + '<div class="cc-body">'+p.ccBody+'</div></div>'
-    + '<div class="anim-area" style="border-radius:14px;overflow:hidden;margin-bottom:16px">'+getConceptVisual(key, h)+'</div>'
-    + '<div class="ch-box">'
-    + '<div class="ch-tag">'+p.chTag+'</div>'
-    + '<div class="ch-task">'+p.chTask+'</div>'
-    + '<div class="ch-detail">'+p.chDetail+'</div>'
-    + '</div>'
+    + '<div class="anim-area" style="border-radius:14px;overflow:hidden;margin-bottom:16px">'+getConceptVisual(key,h)+'</div>'
+    + '<div class="ch-box"><div class="ch-tag">'+p.chTag+'</div><div class="ch-task">'+p.chTask+'</div><div class="ch-detail">'+p.chDetail+'</div></div>'
     + '<div class="tips-list" style="margin-top:16px">'+p.tips.map(t=>'<div class="tip-row"><span>'+t.i+'</span><span>'+t.t+'</span></div>').join('')+'</div>'
     + '<div class="reflect-box" style="margin-top:16px">'
     + '<div class="reflect-lbl">Reflect</div>'
     + '<div class="reflect-q">'+p.reflect+'</div>'
-    + '<textarea placeholder="Write anything... even one sentence counts." style="width:100%;margin-top:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;color:var(--off);font-family:\'DM Sans\',sans-serif;font-size:13px;resize:vertical;min-height:80px"></textarea>'
-    + '</div>';
+    + '<textarea id="hp-reflection-text" placeholder="Write anything... even one sentence counts." style="width:100%;margin-top:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;color:var(--off);font-family:\'DM Sans\',sans-serif;font-size:13px;resize:vertical;min-height:80px;outline:none;box-sizing:border-box"></textarea>'
+    + '</div>'
+    + '<button id="hp-submit-btn" style="width:100%;margin-top:12px;padding:16px;background:var(--off);color:var(--ink);border:none;border-radius:12px;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Submit &amp; See Feedback \u2192</button>';
 
-  // Append after the chapter card
-  const chapterSection = body.lastElementChild;
-  chapterSection.appendChild(el);
+  body.lastElementChild.appendChild(el);
 
-  // Scroll to it
-  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  document.getElementById('hp-submit-btn').onclick = function(){ submitChapterFromPage(key); };
+  setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
 }
+
+function submitChapterFromPage(key) {
+  const h = HOBBIES[key];
+  const p = h.project;
+  const reflection = (document.getElementById('hp-reflection-text')?.value || '').trim();
+  const btn = document.getElementById('hp-submit-btn');
+  if (btn) { btn.textContent = 'Saving...'; btn.style.opacity = '0.6'; btn.disabled = true; }
+
+  setTimeout(function() {
+    document.getElementById('hp-submit-btn')?.remove();
+    const fbEl = document.createElement('div');
+    fbEl.id = 'hp-feedback-block';
+    fbEl.style.cssText = 'margin-top:20px';
+
+    const scoresHTML = p.scores.map(s =>
+      '<div style="margin-bottom:14px">'
+      + '<div style="display:flex;justify-content:space-between;margin-bottom:5px">'
+      + '<span style="font-size:12px;font-weight:700;color:rgba(255,255,255,.6)">'+s.label+'</span>'
+      + '<span style="font-size:12px;font-weight:800;color:'+s.color+'">'+s.val+'</span></div>'
+      + '<div style="height:4px;background:rgba(255,255,255,.07);border-radius:2px">'
+      + '<div style="height:100%;width:'+s.pct+'%;background:'+s.color+';border-radius:2px"></div>'
+      + '</div></div>'
+    ).join('');
+
+    fbEl.innerHTML =
+      '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:12px">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:14px">YOUR SCORES</div>'
+      + scoresHTML + '</div>'
+      + '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:12px">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:10px">AI FEEDBACK</div>'
+      + '<div style="font-size:14px;color:rgba(255,255,255,.65);line-height:1.7">'+p.aiFeedback+'</div></div>'
+      + '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:12px">'
+      + '<div style="font-size:13px;font-weight:800;color:rgba(255,255,255,.8);margin-bottom:14px">Did you enjoy '+key+'?</div>'
+      + '<div style="display:flex;gap:10px">'
+      + '<button id="hp-like-yes" style="flex:1;padding:12px;background:rgba(184,217,110,.1);border:1.5px solid rgba(184,217,110,.3);color:#B8D96E;border-radius:10px;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:800;cursor:pointer">\ud83d\udc4d Yes, save to Memoir</button>'
+      + '<button id="hp-like-no" style="flex:1;padding:12px;background:rgba(232,69,60,.08);border:1.5px solid rgba(232,69,60,.2);color:#E8453C;border-radius:10px;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:800;cursor:pointer">\ud83d\udc4e Not for me</button>'
+      + '</div></div>';
+
+    document.getElementById('hp-chapter-expanded').appendChild(fbEl);
+    document.getElementById('hp-like-yes').onclick = function(){ saveAndNextHobby(key, true,  reflection); };
+    document.getElementById('hp-like-no').onclick  = function(){ saveAndNextHobby(key, false, reflection); };
+    setTimeout(() => fbEl.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+  }, 600);
+}
+
+function saveAndNextHobby(key, liked, reflection) {
+  const h = HOBBIES[key];
+  const p = h.project;
+
+  if (currentUser) {
+    DB.addMemoirEntry(currentUser.email, {
+      hobby: key,
+      hobbyColor: h.color,
+      hobbyIcon: h.icon,
+      concept: p.ccTitle,
+      reflection: reflection || '',
+      liked: liked,
+      scores: p.scores,
+      completedAt: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})
+    });
+  }
+
+  const userHobbies = (currentUser && currentUser.hobbies) || [];
+  const nextKey = userHobbies.find(function(k){ return k !== key; })
+               || Object.keys(HOBBIES).find(function(k){ return k !== key; });
+  const nh = HOBBIES[nextKey];
+
+  const fbEl = document.getElementById('hp-feedback-block');
+  if (!fbEl) return;
+  fbEl.innerHTML =
+    '<div style="background:rgba(184,217,110,.08);border:1px solid rgba(184,217,110,.2);border-radius:16px;padding:28px;margin-bottom:12px;text-align:center">'
+    + '<div style="font-size:36px;margin-bottom:10px">'+(liked?'\ud83c\udf89':'\u2705')+'</div>'
+    + '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:6px">'+(liked?'SAVED TO MEMOIR':'CHAPTER COMPLETE')+'</div>'
+    + '<div style="font-size:13px;color:rgba(255,255,255,.45)">'+(liked?key.toUpperCase()+' \xb7 Chapter 01 is now part of your story.':'Noted \u2014 we\'ll find something that fits you better.')+'</div>'
+    + '</div>'
+    + (liked?'<button id="hp-memoir-btn" style="width:100%;padding:14px;margin-bottom:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:var(--off);font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:800;cursor:pointer">\ud83d\udcd6 View My Memoir</button>':'')
+    + '<button id="hp-next-btn" style="width:100%;padding:14px;background:'+nh.color+';border:none;border-radius:12px;color:'+nh.textColor+';font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">'+nh.icon+' Try Next: '+nextKey.toUpperCase()+' \u2192</button>'
+    + '<button id="hp-explore-btn" style="width:100%;padding:12px;margin-top:8px;background:none;border:none;color:rgba(255,255,255,.3);font-family:\'DM Sans\',sans-serif;font-size:12px;font-weight:700;cursor:pointer">or explore all 20 hobbies</button>';
+
+  if (liked) {
+    document.getElementById('hp-memoir-btn').onclick = function(){ closeHobbyPage(); showView('memoir'); buildMemoirView(); };
+  }
+  document.getElementById('hp-next-btn').onclick    = function(){ closeHobbyPage(); openHobby(nextKey); };
+  document.getElementById('hp-explore-btn').onclick = function(){ closeHobbyPage(); showView('explore'); };
+
+  buildMemoirView();
+  setTimeout(() => fbEl.scrollIntoView({ behavior:'smooth', block:'start' }), 50);
+}
+
+function buildMemoirView() {
+  const feedEl = document.getElementById('memoirFeed');
+  const countEl = document.getElementById('memoirCount');
+  if (!feedEl || !currentUser) return;
+  const entries = DB.getMemoirEntries(currentUser.email);
+  if (countEl) countEl.textContent = entries.length + ' chapter' + (entries.length !== 1 ? 's' : '') + ' written';
+  if (entries.length === 0) {
+    feedEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:rgba(255,255,255,.25);font-size:14px;line-height:1.8">Your memoir is empty.<br>Complete a hobby chapter to write your first entry.</div>';
+    return;
+  }
+  feedEl.innerHTML = entries.map(function(e) {
+    return '<div class="mem-entry" onclick="openHobby(\''+e.hobby+'\')">'
+      + '<div class="mem-hdr"><div class="mem-dot" style="background:'+e.hobbyColor+'"></div>'
+      + '<div class="mem-hobby" style="color:'+e.hobbyColor+'">'+e.hobby.toUpperCase()+'</div>'
+      + '<div class="mem-date">'+e.completedAt+'</div></div>'
+      + '<div class="mem-concept">'+e.concept+'</div>'
+      + (e.reflection ? '<div class="mem-reflect">"'+e.reflection+'"</div>' : '')
+      + '<div class="mem-pills">'
+      + e.scores.map(function(s){ return '<div class="mem-pill" style="background:'+s.color+'22;color:'+s.color+'">'+s.label+' '+s.val+'</div>'; }).join('')
+      + (e.liked===false?'<div class="mem-pill" style="background:rgba(232,69,60,.1);color:#E8453C">Not for me</div>':'')
+      + '</div></div>';
+  }).join('')
+  + '<div class="mem-add" onclick="showView(\'explore\')">'
+  + '<div style="font-size:22px;margin-bottom:6px;color:rgba(255,255,255,.18)">\u2736</div>'
+  + '<div style="font-size:13px;font-weight:800;color:rgba(255,255,255,.4);margin-bottom:3px">Start a new hobby</div>'
+  + '<div style="font-size:11px;color:rgba(255,255,255,.22)">Add another chapter to your story</div>'
+  + '</div>';
+}
+
+
 function closePanel() {
   document.getElementById('overlay').classList.remove('open');
   document.getElementById('detailPanel').classList.remove('open');
@@ -3228,7 +3336,7 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       Explore Hobbies
     </button>
-    <button class="sb-item" id="nav-memoir" onclick="showView('memoir')">
+    <button class="sb-item" id="nav-memoir" onclick="showView('memoir');buildMemoirView()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       Memoir
     </button>
@@ -3327,11 +3435,11 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
 <div class="view" id="view-memoir">
   <div class="section">
     <div class="sec-head">
-      <div><div class="sec-title">MEMOIR</div><div class="sec-sub">Your journey so far · 3 chapters written</div></div>
+      <div><div class="sec-title">MEMOIR</div><div class="sec-sub" id="memoirCount">Your journey so far · 0 chapters written</div></div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">03</div>
     </div>
     <div class="memoir-layout">
-      <div>
+      <div id="memoirFeed">
         <div class="mem-entry" onclick="openHobby('photography')">
           <div class="mem-hdr"><div class="mem-dot" style="background:#F0C93A"></div><div class="mem-hobby" style="color:#F0C93A">PHOTOGRAPHY</div><div class="mem-date">Feb 14</div></div>
           <div class="mem-concept">Rule of Thirds</div>
