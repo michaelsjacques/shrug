@@ -2083,7 +2083,7 @@ function openHobby(key) {
     // Chapter 1 card
     + '<div class="hp-section">'
     + '<div class="hp-section-label">Your first challenge</div>'
-    + '<div class="hp-chapter-card" style="background:'+h.color+';color:'+h.textColor+'" onclick="openPanelFromPage(\"'+key+'\")">'
+    + '<div class="hp-chapter-card" style="background:'+h.color+';color:'+h.textColor+'" id="hp-ch-card">'
     + '<div style="position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.07)"></div>'
     + '<div class="hp-chapter-num">'+p.num+'</div>'
     + '<div class="hp-chapter-title">'+p.title.replace('\n',' ')+'</div>'
@@ -2096,6 +2096,10 @@ function openHobby(key) {
   const page = document.getElementById('hobby-page');
   page.classList.add('open');
   page.scrollTop = 0;
+
+  // Wire chapter card click after render
+  const chCard = document.getElementById('hp-ch-card');
+  if (chCard) chCard.onclick = function() { openPanelFromPage(key); };
 }
 
 function closeHobbyPage() {
@@ -2103,29 +2107,46 @@ function closeHobbyPage() {
 }
 
 function openPanelFromPage(key) {
-  // Opens the original chapter panel on top of the hobby page
-  currentHobby = key;
-  activeHobbyKey = key;
+  // Scroll to chapter section and expand it inline
   const h = HOBBIES[key];
-  document.getElementById('panelHero').style.background = h.color;
-  document.getElementById('panelEye').style.color = h.textColor;
-  document.getElementById('panelEye').textContent = key.toUpperCase() + ' · CHAPTER 01';
-  document.getElementById('panelIcon').textContent = h.icon;
-  document.getElementById('panelName').textContent = key.toUpperCase();
-  document.getElementById('panelName').style.color = h.textColor;
-  document.getElementById('panelTagline').textContent = h.tagline;
-  document.getElementById('panelTagline').style.color = h.textColor;
-  document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelector('.panel-tab').classList.add('active');
-  document.getElementById('tab-overview').classList.add('active');
-  renderPanelTab('project');
-  document.getElementById('tab-project').classList.add('active');
-  document.querySelector('.panel-tab[onclick*="project"]').classList.add('active');
-  document.getElementById('overlay').classList.add('open');
-  document.getElementById('detailPanel').classList.add('open');
-  document.getElementById('detailPanel').style.zIndex = '700';
-  document.querySelector('.panel-scroll').scrollTop = 0;
+  const p = h.project;
+  const dark = h.textColor === 'white';
+  const body = document.getElementById('hp-body');
+
+  // Remove old chapter expanded section if exists
+  const old = document.getElementById('hp-chapter-expanded');
+  if (old) old.remove();
+
+  // Build full chapter content
+  const el = document.createElement('div');
+  el.id = 'hp-chapter-expanded';
+  el.style.cssText = 'margin-top:24px;';
+
+  el.innerHTML =
+    '<div class="hp-section-label">Chapter 01 · ' + p.ccTitle + '</div>'
+    + '<div class="concept-card" style="margin-bottom:16px">'
+    + '<div class="cc-hdr"><div class="cc-icon" style="background:'+h.color+'22">'+p.ccIcon+'</div>'
+    + '<div><div class="cc-title">'+p.ccTitle+'</div><div class="cc-type">'+p.ccType+'</div></div></div>'
+    + '<div class="cc-body">'+p.ccBody+'</div></div>'
+    + '<div class="anim-area" style="border-radius:14px;overflow:hidden;margin-bottom:16px">'+getConceptVisual(key, h)+'</div>'
+    + '<div class="ch-box">'
+    + '<div class="ch-tag">'+p.chTag+'</div>'
+    + '<div class="ch-task">'+p.chTask+'</div>'
+    + '<div class="ch-detail">'+p.chDetail+'</div>'
+    + '</div>'
+    + '<div class="tips-list" style="margin-top:16px">'+p.tips.map(t=>'<div class="tip-row"><span>'+t.i+'</span><span>'+t.t+'</span></div>').join('')+'</div>'
+    + '<div class="reflect-box" style="margin-top:16px">'
+    + '<div class="reflect-lbl">Reflect</div>'
+    + '<div class="reflect-q">'+p.reflect+'</div>'
+    + '<textarea placeholder="Write anything... even one sentence counts." style="width:100%;margin-top:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;color:var(--off);font-family:\'DM Sans\',sans-serif;font-size:13px;resize:vertical;min-height:80px"></textarea>'
+    + '</div>';
+
+  // Append after the chapter card
+  const chapterSection = body.lastElementChild;
+  chapterSection.appendChild(el);
+
+  // Scroll to it
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 }
 function closePanel() {
   document.getElementById('overlay').classList.remove('open');
