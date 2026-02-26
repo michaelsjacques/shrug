@@ -2713,7 +2713,7 @@ function openHobby(key) {
     + '<div class="hp-chapter-num">'+p.num+'</div>'
     + '<div class="hp-chapter-title">'+p.title.replace('\n',' ')+'</div>'
     + '<div class="hp-chapter-desc">'+p.desc+'</div>'
-    + '<button class="hp-chapter-btn">Start Chapter 01 →</button>'
+    + '<button class="hp-chapter-btn" id="hp-ch-btn">Start Chapter 01 →</button>'
     + '</div>'
     + '</div>';
 
@@ -2724,7 +2724,9 @@ function openHobby(key) {
 
   // Wire chapter card click after render
   const chCard = document.getElementById('hp-ch-card');
+  const chBtn  = document.getElementById('hp-ch-btn');
   if (chCard) chCard.onclick = function() { openPanelFromPage(key); };
+  if (chBtn)  chBtn.onclick  = function(e) { e.stopPropagation(); openPanelFromPage(key); };
 }
 
 function closeHobbyPage() {
@@ -2738,6 +2740,7 @@ function openPanelFromPage(key, chapterIdx) {
   const allChapters = [h.project].concat(extraChapters);
   const p = allChapters[chapterIdx];
   const body = document.getElementById('hp-body');
+
   const old = document.getElementById('hp-chapter-expanded');
   if (old) old.remove();
 
@@ -2745,40 +2748,41 @@ function openPanelFromPage(key, chapterIdx) {
   el.id = 'hp-chapter-expanded';
   el.style.cssText = 'margin-top:24px';
 
-  // Chapter selector tabs
-  const tabsHTML = allChapters.map(function(ch, i) {
-    const done = (window.completedChapters && window.completedChapters[key] && window.completedChapters[key][i]);
+  // Build chapter tab buttons via DOM (avoids innerHTML quote escaping bugs)
+  const tabsDiv = document.createElement('div');
+  tabsDiv.style.cssText = 'display:flex;gap:8px;margin-bottom:20px';
+  allChapters.forEach(function(ch, i) {
+    const done = window.completedChapters && window.completedChapters[key] && window.completedChapters[key][i];
     const active = i === chapterIdx;
-    return '<button onclick="openPanelFromPage(\''+key+'\','+i+')" style="flex:1;padding:10px 6px;background:'+(active?'rgba(255,255,255,.12)':'rgba(255,255,255,.04)')+';border:'+(active?'1.5px solid rgba(255,255,255,.25)':'1px solid rgba(255,255,255,.08)')+';border-radius:10px;color:'+(active?'var(--off)':'rgba(255,255,255,.4)')+';font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:800;cursor:pointer;text-align:center;line-height:1.3">'
-      + (done ? '\u2713 ' : '') + 'CH ' + (i+1)
-      + '</button>';
-  }).join('');
+    const btn = document.createElement('button');
+    btn.textContent = (done ? '\u2713 ' : '') + 'CH ' + (i + 1);
+    btn.style.cssText = 'flex:1;padding:10px 6px;background:' + (active ? 'rgba(255,255,255,.12)' : 'rgba(255,255,255,.04)')
+      + ';border:' + (active ? '1.5px solid rgba(255,255,255,.25)' : '1px solid rgba(255,255,255,.08)')
+      + ';border-radius:10px;color:' + (active ? 'var(--off)' : 'rgba(255,255,255,.4)')
+      + ';font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:800;cursor:pointer;text-align:center;line-height:1.3';
+    btn.onclick = (function(idx){ return function(){ openPanelFromPage(key, idx); }; })(i);
+    tabsDiv.appendChild(btn);
+  });
 
   el.innerHTML =
-    // Chapter navigation
-    '<div style="display:flex;gap:8px;margin-bottom:20px">' + tabsHTML + '</div>'
-    // Chapter heading
-    + '<div class="hp-section-label" style="margin-bottom:16px">' + p.num + ' \xb7 ' + p.ccTitle + '</div>'
-    // Concept card
+    '<div class="hp-section-label" style="margin-bottom:16px">' + p.num + ' &middot; ' + p.ccTitle + '</div>'
     + '<div class="concept-card" style="margin-bottom:16px">'
-    + '<div class="cc-hdr"><div class="cc-icon" style="background:'+h.color+'22">'+p.ccIcon+'</div>'
-    + '<div><div class="cc-title">'+p.ccTitle+'</div><div class="cc-type">'+p.ccType+'</div></div></div>'
-    + '<div class="cc-body">'+p.ccBody+'</div></div>'
-    // Visual
-    + '<div class="anim-area" style="border-radius:14px;overflow:hidden;margin-bottom:16px">'+getConceptVisual(key,h)+'</div>'
-    // Challenge
-    + '<div class="ch-box"><div class="ch-tag">'+p.chTag+'</div><div class="ch-task">'+p.chTask+'</div><div class="ch-detail">'+p.chDetail+'</div></div>'
-    // Tips
-    + '<div class="tips-list" style="margin-top:16px">'+p.tips.map(function(t){ return '<div class="tip-row"><span>'+t.i+'</span><span>'+t.t+'</span></div>'; }).join('')+'</div>'
-    // Reflect + submit
+    + '<div class="cc-hdr"><div class="cc-icon" style="background:' + h.color + '22">' + p.ccIcon + '</div>'
+    + '<div><div class="cc-title">' + p.ccTitle + '</div><div class="cc-type">' + p.ccType + '</div></div></div>'
+    + '<div class="cc-body">' + p.ccBody + '</div></div>'
+    + '<div class="anim-area" style="border-radius:14px;overflow:hidden;margin-bottom:16px">' + getConceptVisual(key, h) + '</div>'
+    + '<div class="ch-box"><div class="ch-tag">' + p.chTag + '</div><div class="ch-task">' + p.chTask + '</div><div class="ch-detail">' + p.chDetail + '</div></div>'
+    + '<div class="tips-list" style="margin-top:16px">' + p.tips.map(function(t){ return '<div class="tip-row"><span>' + t.i + '</span><span>' + t.t + '</span></div>'; }).join('') + '</div>'
     + '<div class="reflect-box" style="margin-top:16px">'
     + '<div class="reflect-lbl">Reflect</div>'
-    + '<div class="reflect-q">'+p.reflect+'</div>'
+    + '<div class="reflect-q">' + p.reflect + '</div>'
     + '<textarea id="hp-reflection-text" placeholder="Write anything... even one sentence counts." style="width:100%;margin-top:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;color:var(--off);font-family:\'DM Sans\',sans-serif;font-size:13px;resize:vertical;min-height:80px;outline:none;box-sizing:border-box"></textarea>'
     + '</div>'
-    + '<button id="hp-submit-btn" style="width:100%;margin-top:12px;padding:16px;background:var(--off);color:var(--ink);border:none;border-radius:12px;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Submit \u0026 See Feedback \u2192</button>';
+    + '<button id="hp-submit-btn" style="width:100%;margin-top:12px;padding:16px;background:var(--off);color:var(--ink);border:none;border-radius:12px;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:800;cursor:pointer">Submit &amp; See Feedback &rarr;</button>';
 
-  body.lastElementChild.appendChild(el);
+  el.insertBefore(tabsDiv, el.firstChild);
+  body.appendChild(el);
+
   document.getElementById('hp-submit-btn').onclick = function(){ submitChapterFromPage(key, chapterIdx); };
   setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'start' }); }, 50);
 }
