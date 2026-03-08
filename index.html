@@ -622,6 +622,12 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
 .hw-e-concept{font-size:11px;color:rgba(255,255,255,0.35);font-weight:600}
 .hw-e-quote{font-size:11px;color:rgba(255,255,255,0.22);font-style:italic;line-height:1.5;margin-top:3px}
 
+/* ── HOME STATS ── */
+.home-stats{display:flex;gap:10px;margin-bottom:20px}
+.stat-card{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:14px 12px;animation:fadeUp 0.4s both}
+.stat-card-num{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;line-height:1;margin-bottom:3px}
+.stat-card-lbl{font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:rgba(255,255,255,0.3)}
+
 /* ── MEMOIR ── */
 .memoir-layout{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
 .mem-entry{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all 0.18s;margin-bottom:12px}
@@ -666,6 +672,7 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
 
   /* ── LANDING NAV ── */
   nav { padding: 16px 20px; }
+  nav.stuck { padding: 15px 20px; }
   .n-links { display: none; }
   .n-cta { padding: 10px 18px; font-size: 12px; }
 
@@ -687,13 +694,13 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
   .what-grid { grid-template-columns: 1fr; gap: 40px; }
 
   /* ── HERO PINNED ── */
-  #hero-outer { height: 160vh; }
+  #hero-outer { height: 52svh; }
+  /* Crop hero to content height — SVG kept at full viewport size so it renders 1:1 */
+  #hero { height: 50svh !important; min-height: 50svh !important; }
+  #heroSVG { height: 100vh !important; }
   .hero-orb { display: none; }
   .hero-stats-row { gap: 24px; flex-wrap: wrap; }
   .hero-stat-n { font-size: 34px; }
-  #heroPhase1 { top:70px; left:24px; right:24px; }
-  #heroPhase2 { bottom:70px; left:24px; right:24px; }
-  #heroPhase3 { bottom:70px; left:24px; right:24px; }
   .hero-btn-row { flex-direction: column; gap: 10px; width: 100%; }
   .hero-btn, .hero-btn-ghost { width: 100%; text-align: center; }
 
@@ -721,8 +728,11 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
   /* ── CHAPTER MOCKUP ── */
   .chapter-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
 
-  /* ── PROFILES ── */
-  .profiles-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  /* ── MEMOIR ── */
+  .memoir-cards { grid-template-columns: 1fr; }
+
+  /* ── PROFILES / CURIOSITY TYPES ── */
+  .profiles-grid { grid-template-columns: 1fr; gap: 12px; }
 
   /* ── CTA ── */
   #cta { padding: 80px 24px; min-height: auto; }
@@ -747,73 +757,112 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
   /* ── APP LAYER ── */
   #app-layer { flex-direction: column; }
 
-  /* ── SIDEBAR → BOTTOM NAV ON MOBILE ── */
+  /* ── BOTTOM NAV — 3 CLEAN TABS ── */
   .sidebar {
     position: fixed;
     top: auto !important;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     width: 100% !important;
-    height: 64px;
+    height: 72px;
     flex-direction: row;
     align-items: center;
-    padding: 0 8px !important;
+    padding: 0 4px env(safe-area-inset-bottom, 0px) !important;
     border-right: none !important;
     border-top: 1px solid var(--border);
     z-index: 600;
     overflow: hidden;
+    background: rgba(14,13,11,0.97);
   }
-  .sb-logo { display: none; }
-  .sb-user-block { display: none; }
-  .sb-nav {
-    display: flex;
-    flex-direction: row;
-    gap: 0;
-    flex: 1;
-    overflow: hidden;
-  }
+  .sb-logo, .sb-user-block, .sb-divider, .sb-foot, .sb-footer { display: none; }
+  #sb-user-block { display: none; }
+  #nav-quiz, #nav-mood, #nav-profile, #sb-signout { display: none !important; }
+  /* Hide orphaned sec-lbl above radar chart */
+  .sec-lbl:has(+ #home-radar-chart) { display: none; }
+  .sb-nav { display: flex; flex-direction: row; gap: 0; flex: 1; overflow: hidden; }
   .sb-item {
-    flex: 1;
-    flex-direction: column;
-    gap: 3px;
-    font-size: 9px;
-    padding: 8px 4px;
-    border-radius: 10px;
-    min-width: 0;
+    flex: 1; flex-direction: column; gap: 4px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+    padding: 8px 4px 6px; border-radius: 10px; min-width: 0;
   }
-  .sb-item svg { width: 18px; height: 18px; }
-  .sb-divider { display: none; }
-  .sb-footer { display: none; }
+  .sb-item svg { width: 22px; height: 22px; }
 
   /* ── MAIN CONTENT ── */
-  .main {
-    margin-left: 0 !important;
-    padding-bottom: 80px;
-    height: 100vh;
-    overflow-y: auto;
-  }
+  .main { margin-left: 0 !important; padding-bottom: 80px; height: 100svh; overflow-y: auto; }
+
+  /* ── SECTION PADDING ── */
+  .section { padding: 24px 20px 20px; }
+  .fb-wrap { padding: 20px 20px 80px; }
+  .prof-wrap { padding: 20px 20px 80px; }
 
   /* ── HOME VIEW ── */
-  .home-layout { grid-template-columns: 1fr; gap: 16px; }
-  .home-right { display: none; }
-  #webHomeGreet div:last-child { font-size: 36px !important; }
-  .home-week { padding: 24px 20px 64px; }
-  .home-pills { gap: 8px; }
-  .home-pill { min-width: 100px; }
+  .home-layout { grid-template-columns: 1fr; gap: 0; }
+  /* Show right-column widgets below left content (grid is 1-col so they stack naturally) */
+  .home-right { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .home-widget { padding: 16px; }
+  #webHomeGreet > div:last-child { font-size: 40px !important; }
+  #home-radar-chart { display: none; }
+  /* Active hobby card */
+  .home-week { padding: 24px 20px 24px; min-height: 180px; margin-bottom: 16px; }
+  .hw-hobby { font-size: 36px !important; }
+  /* Stat cards */
+  .home-stats { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .stat-card { padding: 12px 10px; min-width: 0; overflow: hidden; }
+  .stat-card-num { font-size: 28px; }
+  .stat-card-lbl { font-size: 8px; }
+  /* Hobby pills → horizontal scroll strip */
+  .home-pills {
+    display: flex; flex-wrap: nowrap; overflow-x: auto;
+    -webkit-overflow-scrolling: touch; gap: 8px;
+    padding-bottom: 4px; margin-bottom: 20px; scrollbar-width: none;
+  }
+  .home-pills::-webkit-scrollbar { display: none; }
+  .home-pill { min-width: 88px; flex-shrink: 0; padding: 12px 14px; }
 
   /* ── EXPLORE VIEW ── */
   .hobby-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .hobby-card { padding: 18px 16px 48px; min-height: 130px; }
 
-  /* ── PANEL (hobby deep dive) ── */
-  .panel { width: 100% !important; top: 0; }
-  .panel-hero { padding: 24px 20px 20px; }
+  /* ── PANEL → BOTTOM SHEET ── */
+  .panel {
+    top: auto !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    width: 100% !important; height: 90svh;
+    border-radius: 24px 24px 0 0;
+    border-left: none; border-top: 1px solid var(--border);
+    transform: translateY(100%);
+  }
+  .panel.open { transform: translateY(0); }
+  /* Drag handle */
+  .panel::before {
+    content: ''; position: absolute; top: 10px; left: 50%;
+    transform: translateX(-50%); width: 36px; height: 4px;
+    border-radius: 2px; background: rgba(255,255,255,0.18);
+    z-index: 10; pointer-events: none;
+  }
+  .panel-hero { padding: 36px 20px 16px; }
   .panel-tabs { padding: 0 20px; }
-  .panel-scroll { padding: 20px; }
+  .panel-body { padding: 20px 20px 0; }
+  .panel-foot { padding: 12px 20px env(safe-area-inset-bottom, 24px); }
+  .panel-name { font-size: 40px; }
+  .panel-close { width: 40px; height: 40px; top: 44px; right: 16px; }
+
+  /* ── MEMOIR ── */
+  .memoir-layout { grid-template-columns: 1fr; }
+  .mem-aside { display: none; }
+
+  /* ── PROFILE ── */
+  .prof-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  /* ── FEEDBACK ── */
+  .fb-grid { grid-template-columns: 1fr; gap: 12px; }
+  .fb-next { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .fb-title { font-size: 44px; }
+
+  /* ── TOUCH POLISH ── */
+  .hobby-card:active { transform: scale(0.97); box-shadow: none; }
+  .home-week:active { transform: scale(0.99); }
 
   /* ── SECTION HEADERS ── */
-  .s-h2 { font-size: clamp(40px, 10vw, 64px); }
+  .s-h2 { font-size: clamp(56px, 15vw, 80px); width: 100%; }
 }
 
 /* ── SMALL PHONES ── */
@@ -821,7 +870,6 @@ textarea::placeholder{color:rgba(255,255,255,0.15)}
   #hero { padding: 90px 18px 50px; }
   .s { padding: 48px 18px; }
   .profiles-grid { grid-template-columns: 1fr; }
-  .hobby-grid { grid-template-columns: 1fr; }
   .hp-body { padding: 20px 16px 80px; }
   .qbox-opt { font-size: 13px; }
 }
@@ -3022,21 +3070,30 @@ function updateHeroScroll() {
 
   // Suppress #what heading while preview is visible (exitPct < 0.7).
   // Once preview is fully gone, drive a clean scroll-based fade-in (0.7→1.0).
-  // Inline styles override any IntersectionObserver .in class added early.
-  [whatH2, whatLbl].forEach(el => {
-    if (!el) return;
-    if (exitPct < 0.7) {
-      el.style.opacity   = '0';
-      el.style.transform = 'translateY(28px)';
-    } else if (exitPct < 1) {
-      const t = (exitPct - 0.7) / 0.3;
-      el.style.opacity   = t.toFixed(3);
-      el.style.transform = `translateY(${((1 - t) * 28).toFixed(1)}px)`;
-    } else {
+  // On mobile (#hero-outer < viewport), exitPct math is invalid — let CSS/IO handle it.
+  if (window.innerWidth > 768) {
+    [whatH2, whatLbl].forEach(el => {
+      if (!el) return;
+      if (exitPct < 0.7) {
+        el.style.opacity   = '0';
+        el.style.transform = 'translateY(28px)';
+      } else if (exitPct < 1) {
+        const t = (exitPct - 0.7) / 0.3;
+        el.style.opacity   = t.toFixed(3);
+        el.style.transform = `translateY(${((1 - t) * 28).toFixed(1)}px)`;
+      } else {
+        el.style.opacity   = '';
+        el.style.transform = '';
+      }
+    });
+  } else {
+    // Mobile: clear any JS-set inline overrides, let IntersectionObserver animate normally
+    [whatH2, whatLbl].forEach(el => {
+      if (!el) return;
       el.style.opacity   = '';
       el.style.transform = '';
-    }
-  });
+    });
+  }
 }
 
 function runStatCounters() {
@@ -6022,7 +6079,7 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
       Memoir
     </button>
     <div class="sb-divider"></div>
-    <button class="sb-item" onclick="openQuizModal()">
+    <button class="sb-item" id="nav-quiz" onclick="openQuizModal()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
       Take the Quiz
     </button>
