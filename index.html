@@ -1500,6 +1500,7 @@ polygon.radar-poly{fill:rgba(107,78,255,.18);stroke:#6B4EFF;stroke-width:2}
   justify-content: center; gap: 8px; box-sizing: border-box; margin-top: 20px;
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 
@@ -2066,6 +2067,124 @@ const DB = {
     if (users[k]) { users[k] = { ...users[k], ...updates }; this._save(users); }
   },
 };
+
+// ── Supabase client ───────────────────────────────────────────────────────────
+// Replace these two values with your Supabase project URL and anon key
+// (Settings → API in your Supabase dashboard)
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+
+var _sb = null;
+(function() {
+  try {
+    if (typeof supabase !== 'undefined') {
+      _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+  } catch(e) {
+    console.warn('SHRUG: Supabase not available, running in local-only mode', e);
+  }
+})();
+
+// ── Cloud sync helpers (fire-and-forget; localStorage stays as cache) ──────
+async function _sbLoadProgress(userId) {
+  if (!_sb) return null;
+  try {
+    const { data, error } = await _sb.from('chapter_progress')
+      .select('hobby_key, chapter_idx')
+      .eq('user_id', userId);
+    if (error || !data) return null;
+    var result = {};
+    data.forEach(function(row) {
+      if (!result[row.hobby_key]) result[row.hobby_key] = {};
+      result[row.hobby_key][row.chapter_idx] = true;
+    });
+    return result;
+  } catch(e) { console.warn('_sbLoadProgress error', e); return null; }
+}
+
+async function _sbSaveProgress(userId, completedChapters) {
+  if (!_sb) return;
+  try {
+    var rows = [];
+    Object.keys(completedChapters).forEach(function(hobby_key) {
+      Object.keys(completedChapters[hobby_key]).forEach(function(chapter_idx) {
+        if (completedChapters[hobby_key][chapter_idx]) {
+          rows.push({ user_id: userId, hobby_key: hobby_key, chapter_idx: parseInt(chapter_idx) });
+        }
+      });
+    });
+    if (rows.length > 0) {
+      await _sb.from('chapter_progress').upsert(rows, { onConflict: 'user_id,hobby_key,chapter_idx' });
+    }
+  } catch(e) { console.warn('_sbSaveProgress error', e); }
+}
+
+async function _sbSaveMemoirEntry(userId, entry, imageFile) {
+  if (!_sb) return;
+  try {
+    var image_path = null;
+    if (imageFile) {
+      var ext = imageFile.name ? imageFile.name.split('.').pop() : 'jpg';
+      var path = userId + '/' + (entry.hobby || 'misc') + '_' + (entry.chapterIdx || 0) + '_' + Date.now() + '.' + ext;
+      var uploadRes = await _sb.storage.from('memoir-images').upload(path, imageFile, { upsert: true });
+      if (!uploadRes.error) image_path = path;
+    }
+    await _sb.from('memoir_entries').insert({
+      user_id: userId,
+      hobby_key: entry.hobby,
+      chapter_idx: entry.chapterIdx || 0,
+      concept: entry.concept || null,
+      reflection: entry.reflection || null,
+      liked: entry.liked !== false,
+      scores: entry.scores || null,
+      image_path: image_path,
+      ai_feedback: entry.aiText || null,
+    });
+  } catch(e) { console.warn('_sbSaveMemoirEntry error', e); }
+}
+
+// Handle magic link return: fired when user clicks email link
+if (_sb) {
+  _sb.auth.onAuthStateChange(async function(event, session) {
+    if (event === 'SIGNED_IN' && session && !currentUser) {
+      var userId = session.user.id;
+      var email  = session.user.email;
+
+      // Load or create profile
+      var profile = null;
+      try {
+        var profileRes = await _sb.from('profiles').select('*').eq('id', userId).single();
+        profile = profileRes.data;
+      } catch(e) {}
+
+      if (!profile || !profile.name) {
+        var meta = session.user.user_metadata || {};
+        profile = { name: meta.name || email.split('@')[0], profile_type: meta.profile || 'explorer' };
+        try {
+          await _sb.from('profiles').upsert({ id: userId, name: profile.name, profile_type: profile.profile_type });
+        } catch(e) {}
+      }
+
+      // Load cloud progress into localStorage for existing code to use
+      var cloudProgress = await _sbLoadProgress(userId);
+      if (cloudProgress) {
+        localStorage.setItem('shrug_progress_' + email.toLowerCase(), JSON.stringify(cloudProgress));
+      }
+
+      var user = { id: userId, email: email, name: profile.name, profile: profile.profile_type };
+      DB.saveSession(user);
+      currentUser = user;
+
+      // If signup modal is showing a "check your email" message, switch to app
+      var resultBox = document.getElementById('resultBox');
+      if (resultBox && resultBox.dataset.magicPending) {
+        resultBox.dataset.magicPending = '';
+      }
+      closeResult();
+      enterApp(user);
+    }
+  });
+}
 
 
 
@@ -4519,7 +4638,7 @@ function renderSignupStep() {
       <input class="form-input" id="inp-email" type="email" placeholder="you@example.com" autocomplete="email">
       <div class="form-error" id="err-email">Please enter a valid email address.</div>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="pass-field-wrap" style="display:none">
       <label class="form-label">Password</label>
       <input class="form-input" id="inp-pass" type="password" placeholder="At least 8 characters" autocomplete="new-password">
       <div class="form-error" id="err-pass">Password must be at least 8 characters.</div>
@@ -5144,7 +5263,9 @@ function submitChapterFromPage(key, chapterIdx) {
     if (!window.completedChapters) window.completedChapters = {};
     if (!window.completedChapters[key]) window.completedChapters[key] = {};
     window.completedChapters[key][chapterIdx] = true;
-    if (currentUser) { DB.saveProgress(currentUser.email, window.completedChapters); }
+    if (currentUser) { DB.saveProgress(currentUser.email, window.completedChapters);
+    // Sync to cloud (fire-and-forget)
+    if (currentUser && currentUser.id) { _sbSaveProgress(currentUser.id, window.completedChapters); } }
     _doFeedback(imageBase64);
   }
   if (_imgInput && _imgInput.files && _imgInput.files[0] && _imgInput.files[0].type.startsWith('image/')) {
@@ -6474,10 +6595,9 @@ function injectProjectSubmitBtn() {
 // DB — localStorage backend (swap methods for real API calls)
 // ═══════════════════════════════════════════════════════════════
 // ── Override landing's stub submitSignup with real version ────
-function submitSignup() {
+async function submitSignup() {
   const first = document.getElementById('inp-first')?.value.trim() || '';
   const email = (document.getElementById('inp-email')?.value || '').trim().toLowerCase();
-  const pass  = document.getElementById('inp-pass')?.value || '';
   let valid = true;
 
   const emailEl  = document.getElementById('inp-email');
@@ -6485,40 +6605,70 @@ function submitSignup() {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     emailEl?.classList.add('error'); emailErr?.classList.add('show'); valid = false;
   } else { emailEl?.classList.remove('error'); emailErr?.classList.remove('show'); }
-
-  const passEl  = document.getElementById('inp-pass');
-  const passErr = document.getElementById('err-pass');
-  if (pass.length < 8) {
-    passEl?.classList.add('error'); passErr?.classList.add('show'); valid = false;
-  } else { passEl?.classList.remove('error'); passErr?.classList.remove('show'); }
-
   if (!valid) return;
 
   const btn = document.getElementById('signupBtn');
   btn?.classList.add('loading');
 
   const userData = {
-    name:     first || 'Explorer',
+    name:    first || 'Explorer',
     email,
-    password: pass,
-    profile:  resultProfile?.key          || 'creative',
-    hobbies:  resultProfile?.p?.hobbies   || PROFILES_DATA.creative.hobbies,
+    profile: resultProfile?.key        || 'creative',
+    hobbies: resultProfile?.p?.hobbies || PROFILES_DATA.creative.hobbies,
   };
 
+  // Use Supabase magic link if available, else fall back to local account
+  if (_sb && SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co') {
+    try {
+      const { error } = await _sb.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.href,
+          data: { name: userData.name, profile: userData.profile },
+        },
+      });
+      btn?.classList.remove('loading');
+      if (error) {
+        const errDiv = document.getElementById('err-email');
+        if (errDiv) { errDiv.textContent = error.message; errDiv.classList.add('show'); }
+        emailEl?.classList.add('error');
+        return;
+      }
+      // Show "check your email" state
+      const resultBox = document.getElementById('resultBox');
+      if (resultBox) {
+        resultBox.dataset.magicPending = '1';
+        resultBox.innerHTML = `
+          <div style="text-align:center;padding:40px 20px">
+            <div style="font-size:48px;margin-bottom:16px">✉️</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;margin-bottom:12px">CHECK YOUR EMAIL</div>
+            <div style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:24px">
+              We sent a magic link to <strong style="color:var(--off)">${email}</strong>.<br>
+              Click it to sign in — no password needed.
+            </div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.3)">Didn’t get it? Check your spam folder.</div>
+          </div>`;
+      }
+      return;
+    } catch(e) {
+      console.warn('SHRUG: OTP error, falling back to local', e);
+    }
+  }
+
+  // Local-only fallback (no Supabase configured)
   setTimeout(() => {
-    console.log('SHRUG: starting DB.create', userData);
+    const localData = { ...userData, password: 'local_' + Date.now(), createdAt: Date.now() };
     let res;
-    try { res = DB.create(userData); } catch(e) { console.error('SHRUG: DB.create threw', e); btn?.classList.remove('loading'); return; }
-    console.log('SHRUG: DB.create result', res);
+    try { res = DB.create(localData); } catch(e) { btn?.classList.remove('loading'); return; }
     btn?.classList.remove('loading');
     if (res.error) {
       const errDiv = document.getElementById('err-email');
       if (errDiv) { errDiv.textContent = res.error; errDiv.classList.add('show'); }
-      document.getElementById('inp-email')?.classList.add('error');
+      emailEl?.classList.add('error');
       return;
     }
-    try { DB.saveSession(res.user); console.log('SHRUG: session saved'); } catch(e) { console.error('SHRUG: saveSession threw', e); }
-    try { renderWelcomeStep(first || 'Explorer', email); console.log('SHRUG: renderWelcomeStep called'); } catch(e) { console.error('SHRUG: renderWelcomeStep threw', e); }
+    DB.saveSession(res.user);
+    renderWelcomeStep(userData.name, email);
   }, 800);
 }
 
@@ -6530,14 +6680,46 @@ function openLoginModal() {
 function closeLoginModal() {
   document.getElementById('loginModal').classList.remove('open');
 }
-function submitLogin() {
+async function submitLogin() {
   const email = (document.getElementById('login-email')?.value || '').trim().toLowerCase();
-  const pass  = document.getElementById('login-pass')?.value || '';
   const errEl = document.getElementById('login-err');
   const btn   = document.getElementById('loginBtn');
-  if (!email || !pass) { errEl.textContent = 'Please enter your email and password.'; errEl.classList.add('show'); return; }
+  if (!email) { errEl.textContent = 'Please enter your email address.'; errEl.classList.add('show'); return; }
+
+  // Use Supabase magic link if configured
+  if (_sb && SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co') {
+    btn.style.opacity = '0.6'; btn.disabled = true;
+    try {
+      const { error } = await _sb.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: window.location.href },
+      });
+      btn.style.opacity = '1'; btn.disabled = false;
+      if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+      errEl.classList.remove('show');
+      // Show confirmation in the modal
+      const box = document.querySelector('.login-box');
+      if (box) {
+        box.innerHTML = `
+          <div style="text-align:center;padding:20px 0">
+            <div style="font-size:40px;margin-bottom:12px">✉️</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:10px">CHECK YOUR EMAIL</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6">
+              Magic link sent to <strong style="color:var(--off)">${email}</strong>.<br>Click it to sign in instantly.
+            </div>
+          </div>`;
+      }
+    } catch(e) {
+      btn.style.opacity = '1'; btn.disabled = false;
+      errEl.textContent = 'Something went wrong. Please try again.'; errEl.classList.add('show');
+    }
+    return;
+  }
+
+  // Local-only fallback
   btn.style.opacity = '0.6'; btn.disabled = true;
   setTimeout(() => {
+    const pass = document.getElementById('login-pass')?.value || '';
     const res = DB.login(email, pass);
     btn.style.opacity = '1'; btn.disabled = false;
     if (res.error) { errEl.textContent = res.error; errEl.classList.add('show'); return; }
@@ -6549,9 +6731,38 @@ function submitLogin() {
 }
 
 // ── Override landing's launchApp stub ─────────────────────────
-function launchApp() {
-  const session = DB.loadSession();
-  if (session) { closeResult(); enterApp(session); }
+async function launchApp() {
+  // Try Supabase session first (handles magic link returns + persisted sessions)
+  if (_sb) {
+    try {
+      var { data: { session } } = await _sb.auth.getSession();
+      if (session) {
+        var userId = session.user.id;
+        var email  = session.user.email;
+        var profile = null;
+        try {
+          var pr = await _sb.from('profiles').select('*').eq('id', userId).single();
+          profile = pr.data;
+        } catch(e) {}
+        var cloudProgress = await _sbLoadProgress(userId);
+        if (cloudProgress) {
+          localStorage.setItem('shrug_progress_' + email.toLowerCase(), JSON.stringify(cloudProgress));
+        }
+        var user = {
+          id: userId, email: email,
+          name: (profile && profile.name) ? profile.name : email.split('@')[0],
+          profile: (profile && profile.profile_type) ? profile.profile_type : 'explorer',
+        };
+        DB.saveSession(user);
+        closeResult();
+        enterApp(user);
+        return;
+      }
+    } catch(e) { console.warn('SHRUG: Supabase session check failed', e); }
+  }
+  // Fallback: localStorage session (local-only mode or Supabase not configured)
+  const localFallbackSession = DB.loadSession();
+  if (localFallbackSession) { closeResult(); enterApp(localFallbackSession); }
 }
 
 // ── Enter the app ─────────────────────────────────────────────
@@ -7431,29 +7642,6 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
 </div>
 
 <!-- LOGIN MODAL -->
-<div class="login-modal" id="loginModal">
-  <div class="login-box">
-    <button class="quiz-x" onclick="closeLoginModal()" style="position:absolute;top:16px;right:16px">✕</button>
-    <div class="login-title">WELCOME BACK</div>
-    <div class="login-sub">Sign in to continue your journey and pick up where you left off.</div>
-    <div class="login-err" id="login-err"></div>
-    <div class="form-group" style="margin-bottom:12px">
-      <label class="form-label">Email Address</label>
-      <input class="form-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')submitLogin()">
-    </div>
-    <div class="form-group" style="margin-bottom:20px">
-      <label class="form-label">Password</label>
-      <input class="form-input" id="login-pass" type="password" placeholder="Your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitLogin()">
-    </div>
-    <button class="signup-submit-btn" id="loginBtn" onclick="submitLogin()">
-      <span class="btn-text">Sign In →</span>
-    </button>
-    <div class="login-footer">
-      Don't have an account? <button onclick="closeLoginModal();openQuiz()">Take the quiz to join free</button>
-    </div>
-  </div>
-</div>
-
 <!-- SETTINGS PANEL -->
 <div class="settings-panel" id="settingsPanel">
   <div class="settings-box">
@@ -7681,30 +7869,75 @@ function previewArtifactMedia(input) {
   }
 }
 
-function submitArtifact(key) {
+async function submitArtifact(key) {
   var art = HOBBY_ARTIFACTS[key];
   var btn = document.getElementById('ap-submit-btn');
+  var uploadInput = document.getElementById('ap-upload-input');
   if (btn) { btn.textContent = 'Analyzing…'; btn.disabled = true; }
-  setTimeout(function() {
-    var result = document.getElementById('ap-result');
-    if (result && art) {
-      result.innerHTML =
-        '<div class="ap-result-box">' +
-          '<div class="ap-result-label">AI Feedback</div>' +
-          '<div class="ap-result-text">' + art.aiFeedback + '</div>' +
-        '</div>';
-    }
-    if (btn) {
-      btn.textContent = 'Artifact Saved ✓';
-      btn.style.background = 'rgba(255,255,255,0.1)';
-      btn.style.color = 'rgba(255,255,255,0.5)';
-      btn.disabled = true;
-    }
-    if (typeof memoirState !== 'undefined') {
-      if (!memoirState.artifacts) memoirState.artifacts = {};
-      memoirState.artifacts[key] = { completed: true, ts: Date.now() };
-    }
-  }, 2200);
+
+  var realFeedback = null;
+
+  // Upload to Supabase Storage + call edge function (photos only)
+  if (_sb && SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co' && uploadInput && uploadInput.files && uploadInput.files[0]) {
+    try {
+      var file = uploadInput.files[0];
+      var sessionRes = await _sb.auth.getSession();
+      var session = sessionRes && sessionRes.data && sessionRes.data.session;
+
+      if (session) {
+        var ext = (file.name || '').split('.').pop() || (file.type.includes('png') ? 'png' : file.type.includes('gif') ? 'gif' : file.type.includes('video') ? 'mp4' : 'jpg');
+        var path = session.user.id + '/' + key + '_' + Date.now() + '.' + ext;
+
+        var uploadRes = await _sb.storage.from('artifacts').upload(path, file, { upsert: true });
+
+        if (!uploadRes.error) {
+          // Call edge function for photo analysis (video returns null)
+          try {
+            var fnRes = await _sb.functions.invoke('analyze-artifact', {
+              body: { hobby_key: key, media_path: path, media_type: art.mediaType },
+            });
+            if (fnRes.data && fnRes.data.feedback) {
+              realFeedback = fnRes.data.feedback;
+            }
+          } catch(fnErr) { console.warn('SHRUG: edge function error', fnErr); }
+
+          // Save artifact record to DB
+          try {
+            await _sb.from('artifacts').upsert({
+              user_id: session.user.id,
+              hobby_key: key,
+              media_path: path,
+              media_type: art.mediaType,
+              ai_feedback: realFeedback || art.aiFeedback,
+            }, { onConflict: 'user_id,hobby_key' });
+          } catch(dbErr) { console.warn('SHRUG: artifact DB save error', dbErr); }
+        }
+      }
+    } catch(e) { console.warn('SHRUG: artifact upload error', e); }
+  }
+
+  // Show feedback (real AI or pre-written)
+  var feedback = realFeedback || art.aiFeedback;
+  var isRealAI  = !!realFeedback;
+
+  var result = document.getElementById('ap-result');
+  if (result && art) {
+    result.innerHTML =
+      '<div class="ap-result-box">' +
+        '<div class="ap-result-label">AI Feedback' + (isRealAI ? ' • Live Analysis' : '') + '</div>' +
+        '<div class="ap-result-text">' + feedback + '</div>' +
+      '</div>';
+  }
+  if (btn) {
+    btn.textContent = 'Artifact Saved ✓';
+    btn.style.background = 'rgba(255,255,255,0.1)';
+    btn.style.color = 'rgba(255,255,255,0.5)';
+    btn.disabled = true;
+  }
+  if (typeof memoirState !== 'undefined') {
+    if (!memoirState.artifacts) memoirState.artifacts = {};
+    memoirState.artifacts[key] = { completed: true, ts: Date.now() };
+  }
 }
 
 
@@ -7947,5 +8180,29 @@ function submitArtifact(key) {
 </script>
 
 
+
+
+<div class="login-modal" id="loginModal">
+  <div class="login-box">
+    <button class="quiz-x" onclick="closeLoginModal()" style="position:absolute;top:16px;right:16px">✕</button>
+    <div class="login-title">WELCOME BACK</div>
+    <div class="login-sub">Enter your email and we’ll send you a magic link to sign in instantly.</div>
+    <div class="login-err" id="login-err"></div>
+    <div class="form-group" style="margin-bottom:12px">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" id="login-email" type="email" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')submitLogin()">
+    </div>
+    <div class="form-group" style="display:none" id="login-pass-wrap">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="login-pass" type="password" placeholder="Your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitLogin()">
+    </div>
+    <button class="signup-submit-btn" id="loginBtn" onclick="submitLogin()">
+      <span class="btn-text">Sign In →</span>
+    </button>
+    <div class="login-footer">
+      Don't have an account? <button onclick="closeLoginModal();openQuiz()">Take the quiz to join free</button>
+    </div>
+  </div>
+</div>
 
 </body></html>
