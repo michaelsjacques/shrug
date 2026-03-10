@@ -1499,6 +1499,185 @@ polygon.radar-poly{fill:rgba(107,78,255,.18);stroke:#6B4EFF;stroke-width:2}
   cursor: pointer; margin-bottom: 12px; display: flex; align-items: center;
   justify-content: center; gap: 8px; box-sizing: border-box; margin-top: 20px;
 }
+
+/* ── Personal Hobby Map ──────────────────────────────── */
+.map-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+@media(max-width:680px){ .map-grid{ grid-template-columns:1fr; } }
+.map-trait-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 18px; }
+.map-trait-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 8px; }
+.map-trait-value { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; line-height: 1; margin-bottom: 4px; }
+.map-trait-desc { font-size: 11px; color: rgba(255,255,255,.38); line-height: 1.5; }
+.map-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.map-bar-lbl { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.5); width: 80px; flex-shrink: 0; }
+.map-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; overflow: hidden; }
+.map-bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
+.map-bar-val { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.28); width: 28px; text-align: right; flex-shrink: 0; }
+.map-suggestion { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 12px; cursor: pointer; margin-bottom: 8px; transition: background .15s; }
+.map-suggestion:hover { background: rgba(255,255,255,.08); }
+.map-sug-icon { font-size: 22px; flex-shrink: 0; }
+.map-sug-name { font-weight: 800; font-size: 13px; }
+.map-sug-why { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 2px; }
+.map-dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.map-dim-card { background: rgba(255,255,255,.04); border-radius: 12px; padding: 14px; }
+.map-dim-pair { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.map-dim-a, .map-dim-b { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.35); }
+.map-dim-slider { width: 100%; height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; position: relative; margin-top: 4px; }
+.map-dim-thumb { position: absolute; top: -4px; width: 12px; height: 12px; border-radius: 50%; transform: translateX(-50%); }
+
+/* ── Keep Learning ─────────────────────────────────── */
+.kl-hobby-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 24px; }
+@media(max-width:500px){ .kl-hobby-grid{ grid-template-columns:1fr 1fr; } }
+.kl-hobby-card { border-radius: 14px; padding: 14px 12px; cursor: pointer; transition: transform .15s, box-shadow .15s; text-align: center; }
+.kl-hobby-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+.kl-hobby-card.selected { outline: 2px solid white; outline-offset: 2px; }
+.kl-hc-icon { font-size: 28px; margin-bottom: 6px; }
+.kl-hc-name { font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; margin-bottom: 2px; }
+.kl-hc-done { font-size: 9px; font-weight: 700; opacity: .6; }
+.kl-chapter-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 20px; margin-top: 16px; min-height: 120px; }
+.kl-gen-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: #F0C93A; color: #0E0D0B; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 12px; }
+.kl-gen-btn:disabled { opacity: .5; cursor: not-allowed; }
+.kl-chapter-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; margin-bottom: 8px; }
+.kl-chapter-lesson { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: 14px; }
+.kl-chapter-task { background: rgba(255,255,255,.06); border-left: 3px solid #F0C93A; border-radius: 0 10px 10px 0; padding: 12px 14px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); }
+
+/* ── Hobby Tree ────────────────────────────────────── */
+.ht-hobby-scroll { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 22px; }
+@media(max-width:600px){ .ht-hobby-scroll{ grid-template-columns: repeat(4,1fr); } }
+@media(max-width:420px){ .ht-hobby-scroll{ grid-template-columns: repeat(3,1fr); } }
+.ht-pill { padding: 10px 6px 8px; border-radius: 12px; font-size: 9px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); color: rgba(255,255,255,.55); cursor: pointer; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 5px; line-height: 1; }
+.ht-pill:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
+.ht-pill .ht-pill-icon { font-size: 20px; }
+.ht-pill.active { border-color: transparent; color: #0E0D0B; }
+.ht-niche-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media(max-width:500px){ .ht-niche-grid{ grid-template-columns:1fr; } }
+.ht-niche-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; padding: 16px; cursor: pointer; transition: all .15s; }
+.ht-niche-card:hover { background: rgba(255,255,255,.08); transform: translateY(-1px); }
+.ht-nc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.ht-nc-icon { font-size: 22px; }
+.ht-nc-label { font-weight: 800; font-size: 14px; }
+.ht-nc-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5; }
+
+/* ── Weekly Prompt ─────────────────────────────────── */
+.wp-card { border-radius: 20px; padding: 28px 24px; margin-bottom: 20px; position: relative; overflow: hidden; }
+.wp-week-lbl { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; opacity: .6; margin-bottom: 12px; }
+.wp-emoji { font-size: 48px; margin-bottom: 14px; line-height: 1; }
+.wp-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; line-height: 1.1; margin-bottom: 12px; }
+.wp-task { font-size: 14px; line-height: 1.7; opacity: .8; }
+.wp-submit-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 20px; }
+.wp-textarea { width: 100%; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 12px; color: var(--off); font-family: 'DM Sans', sans-serif; font-size: 13px; resize: vertical; min-height: 80px; outline: none; box-sizing: border-box; margin-bottom: 12px; }
+.wp-submit-btn { padding: 14px 24px; background: #F0C93A; color: #0E0D0B; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+.wp-done-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(184,217,110,.15); color: #B8D96E; border: 1px solid rgba(184,217,110,.3); border-radius: 20px; padding: 6px 14px; font-size: 11px; font-weight: 800; margin-bottom: 16px; }
+
+/* ── Community ─────────────────────────────────────── */
+.comm-feed { display: flex; flex-direction: column; gap: 12px; }
+.comm-post { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 18px; }
+.comm-post-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.comm-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.comm-post-name { font-weight: 800; font-size: 13px; }
+.comm-post-meta { font-size: 10px; color: rgba(255,255,255,.35); margin-top: 1px; }
+.comm-post-text { font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; }
+.comm-post-img { width: 100%; border-radius: 10px; margin-top: 10px; object-fit: cover; max-height: 200px; display: block; }
+.comm-empty { text-align: center; padding: 48px 20px; color: rgba(255,255,255,.25); font-size: 14px; line-height: 1.8; }
+
+/* ── Materials ─────────────────────────────────────── */
+.mat-input-row { display: flex; gap: 10px; margin-bottom: 16px; }
+.mat-input { flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 14px 16px; color: var(--off); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; }
+.mat-input:focus { border-color: rgba(240,201,58,.5); }
+.mat-go-btn { padding: 14px 20px; background: #F0C93A; color: #0E0D0B; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.mat-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: 700; color: rgba(255,255,255,.7); margin: 0 6px 6px 0; cursor: pointer; }
+.mat-tag:hover { background: rgba(255,255,255,.12); }
+.mat-tag .mat-tag-x { opacity: .5; margin-left: 2px; }
+.mat-result-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; padding: 16px; margin-bottom: 10px; cursor: pointer; transition: all .15s; }
+.mat-result-card:hover { background: rgba(255,255,255,.08); transform: translateY(-1px); }
+.mat-rc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.mat-rc-icon { font-size: 22px; }
+.mat-rc-hobby { font-weight: 800; font-size: 14px; }
+.mat-rc-match { font-size: 10px; font-weight: 700; color: #B8D96E; background: rgba(184,217,110,.12); border-radius: 10px; padding: 2px 8px; margin-left: auto; }
+.mat-rc-project { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.5; }
+.mat-rc-materials { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+.mat-rc-mtag { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.4); background: rgba(255,255,255,.05); border-radius: 6px; padding: 2px 8px; }
+
+/* ── Trinket Shelf ─────────────────────────────────────── */
+.trinket-shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 8px; padding-bottom: 24px; }
+@media(min-width:900px){ .trinket-shelf{ grid-template-columns: repeat(7, 1fr); } }
+.trinket { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+.trinket-obj {
+  width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center;
+  justify-content: center; position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.18s;
+}
+.trinket:hover .trinket-obj { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,.5); }
+.trinket-thumb { width: 100%; height: 100%; object-fit: cover; }
+.trinket-ico { font-size: 26px; line-height: 1; }
+.trinket-badge {
+  position: absolute; bottom: 3px; right: 3px; font-size: 12px;
+  background: rgba(0,0,0,.35); border-radius: 5px; padding: 1px 3px; line-height: 1;
+}
+.trinket-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.18) 0%, transparent 55%);
+  pointer-events: none;
+}
+.trinket-obj-empty {
+  border: 2px dashed rgba(255,255,255,.1); background: rgba(255,255,255,.03);
+}
+.trinket-lbl {
+  font-size: 8px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  color: rgba(255,255,255,.35); margin-top: 5px; text-align: center; line-height: 1.2;
+}
+/* ── Trinket Drawer ───────────────────────────────────── */
+#trinket-drawer { position: fixed; inset: 0; z-index: 1100; display: none; }
+#trinket-drawer.open { display: block; }
+.td-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.65); }
+.td-card {
+  position: absolute; bottom: 0; left: 0; right: 0; max-height: 88vh;
+  background: #161616; border-radius: 22px 22px 0 0; overflow-y: auto;
+  animation: tdSlideUp .3s cubic-bezier(.22,1,.36,1);
+}
+@keyframes tdSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.td-close {
+  position: absolute; top: 14px; right: 14px; width: 32px; height: 32px;
+  background: rgba(255,255,255,.1); border: none; border-radius: 50%; color: rgba(255,255,255,.7);
+  font-size: 14px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+}
+.td-hdr {
+  padding: 28px 20px 20px; display: flex; align-items: center; gap: 14px;
+  border-radius: 22px 22px 0 0;
+}
+.td-hicon { font-size: 38px; line-height: 1; }
+.td-hname { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px; line-height: 1; }
+.td-hsub { font-size: 12px; font-weight: 700; opacity: .65; margin-top: 2px; }
+.td-empty { padding: 36px 24px 44px; text-align: center; }
+.td-empty-ico { font-size: 60px; margin-bottom: 14px; }
+.td-empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; color: rgba(255,255,255,.9); margin-bottom: 6px; }
+.td-empty-sub { font-size: 12px; color: rgba(255,255,255,.38); margin-bottom: 16px; line-height: 1.5; }
+.td-empty-criteria { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 24px; }
+.td-criteria-pill { font-size: 10px; font-weight: 700; padding: 4px 10px; background: rgba(255,255,255,.07); border-radius: 20px; color: rgba(255,255,255,.5); }
+.td-start-btn { padding: 14px 28px; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+.td-artifact-block { margin: 0 16px 12px; border-radius: 14px; padding: 18px; }
+.td-chapters { padding: 4px 16px 48px; }
+.td-ch { background: rgba(255,255,255,.05); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+.td-ch-lbl { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 8px; }
+.td-ch-img { width: 100%; border-radius: 8px; margin-bottom: 10px; object-fit: cover; max-height: 220px; display: block; }
+.td-ch-concept { font-weight: 800; font-size: 14px; color: rgba(255,255,255,.88); margin-bottom: 5px; }
+.td-ch-reflect { font-size: 13px; font-style: italic; color: rgba(255,255,255,.45); line-height: 1.55; margin-bottom: 10px; }
+.td-ch-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.td-pill { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+
+/* ── Creative Journeys — full page card style ─────────── */
+#webJourneyGridFull { display: flex; flex-direction: column; gap: 16px; }
+.journey-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform .18s, box-shadow .18s; }
+.journey-card:hover { transform: translateY(-2px); box-shadow: 0 12px 48px rgba(0,0,0,.5); }
+.jc-gradient { padding: 24px 22px 20px; position: relative; overflow: hidden; }
+.jc-gradient::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.22); }
+.jc-gradient > * { position: relative; z-index: 1; }
+.jc-emoji { font-size: 42px; margin-bottom: 10px; line-height: 1; }
+.jc-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: white; margin-bottom: 6px; text-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.jc-memoir { font-size: 12px; font-weight: 700; color: rgba(0,0,0,.5); font-style: italic; }
+.jc-bottom { padding: 14px 20px 18px; }
+.jc-steps-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.jc-step-pill { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; padding: 5px 10px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.6); }
+.jc-step-arrow { font-size: 11px; color: rgba(255,255,255,.2); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
@@ -3444,6 +3623,279 @@ const HOBBY_ARTIFACTS = {
   }
 };
 
+const HOBBY_DIMENSIONS = {
+  photography:  {visual:10,solo:7,depth:6,indoor:4},
+  painting:     {visual:10,solo:8,depth:8,indoor:8},
+  writing:      {visual:2, solo:9,depth:8,indoor:9},
+  cooking:      {visual:6,solo:5,depth:4,indoor:8},
+  baking:       {visual:7,solo:6,depth:5,indoor:9},
+  yoga:         {visual:3,solo:6,depth:6,indoor:7},
+  ceramics:     {visual:8,solo:7,depth:7,indoor:8},
+  gardening:    {visual:7,solo:6,depth:8,indoor:2},
+  birdwatching: {visual:8,solo:5,depth:7,indoor:2},
+  reading:      {visual:2,solo:9,depth:9,indoor:9},
+  piano:        {visual:2,solo:8,depth:9,indoor:10},
+  collage:      {visual:10,solo:8,depth:4,indoor:9},
+  drawing:      {visual:10,solo:8,depth:6,indoor:8},
+  dancing:      {visual:6,solo:3,depth:7,indoor:8},
+  knitting:     {visual:7,solo:8,depth:7,indoor:9},
+  journaling:   {visual:2,solo:10,depth:7,indoor:9},
+  woodworking:  {visual:6,solo:8,depth:9,indoor:8},
+  film:         {visual:9,solo:4,depth:8,indoor:6},
+  language:     {visual:3,solo:5,depth:9,indoor:8},
+  hiking:       {visual:7,solo:5,depth:5,indoor:1},
+  fashion:      {visual:10,solo:5,depth:5,indoor:7},
+  gaming:       {visual:5,solo:5,depth:7,indoor:10},
+  travel:       {visual:8,solo:5,depth:6,indoor:3},
+  streetphoto:  {visual:10,solo:7,depth:6,indoor:2},
+  sneakers:     {visual:9,solo:7,depth:6,indoor:8},
+  collectibles: {visual:8,solo:7,depth:8,indoor:9},
+  interior:     {visual:10,solo:7,depth:7,indoor:9},
+  ai:           {visual:3,solo:8,depth:8,indoor:9},
+};
+
+const HOBBY_TREE = {
+  photography:[
+    {id:'portrait',icon:'👤',label:'Portrait',desc:'People as subjects. Natural light, expression, connection between lens and face.'},
+    {id:'street',icon:'🏙️',label:'Street',desc:'Candid moments in public. Timing over technique. The decisive moment.'},
+    {id:'landscape',icon:'🌄',label:'Landscape',desc:'Light over land. Golden hour, composition, patience waiting for conditions.'},
+    {id:'macro',icon:'🔍',label:'Macro',desc:'The world at 1:1. Insects, textures, droplets — things the eye overlooks.'},
+    {id:'film',icon:'🎞️',label:'Film/Analog',desc:'Shooting on 35mm or medium format. Slow, intentional, irreversible frames.'},
+    {id:'documentary',icon:'📰',label:'Documentary',desc:'Visual storytelling across a series. A project that says something specific.'},
+  ],
+  painting:[
+    {id:'watercolor',icon:'💧',label:'Watercolor',desc:'Transparent layers and happy accidents. Water does half the work.'},
+    {id:'oil',icon:'🎨',label:'Oil',desc:'Rich, slow-drying, blendable. The classical medium. Forgiving and luminous.'},
+    {id:'gouache',icon:'⬜',label:'Gouache',desc:'Opaque watercolor. Flat graphic color. Used in illustration and animation.'},
+    {id:'acrylic',icon:'🖌️',label:'Acrylic',desc:'Fast-drying, versatile. Can mimic oils or watercolors depending on dilution.'},
+    {id:'pleinair',icon:'🌿',label:'Plein Air',desc:'Painting outdoors from life. Capturing light as it changes. Racing the sun.'},
+    {id:'abstract',icon:'🔷',label:'Abstract',desc:'Emotion and structure without representation. Color and form as language.'},
+  ],
+  writing:[
+    {id:'fiction',icon:'📖',label:'Fiction',desc:'Characters, scene, conflict. Short stories before novels. Show, don\'t tell.'},
+    {id:'essay',icon:'📝',label:'Personal Essay',desc:'True stories, your perspective. The form where voice matters most.'},
+    {id:'poetry',icon:'✨',label:'Poetry',desc:'Compression and image. Saying the most with the fewest words.'},
+    {id:'screenwriting',icon:'🎬',label:'Screenwriting',desc:'Writing for the screen. Scene descriptions, dialogue, structure. Action only.'},
+    {id:'nature',icon:'🌱',label:'Nature Writing',desc:'Observation of the natural world turned into prose. Precise and sensory.'},
+    {id:'flash',icon:'⚡',label:'Flash Fiction',desc:'Complete stories in 100–500 words. Constraint forces precision.'},
+  ],
+  cooking:[
+    {id:'french',icon:'🥘',label:'French Technique',desc:'Mother sauces, mise en place, classical methods. The foundation of western cooking.'},
+    {id:'fermentation',icon:'🫙',label:'Fermentation',desc:'Kimchi, miso, kombucha, sourdough starters. Patience as an ingredient.'},
+    {id:'japanese',icon:'🍣',label:'Japanese',desc:'Umami, balance, restraint. Dashi, rice, knife skills, seasonal thinking.'},
+    {id:'grilling',icon:'🔥',label:'Grilling & Fire',desc:'Maillard reaction, smoke, direct and indirect heat. Fire as a cooking tool.'},
+    {id:'pasta',icon:'🍝',label:'Fresh Pasta',desc:'Flour and egg. Rolling, cutting, shaping by hand. A skill with a physical feel.'},
+    {id:'spice',icon:'🌶️',label:'Spice Blending',desc:'Building flavor from whole spices. Toasting, grinding, proportions.'},
+  ],
+  baking:[
+    {id:'sourdough',icon:'🍞',label:'Sourdough',desc:'Wild yeast, long fermentation, scoring and baking in a dutch oven.'},
+    {id:'pastry',icon:'🥐',label:'Laminated Pastry',desc:'Croissants, pains au chocolat. Layers of butter and dough. Precise and rewarding.'},
+    {id:'cookies',icon:'🍪',label:'Cookies',desc:'Drop, rolled, sandwich — cookies teach ratios, texture, and browning.'},
+    {id:'cake',icon:'🎂',label:'Layer Cake',desc:'Crumb coats, buttercream, decorating. Architecture you can eat.'},
+    {id:'tarts',icon:'🥧',label:'Tarts & Pies',desc:'Blind baking, curd fillings, crust texture. Precision pastry work.'},
+    {id:'bread',icon:'🫓',label:'Enriched Bread',desc:'Brioche, challah, milk bread. Eggs and butter make dough tender and rich.'},
+  ],
+  ceramics:[
+    {id:'wheel',icon:'🏺',label:'Wheel Throwing',desc:'Clay centered on a spinning wheel. The most meditative form of making.'},
+    {id:'handbuilding',icon:'🤲',label:'Hand Building',desc:'Pinch pots, slab construction, coiling. No wheel required. More sculptural.'},
+    {id:'glazing',icon:'✨',label:'Glazing & Surface',desc:'The chemistry of color. How minerals transform under heat. Testing and surprise.'},
+    {id:'raku',icon:'🔥',label:'Raku',desc:'Fast-fired, removed glowing hot, smoked. Dramatic, unpredictable, Japanese-origin.'},
+    {id:'sculpture',icon:'🗿',label:'Sculpture',desc:'Form without function. Clay as three-dimensional drawing. No rules.'},
+    {id:'porcelain',icon:'⚪',label:'Porcelain',desc:'The most demanding clay. Translucent when thin. Unforgiving but beautiful.'},
+  ],
+  gardening:[
+    {id:'herbs',icon:'🌿',label:'Herb Garden',desc:'Basil, rosemary, thyme — plants you grow and eat. Kitchen-connected gardening.'},
+    {id:'container',icon:'🪴',label:'Container Gardening',desc:'Balconies, patios, small spaces. High yield in limited soil.'},
+    {id:'native',icon:'🌼',label:'Native Plants',desc:'Plants native to your region. Low water, wildlife habitat, ecological good.'},
+    {id:'bonsai',icon:'🎋',label:'Bonsai',desc:'Miniature trees shaped over years. Patience, wiring, seasonal care.'},
+    {id:'hydroponics',icon:'💧',label:'Hydroponics',desc:'Growing in water, not soil. Fast growth, year-round, indoor-capable.'},
+    {id:'cutflowers',icon:'💐',label:'Cut Flowers',desc:'Growing flowers for arranging. Dahlia, sweet pea, zinnia. Seasonal abundance.'},
+  ],
+  birdwatching:[
+    {id:'ear',icon:'👂',label:'Birding by Ear',desc:'Identifying species purely by song. The highest skill in birding.'},
+    {id:'raptors',icon:'🦅',label:'Raptors',desc:'Hawks, eagles, falcons. Shape, wingbeat, soaring behavior. Field marks at distance.'},
+    {id:'migration',icon:'🧭',label:'Migration Tracking',desc:'Seasonal movement patterns. Hotspots, timing, weather correlation.'},
+    {id:'journaling',icon:'📔',label:'Field Journaling',desc:'Sketching and noting observations on site. The naturalist tradition.'},
+    {id:'shorebirds',icon:'🦢',label:'Shorebirds',desc:'The most challenging group. Subtle plumage, variable by season and age.'},
+    {id:'habitat',icon:'🌲',label:'Habitat Study',desc:'Understanding which birds live where and why. Ecology over checklists.'},
+  ],
+  reading:[
+    {id:'literary',icon:'📚',label:'Literary Fiction',desc:'Language-forward fiction. Prose style as much as plot. Prize-winners and debuts.'},
+    {id:'classics',icon:'🏛️',label:'Classics',desc:'Work that survived centuries. Why it lasted, what it means now.'},
+    {id:'nonfiction',icon:'🔬',label:'Narrative Nonfiction',desc:'True stories told with novelistic technique. History, science, biography.'},
+    {id:'poetry',icon:'✍️',label:'Poetry',desc:'Reading slowly. One poem at a time. Memorization as a practice.'},
+    {id:'graphic',icon:'🎭',label:'Graphic Novels',desc:'Sequential art as literature. Maus, Persepolis, building the canon.'},
+    {id:'shortform',icon:'⚡',label:'Short Stories',desc:'The most demanding form for writers. Chekhov, Carver, O\'Connor, Munro.'},
+  ],
+  piano:[
+    {id:'classical',icon:'🎹',label:'Classical',desc:'Repertoire from Bach to Debussy. Technical precision and musical depth.'},
+    {id:'jazz',icon:'🎷',label:'Jazz',desc:'Chord extensions, improvisation, the ii-V-I. A different musical language.'},
+    {id:'composition',icon:'📝',label:'Composition',desc:'Writing original music. Melody, harmony, structure. Making something new.'},
+    {id:'improvisation',icon:'✨',label:'Improvisation',desc:'Playing freely, in the moment. Scales, modes, musical conversation.'},
+    {id:'theory',icon:'📐',label:'Music Theory',desc:'Understanding why music works. Scales, intervals, harmony, voice leading.'},
+    {id:'pop',icon:'🎵',label:'Pop/Contemporary',desc:'Playing songs you actually know. Chord charts, ear training, feel.'},
+  ],
+  collage:[
+    {id:'paper',icon:'✂️',label:'Paper Cutting',desc:'Scissors and exacto knife as drawing tools. Positive and negative space.'},
+    {id:'magazine',icon:'📰',label:'Magazine Collage',desc:'Cut, rearrange, recontextualize. Found images get new meaning.'},
+    {id:'digital',icon:'💻',label:'Digital Collage',desc:'Photoshop or Procreate. Blending modes, erasure, texture overlays.'},
+    {id:'vision',icon:'🌟',label:'Vision Board',desc:'Intentional image selection as a clarity practice. What you\'re building toward.'},
+    {id:'mixedmedia',icon:'🎨',label:'Mixed Media',desc:'Collage plus paint, drawing, fabric, found objects. Layered surfaces.'},
+    {id:'bookbinding',icon:'📕',label:'Artist Books',desc:'Making books as objects. Accordion folds, pamphlet stitch, altered books.'},
+  ],
+  drawing:[
+    {id:'figure',icon:'🧍',label:'Figure Drawing',desc:'The human body as the ultimate drawing challenge. Proportion, gesture, anatomy.'},
+    {id:'urban',icon:'🏛️',label:'Urban Sketching',desc:'Drawing on location in cities. Architecture, people, life as it happens.'},
+    {id:'botanical',icon:'🌺',label:'Botanical',desc:'Scientific illustration tradition. Plants rendered with accuracy and beauty.'},
+    {id:'comics',icon:'💬',label:'Comics/Manga',desc:'Sequential storytelling. Panel composition, character design, visual narrative.'},
+    {id:'portrait',icon:'👤',label:'Portraiture',desc:'Likeness from life. The eyes, the light, the specific person before you.'},
+    {id:'gesture',icon:'⚡',label:'Gesture Drawing',desc:'30-second to 2-minute figure poses. Speed that captures energy, not detail.'},
+  ],
+  dancing:[
+    {id:'salsa',icon:'💃',label:'Salsa/Latin',desc:'Partner dancing with Cuban motion. On-2 timing, turns, body movement.'},
+    {id:'hiphop',icon:'🎤',label:'Hip-Hop',desc:'Groove, isolation, freestyle. Rooted in music and street culture.'},
+    {id:'contemporary',icon:'🩰',label:'Contemporary',desc:'Modern movement vocabulary. Floor work, improvisation, physical storytelling.'},
+    {id:'ballet',icon:'🩱',label:'Ballet Basics',desc:'Barre work, turnout, port de bras. Foundation for all western dance.'},
+    {id:'swing',icon:'🎷',label:'Swing/Lindy Hop',desc:'Partner dancing to jazz. Charleston roots, aerial possibilities, pure joy.'},
+    {id:'contact',icon:'🤝',label:'Contact Improv',desc:'Weight sharing with a partner. Listening through touch. Dance as conversation.'},
+  ],
+  knitting:[
+    {id:'colorwork',icon:'🌈',label:'Colorwork',desc:'Fair isle, stranded knitting, intarsia. Multiple colors in one row.'},
+    {id:'lace',icon:'🕸️',label:'Lace',desc:'Yarn-overs and decreases creating patterns with holes. Delicate and complex.'},
+    {id:'socks',icon:'🧦',label:'Socks',desc:'Knitting in the round, turning a heel. The gateway to technical knitting.'},
+    {id:'cables',icon:'🔀',label:'Cables',desc:'Crossing stitches to create braided texture. Tactile and architectural.'},
+    {id:'brioche',icon:'🍞',label:'Brioche',desc:'Two-color slipped-stitch technique. Squishy, reversible, surprisingly simple.'},
+    {id:'entrelac',icon:'◇',label:'Entrelac',desc:'Interlocking squares worked at angles. Looks harder than it is. Stunning.'},
+  ],
+  journaling:[
+    {id:'bullet',icon:'•',label:'Bullet Journal',desc:'Rapid logging, collections, migration. An analog productivity and reflection system.'},
+    {id:'morning',icon:'☀️',label:'Morning Pages',desc:'Three longhand pages, every morning, no editing. Julia Cameron\'s method.'},
+    {id:'dream',icon:'🌙',label:'Dream Journal',desc:'Recording dreams immediately on waking. Patterns, symbols, the subconscious.'},
+    {id:'artjournal',icon:'🎨',label:'Art Journal',desc:'Visual and written together. Collage, paint, handwriting. No rules.'},
+    {id:'gratitude',icon:'🙏',label:'Gratitude Practice',desc:'Specific, detailed gratitude — not generic. Changes what you notice.'},
+    {id:'letters',icon:'✉️',label:'Letters',desc:'Writing to specific people (sent or unsent). The oldest journaling form.'},
+  ],
+  woodworking:[
+    {id:'handtools',icon:'🪚',label:'Hand Tool Joinery',desc:'Mortise and tenon, dovetail. No power tools. The loudest skill is silence.'},
+    {id:'turning',icon:'🌀',label:'Lathe Turning',desc:'Bowls and spindles from spinning blanks. Watching form emerge from a block.'},
+    {id:'furniture',icon:'🪑',label:'Furniture Making',desc:'Functional pieces. Chairs, tables, shelves. Design meets craft.'},
+    {id:'carving',icon:'🗡️',label:'Carving',desc:'Chisels and gouges shaping relief or sculpture. Slow, meditative, precise.'},
+    {id:'finishing',icon:'✨',label:'Finishing & Staining',desc:'Sanding, grain raising, oil, wax, lacquer. How wood becomes beautiful.'},
+    {id:'marquetry',icon:'🔲',label:'Marquetry',desc:'Inlaid wood veneer patterns. Puzzle-like precision creating pictures in wood.'},
+  ],
+  film:[
+    {id:'documentary',icon:'📰',label:'Documentary',desc:'Real subjects, real stories. Observational, participatory, poetic modes.'},
+    {id:'narrative',icon:'🎭',label:'Narrative Short',desc:'Fiction with actors, script, locations. The full filmmaking pipeline in miniature.'},
+    {id:'videoessay',icon:'💬',label:'Video Essay',desc:'Ideas expressed through editing, narration, and image. YouTube\'s native form.'},
+    {id:'cinematography',icon:'📷',label:'Cinematography',desc:'Composition, light, camera movement. The image before the edit.'},
+    {id:'editing',icon:'✂️',label:'Editing Theory',desc:'Rhythm, continuity, montage. How cuts create meaning and emotion.'},
+    {id:'sound',icon:'🎵',label:'Sound Design',desc:'Foley, music, silence. Half the emotional power of any film lives in audio.'},
+  ],
+  language:[
+    {id:'spanish',icon:'🇪🇸',label:'Spanish',desc:'500 million speakers. Latin cognates make vocabulary accessible to English speakers.'},
+    {id:'japanese',icon:'🇯🇵',label:'Japanese',desc:'Three writing systems, agglutinative grammar, honorifics. Rich and challenging.'},
+    {id:'french',icon:'🇫🇷',label:'French',desc:'Closest to English after centuries of contact. Literature, film, and food.'},
+    {id:'portuguese',icon:'🇧🇷',label:'Portuguese',desc:'Brazil and Portugal. Similar to Spanish with its own music and rhythm.'},
+    {id:'mandarin',icon:'🇨🇳',label:'Mandarin',desc:'Tonal language, logographic script. Most spoken language on Earth.'},
+    {id:'arabic',icon:'🇸🇦',label:'Arabic',desc:'Right-to-left, root-based vocabulary, 400 million speakers across dialects.'},
+  ],
+  hiking:[
+    {id:'trailrunning',icon:'🏃',label:'Trail Running',desc:'Running on dirt, elevation change, technical terrain. Fitness meets nature.'},
+    {id:'naturejournaling',icon:'📔',label:'Nature Journaling',desc:'Sketching and noting what you observe while moving through wild spaces.'},
+    {id:'survival',icon:'🔥',label:'Wilderness Skills',desc:'Navigation, fire-starting, shelter. Confidence in the backcountry.'},
+    {id:'foraging',icon:'🍄',label:'Foraging',desc:'Identifying edible plants and fungi. Mushrooms, berries, greens. Do the research.'},
+    {id:'backpacking',icon:'🎒',label:'Backpacking',desc:'Multi-day trips carrying everything. Gear selection, route planning, endurance.'},
+    {id:'plantid',icon:'🌿',label:'Plant ID',desc:'Knowing what grows where and why. Botany through close attention.'},
+  ],
+  fashion:[
+    {id:'vintage',icon:'🕰️',label:'Vintage Hunting',desc:'Thrift stores, estate sales, eBay. Dating garments, spotting quality, building vocabulary.'},
+    {id:'tailoring',icon:'✂️',label:'Tailoring Basics',desc:'Hemming, taking in seams, replacing zippers. Making clothes fit perfectly.'},
+    {id:'capsule',icon:'🗂️',label:'Capsule Wardrobe',desc:'20-30 pieces that work together. Intentional reduction. Quality over quantity.'},
+    {id:'dyeing',icon:'🎨',label:'Natural Dyeing',desc:'Indigo, avocado skins, onion peels. Ancient color from plants and minerals.'},
+    {id:'decades',icon:'📺',label:'Decade Study',desc:'Deep research into a specific era\'s silhouette, fabrication, and social context.'},
+    {id:'accessories',icon:'💍',label:'Accessories',desc:'Bags, shoes, jewelry as the punctuation of an outfit. Finishing the look.'},
+  ],
+  gaming:[
+    {id:'tabletop',icon:'🎲',label:'Tabletop RPG',desc:'Dungeons and Dragons, Pathfinder. Collaborative storytelling with rules.'},
+    {id:'boardgame',icon:'♟️',label:'Board Game Design',desc:'Designing mechanics, playtesting, iterating. Making the game, not just playing it.'},
+    {id:'solo',icon:'🃏',label:'Solo Games',desc:'Designed for one. Journaling RPGs, solitaire systems, single-player board games.'},
+    {id:'strategy',icon:'🏆',label:'Strategy Deep Dive',desc:'Chess, Go, Agricola, Twilight Imperium. Games with genuine depth.'},
+    {id:'vintage',icon:'👾',label:'Retro/Vintage',desc:'Arcade, Atari, early console. Games as cultural artifacts and design history.'},
+    {id:'design',icon:'⚙️',label:'Game Design Theory',desc:'Reading on mechanics, systems, player psychology. Understanding why games work.'},
+  ],
+  travel:[
+    {id:'streetfood',icon:'🍜',label:'Street Food',desc:'Eating where locals eat. Market stalls, carts, small shops. Flavor over ambiance.'},
+    {id:'architecture',icon:'🏛️',label:'Architecture',desc:'Reading buildings as history. What was built when, for whom, and why.'},
+    {id:'slow',icon:'🐢',label:'Slow Travel',desc:'One place for weeks, not many places for days. Depth over coverage.'},
+    {id:'pilgrimage',icon:'🚶',label:'Pilgrimage Routes',desc:'Camino de Santiago, Kumano Kodo. Walking with intention and community.'},
+    {id:'solo',icon:'🧳',label:'Solo Travel',desc:'The decisions, risks, and freedoms of traveling completely alone.'},
+    {id:'documenting',icon:'📷',label:'Travel Documentary',desc:'Building a visual or written record of a place. Journalism as tourism.'},
+  ],
+  streetphoto:[
+    {id:'documentary',icon:'📰',label:'Documentary',desc:'Long-form photographic projects about specific communities or subjects.'},
+    {id:'flash',icon:'⚡',label:'Flash Photography',desc:'On-camera flash in daylight. Hard shadows, saturated color. A bold aesthetic.'},
+    {id:'colorpalette',icon:'🎨',label:'Color Theory',desc:'Shooting for specific palettes. Monochrome days. Complementary color hunting.'},
+    {id:'zines',icon:'📄',label:'Zine Making',desc:'Self-publishing your work. Layout, printing, distribution. Your editorial voice.'},
+    {id:'bw',icon:'⬛',label:'Black & White',desc:'Removing color forces attention to light, form, and contrast. Timeless.'},
+    {id:'archive',icon:'🗂️',label:'Archive Practice',desc:'Organizing, editing, and sequencing your body of work. Thinking like a curator.'},
+  ],
+  sneakers:[
+    {id:'custompaint',icon:'🖌️',label:'Custom Painting',desc:'Angelus leather paint, prep, sealing. Turning a blank canvas into original art.'},
+    {id:'restoration',icon:'✨',label:'Restoration',desc:'Cleaning, sole re-gluing, midsole repainting. Bringing dead shoes back to life.'},
+    {id:'lacing',icon:'👟',label:'Lace Art',desc:'Zipper lacing, display lacing, bar lacing. A small change with outsized effect.'},
+    {id:'collection',icon:'🏆',label:'Collection Building',desc:'Focus, restraint, curation. A collection is a point of view, not just accumulation.'},
+    {id:'grading',icon:'📊',label:'Condition Grading',desc:'DS, VNDS, beaters. Learning the standards that determine value.'},
+    {id:'history',icon:'📚',label:'Sneaker History',desc:'Air Max, Jordan, Yeezy. Understanding the stories and cultural moments behind silhouettes.'},
+  ],
+  collectibles:[
+    {id:'sportscards',icon:'⚾',label:'Sports Cards',desc:'Grading, print runs, rookie cards. PSA vs BGS. Investing or collecting?'},
+    {id:'vinyl',icon:'🎵',label:'Vinyl Records',desc:'First pressings, labels, condition grading. Music as physical artifact.'},
+    {id:'vintagetoys',icon:'🧸',label:'Vintage Toys',desc:'Star Wars, GI Joe, Transformers. Original vs reproduction. Condition obsession.'},
+    {id:'coins',icon:'🪙',label:'Coins & Currency',desc:'Numismatics. Historical coins as portable history. Grading and authentication.'},
+    {id:'autographs',icon:'✍️',label:'Autographs',desc:'Authentication, COAs, in-person vs. TTM. Provenance matters completely.'},
+    {id:'books',icon:'📗',label:'Books & Ephemera',desc:'First editions, signed copies, dust jackets. Condition is everything.'},
+  ],
+  interior:[
+    {id:'minimalism',icon:'⬜',label:'Minimalism',desc:'Less as the point. Negative space, intentional objects, visual quiet.'},
+    {id:'maximalism',icon:'🎪',label:'Maximalism',desc:'Pattern, color, layering. More as the point. Every surface has a story.'},
+    {id:'vintage',icon:'🛋️',label:'Vintage/Thrift',desc:'Sourcing preloved furniture. Quality over newness. The thrill of the find.'},
+    {id:'biophilic',icon:'🌿',label:'Biophilic Design',desc:'Bringing nature in. Plants, wood, stone, light. Spaces that feel alive.'},
+    {id:'lighting',icon:'💡',label:'Lighting Design',desc:'Layers of light. Ambient, task, accent. Temperature and direction matter.'},
+    {id:'colortheory',icon:'🎨',label:'Color Theory',desc:'How colors interact in a room. Undertones, saturation, the 60-30-10 rule.'},
+  ],
+  ai:[
+    {id:'prompting',icon:'💬',label:'Prompt Engineering',desc:'Writing instructions that reliably produce desired outputs. Precision matters.'},
+    {id:'imageai',icon:'🖼️',label:'Image Generation',desc:'Midjourney, Stable Diffusion, Flux. Style prompting, seeds, CFG settings.'},
+    {id:'agents',icon:'🤖',label:'AI Agents',desc:'Systems that take actions, use tools, plan and execute multi-step tasks.'},
+    {id:'creative',icon:'✍️',label:'Creative AI',desc:'Using AI as a collaborator for writing, art, music. The human stays in the loop.'},
+    {id:'ethics',icon:'⚖️',label:'AI Ethics',desc:'Bias, alignment, impact. Understanding the real costs and risks of AI systems.'},
+    {id:'building',icon:'⚙️',label:'Building with AI',desc:'APIs, embeddings, RAG, fine-tuning. Making things that use AI, not just use AI.'},
+  ],
+};
+
+const WEEKLY_PROMPTS = [
+  {emoji:'🔦',title:'Document the Unremarkable',task:'Find the most forgettable moment or object in your day and make it interesting. Photograph it, sketch it, or write 100 words about it. The constraint: no editing allowed.'},
+  {emoji:'🎁',title:'Make Something for Someone',task:'Create a small thing specifically for one person you know — a note, a drawing, a recipe, a playlist, a photo. The constraint: it has to be made, not bought.'},
+  {emoji:'👀',title:'Go Outside and Actually Notice',task:'Walk for 30 minutes with no phone in hand. When you get back, write or sketch five specific things you observed. Not impressions — specific things.'},
+  {emoji:'⏱️',title:'One Hour, One Object',task:'Pick any single object and spend a full uninterrupted hour on it. Draw it, photograph it, write about it, or try to understand how it works. Resist moving on.'},
+  {emoji:'🎭',title:'Steal Like an Artist',task:'Find a piece of work you admire — a photo, a painting, a paragraph — and make your own version. Same subject or structure, your own execution. Credit the original.'},
+  {emoji:'🔺',title:'Three Colors Only',task:'Make something using exactly three colors (or three ingredients, or three materials). The constraint is the whole point. Work within it.'},
+  {emoji:'💥',title:'The Ugly First Draft',task:'Make something bad on purpose. Skip the planning. Go fast. Embrace the mess. The goal is to finish something imperfect instead of not starting something perfect.'},
+  {emoji:'🧒',title:'Memory Project',task:'Recreate one specific memory from your childhood using whatever you\'ve learned here. Cook the food, draw the place, write the moment. Accuracy matters less than the attempt.'},
+  {emoji:'⚡',title:'15-Minute Speed Round',task:'Set a 15-minute timer and complete something — anything — before it goes off. No revisions. Done is the product. What did you make?'},
+  {emoji:'🗣️',title:'Teach Someone',task:'Explain one skill you\'ve learned in the last month to someone who doesn\'t know it. Write the explanation, record yourself, or do it in person. Teaching reveals gaps.'},
+  {emoji:'🏠',title:'Use What You Have',task:'Make something using only materials already in your home. No purchases, no deliveries. Constraint creates creativity. What can you actually make right now?'},
+  {emoji:'😬',title:'Outside Your Comfort Zone',task:'Try one aspect of a hobby you\'ve been putting off or avoiding. The hard part, not the easy part. Document what surprised you about it.'},
+  {emoji:'🔢',title:'Collect 10 Things',task:'Find 10 versions of one thing — 10 different textures, 10 shades of one color, 10 sounds, 10 lines of found text. Arrange and photograph them.'},
+  {emoji:'🌅',title:'Light Study',task:'Observe and record the same subject or space at three different times of day. Morning, midday, evening. Photograph, sketch, or describe each. What changes?'},
+  {emoji:'✉️',title:'A Letter to Yourself',task:'Write a letter to yourself five years ago. Specific advice, not generic wisdom. What do you actually wish you\'d known? Seal it if you want.'},
+  {emoji:'🟡',title:'One Color Day',task:'Pick one color and make everything today about it. Photograph it everywhere. Eat it. Wear it. Notice where it appears. Monochrome as a lens.'},
+  {emoji:'🤝',title:'Collaborate',task:'Ask one person to join you in any creative activity this week. It doesn\'t have to be good. The point is doing it with someone else.'},
+  {emoji:'🔇',title:'The Silent Hour',task:'Do something creative in complete silence for 60 minutes. No music, no podcast, no TV. Just you and the work. Notice what happens to your attention.'},
+  {emoji:'✅',title:'Finish It',task:'Pick something you started and never finished. A drawing, a piece of writing, a project, a craft. Complete it this week, even imperfectly. Done beats perfect.'},
+  {emoji:'🔁',title:'Do It Again, Differently',task:'Take something you made or did last month and redo it with what you know now. Same subject, different approach. Compare the two versions honestly.'},
+];
+
 const CREATIVE_JOURNEYS = [
   {
     id:'handmade-bowl',title:'Make Your First Bowl',emoji:'🏺',color:'#C4916A',
@@ -4568,7 +5020,7 @@ function renderResultStep() {
     return `<div class="rbhr" style="background:${hd.color}">
       <span class="rbhr-icon">${hd.icon}</span>
       <div class="rbhr-name">${h.toUpperCase()}</div>
-      <div class="rbhr-tag" style="color:rgba(0,0,0,.4)">${hd.tagline}</div>
+      <div class="rbhr-tag" style="color:rgba(0,0,0,.4)">${(HOBBY_ARTIFACTS[h]||{}).tagline||hd.tagline}</div>
     </div>`;
   }).join('');
 
@@ -4757,25 +5209,51 @@ function switchExploreTab(tab, el) {
   if (tab === 'journeys') buildJourneysGrid();
 }
 
-function buildJourneysGrid() {
-  const grid = document.getElementById('webJourneyGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
+function _buildJourneyCards(gridEl) {
+  if (!gridEl) return;
+  gridEl.innerHTML = '';
   CREATIVE_JOURNEYS.forEach(function(j) {
-    const d = document.createElement('div');
+    var d = document.createElement('div');
     d.className = 'journey-card';
     d.onclick = function(){ openJourney(j.id); };
-    const dots = j.steps.map(function(){ return '<div class="jc-step-dot"></div>'; }).join('');
-    d.innerHTML = '<div class="jc-accent" style="background:'+j.color+'"></div>'
-      + '<div class="jc-emoji">'+j.emoji+'</div>'
-      + '<div class="jc-info">'
-      + '<div class="jc-title">'+j.title+'</div>'
-      + '<div class="jc-sub">'+j.tagline+'</div>'
-      + '<div class="jc-steps-row">'+dots+'</div>'
-      + '<div class="jc-memoir">'+j.memoir+'</div>'
+
+    // Build gradient from each hobby's color in the journey
+    var hobbyColors = j.steps.map(function(s) {
+      var h = HOBBIES[s.hobby];
+      return h ? h.color : j.color;
+    });
+    // Create a rich angled gradient from all hobby colors
+    var gradStops = hobbyColors.map(function(c, i) {
+      return c + ' ' + Math.round(i * 100 / Math.max(hobbyColors.length - 1, 1)) + '%';
+    }).join(', ');
+    var gradient = 'linear-gradient(135deg, ' + gradStops + ')';
+
+    var stepsHTML = j.steps.map(function(s) {
+      var h = HOBBIES[s.hobby];
+      return '<div class="jc-step-pill" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.9)">'
+        + '<span>' + s.icon + '</span>'
+        + '<span style="font-weight:800;letter-spacing:.5px">' + (s.hobby.charAt(0).toUpperCase()+s.hobby.slice(1)) + '</span>'
+        + '</div>';
+    }).join('<div class="jc-step-arrow" style="color:rgba(255,255,255,.4)">→</div>');
+
+    d.innerHTML = '<div class="jc-gradient" style="background:' + gradient + '">'
+      + '<div class="jc-emoji">' + j.emoji + '</div>'
+      + '<div class="jc-title">' + j.title + '</div>'
+      + '<div class="jc-memoir" style="color:rgba(255,255,255,.7);margin-top:4px">' + j.memoir + '</div>'
+      + '</div>'
+      + '<div class="jc-bottom" style="padding:14px 20px 16px;border-top:1px solid rgba(255,255,255,.06)">'
+      + '<div class="jc-steps-flow">' + stepsHTML + '</div>'
       + '</div>';
-    grid.appendChild(d);
+    gridEl.appendChild(d);
   });
+}
+
+function buildJourneysGrid() {
+  _buildJourneyCards(document.getElementById('webJourneyGrid'));
+}
+
+function buildJourneysView() {
+  _buildJourneyCards(document.getElementById('webJourneyGridFull'));
 }
 
 function openJourney(id) {
@@ -4838,7 +5316,7 @@ function buildExploreGrid() {
     d.innerHTML = '<div class="hc-blob"></div>'
       + '<span class="hc-icon" style="color:'+h.textColor+'">' + _ico + '</span>'
       + '<div class="hc-name" style="color:'+h.textColor+'">'+k.toUpperCase()+'</div>'
-      + '<div class="hc-tag" style="color:'+h.textColor+'">'+h.tagline+'</div>'
+      + '<div class="hc-tag" style="color:'+h.textColor+'">'+((HOBBY_ARTIFACTS[k]||{}).tagline||h.tagline)+'</div>'
       + '<div class="hc-arr" style="color:'+h.textColor+'">›</div>';
     grid.appendChild(d);
   });
@@ -5518,45 +5996,752 @@ function buildMemoirView() {
   const countEl = document.getElementById('memoirCount');
   if (!feedEl || !currentUser) return;
 
-  // Update aside profile
-  const profData = PROFILES_DATA[currentUser.profile];
-  const completed = window.completedChapters || {};
-  const totalCh = Object.values(completed).reduce(function(a,h){ return a + Object.keys(h).length; }, 0);
-  const hobbiesTried = Object.keys(completed).length;
-  const memoirEmoji = document.getElementById('memoir-aside-emoji');
-  const memoirType = document.getElementById('memoir-aside-type');
-  const memoirStats = document.getElementById('memoir-aside-stats');
-  const memoirDesc = document.getElementById('memoir-aside-desc');
-  if (profData) {
-    if (memoirEmoji) memoirEmoji.textContent = profData.emoji;
-    if (memoirType) memoirType.textContent = profData.type.replace('\n', ' ');
-    if (memoirStats) memoirStats.textContent = totalCh + ' chapters · ' + hobbiesTried + ' hobbies';
-    if (memoirDesc) memoirDesc.textContent = profData.desc.replace(/<[^>]+>/g, '').slice(0, 120) + '...';
-  }
   const entries = DB.getMemoirEntries(currentUser.email);
-  if (countEl) countEl.textContent = entries.length + ' chapter' + (entries.length !== 1 ? 's' : '') + ' written';
+  const completed = window.completedChapters || {};
+  const hobbiesDone = Object.keys(completed).length;
+  const artifactsDone = HOBBY_ORDER.filter(function(k) {
+    return completed[k] && completed[k][2] !== undefined;
+  }).length;
+
+  if (countEl) countEl.textContent = artifactsDone + ' artifacts collected · ' + hobbiesDone + ' hobbies explored';
+
+  // Group entries by hobby
+  var byHobby = {};
+  entries.forEach(function(e) {
+    if (!byHobby[e.hobby]) byHobby[e.hobby] = [];
+    byHobby[e.hobby].push(e);
+  });
+
+  // Build trinket shelf — one trinket per hobby, all 28 shown
+  var shelfHTML = '<div class="trinket-shelf">';
+  HOBBY_ORDER.forEach(function(k) {
+    var hd = HOBBIES[k];
+    var art = HOBBY_ARTIFACTS ? HOBBY_ARTIFACTS[k] : null;
+    var hobbyEntries = byHobby[k] || [];
+    var isDone = hobbyEntries.length > 0;
+    var latestEntry = hobbyEntries[hobbyEntries.length - 1];
+    var hasImg = latestEntry && latestEntry.image;
+    var _rgb = hexRGB(hd.color);
+
+    if (isDone) {
+      shelfHTML += '<div class="trinket trinket-done" onclick="openTrinketDetail(\'' + k + '\')">'
+        + '<div class="trinket-obj" style="background:linear-gradient(145deg,'+hd.color+',rgba('+_rgb+',.7))">'
+        + (hasImg ? '<img class="trinket-thumb" src="' + latestEntry.image + '">' : '<span class="trinket-ico">' + hd.icon + '</span>')
+        + (art ? '<div class="trinket-badge">' + art.emoji + '</div>' : '')
+        + '<div class="trinket-shine"></div>'
+        + '</div>'
+        + '<div class="trinket-lbl">' + k + '</div>'
+        + '</div>';
+    } else {
+      shelfHTML += '<div class="trinket trinket-empty" onclick="openTrinketDetail(\'' + k + '\')">'
+        + '<div class="trinket-obj trinket-obj-empty">'
+        + '<span class="trinket-ico" style="opacity:.2">' + hd.icon + '</span>'
+        + '</div>'
+        + '<div class="trinket-lbl" style="color:rgba(255,255,255,.18)">' + k + '</div>'
+        + '</div>';
+    }
+  });
+  shelfHTML += '</div>';
+  shelfHTML += '<div class="mem-add" onclick="showView(\'explore\')">'
+    + '<div style="font-size:22px;margin-bottom:6px;color:rgba(255,255,255,.18)">\u2736</div>'
+    + '<div style="font-size:13px;font-weight:800;color:rgba(255,255,255,.4);margin-bottom:3px">Explore more hobbies</div>'
+    + '<div style="font-size:11px;color:rgba(255,255,255,.22)">28 artifacts to collect</div>'
+    + '</div>';
+
+  feedEl.innerHTML = shelfHTML;
+}
+
+function openTrinketDetail(key) {
+  var hd = HOBBIES[key];
+  var art = HOBBY_ARTIFACTS ? HOBBY_ARTIFACTS[key] : null;
+  if (!hd) return;
+
+  var drawer = document.getElementById('trinket-drawer');
+  if (!drawer) return;
+
+  var entries = currentUser ? DB.getMemoirEntries(currentUser.email).filter(function(e){ return e.hobby === key; }) : [];
+  var _rgb = hexRGB(hd.color);
+  var textCol = hd.textColor === 'white' ? 'white' : '#0E0D0B';
+
+  var chaptersHTML = '';
   if (entries.length === 0) {
-    feedEl.innerHTML = '<div style="padding:40px 20px;text-align:center;color:rgba(255,255,255,.25);font-size:14px;line-height:1.8">Your memoir is empty.<br>Complete a hobby chapter to write your first entry.</div>';
+    var hasArt = !!art;
+    chaptersHTML = '<div class="td-empty">'
+      + '<div class="td-empty-ico">' + (hasArt ? art.emoji : hd.icon) + '</div>'
+      + '<div class="td-empty-title">' + (hasArt ? art.title : key.toUpperCase()) + '</div>'
+      + '<div class="td-empty-sub">' + (hasArt ? art.tagline : hd.tagline) + '</div>'
+      + (hasArt ? '<div class="td-empty-criteria">'
+          + art.aiCriteria.map(function(c){ return '<span class="td-criteria-pill">'+c+'</span>'; }).join('')
+          + '</div>' : '')
+      + '<button class="td-start-btn" style="background:'+hd.color+';color:'+textCol+'" onclick="closeTrinketDetail();openHobby(\''+key+'\')">Start this hobby →</button>'
+      + '</div>';
+  } else {
+    chaptersHTML = '<div class="td-chapters">';
+    // Show artifact (ch3) first if exists
+    var ch3 = entries.filter(function(e){ return (e.chapter_idx===2)||(e.chapter===2); })[0];
+    if (ch3 && art) {
+      chaptersHTML += '<div class="td-artifact-block" style="background:linear-gradient(135deg,'+hd.color+',rgba('+_rgb+',.5))">'
+        + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:'+textCol+';opacity:.6;margin-bottom:6px">🏆 Final Artifact</div>'
+        + '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:1px;color:'+textCol+';margin-bottom:4px">' + art.title + '</div>'
+        + '<div style="font-size:11px;color:'+textCol+';opacity:.6;margin-bottom:12px">' + art.tagline + '</div>'
+        + (ch3.image ? '<img class="td-ch-img" src="'+ch3.image+'">' : '')
+        + (ch3.reflection ? '<div class="td-ch-reflect" style="color:'+textCol+';opacity:.7">"'+ch3.reflection+'"</div>' : '')
+        + '</div>';
+    }
+    // Show all chapter entries
+    chaptersHTML += '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin:16px 0 10px">Your Journey</div>';
+    entries.forEach(function(e) {
+      var chIdx = e.chapter_idx !== undefined ? e.chapter_idx : (e.chapter !== undefined ? e.chapter : 0);
+      var chLabel = chIdx === 2 ? 'Chapter 3 — ' + (art ? art.title : 'Artifact') : 'Chapter ' + (chIdx + 1);
+      chaptersHTML += '<div class="td-ch">'
+        + '<div class="td-ch-lbl">' + chLabel + '</div>'
+        + (e.image ? '<img class="td-ch-img" src="'+e.image+'">' : '')
+        + '<div class="td-ch-concept">' + (e.concept||'') + '</div>'
+        + (e.reflection ? '<div class="td-ch-reflect">"'+e.reflection+'"</div>' : '')
+        + '<div class="td-ch-pills">'
+        + (e.scores||[]).map(function(s){ return '<span class="td-pill" style="background:'+s.color+'18;color:'+s.color+'">'+s.label+' '+s.val+'</span>'; }).join('')
+        + '</div>'
+        + '</div>';
+    });
+    chaptersHTML += '</div>';
+  }
+
+  drawer.innerHTML = '<div class="td-backdrop" onclick="closeTrinketDetail()"></div>'
+    + '<div class="td-card">'
+    + '<button class="td-close" onclick="closeTrinketDetail()">✕</button>'
+    + '<div class="td-hdr" style="background:linear-gradient(135deg,'+hd.color+',rgba('+_rgb+',.6));color:'+textCol+'">'
+    + '<div class="td-hicon">' + hd.icon + '</div>'
+    + '<div><div class="td-hname">' + key.toUpperCase() + '</div>'
+    + (art ? '<div class="td-hsub">' + art.title + '</div>' : '') + '</div>'
+    + '</div>'
+    + chaptersHTML
+    + '</div>';
+
+  drawer.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ══════════════════════════════════════════════════════════════
+// PERSONAL HOBBY MAP
+// ══════════════════════════════════════════════════════════════
+function buildHobbyMap() {
+  var el = document.getElementById('map-content');
+  if (!el) return;
+  var completed = window.completedChapters || {};
+  var keys = Object.keys(completed);
+
+  // Default demo state when no data — shows a sample creative profile
+  if (keys.length === 0) {
+    var demoTraitMeta = {
+      creative: {label:'Creative', desc:'You make things. New combinations, novel ideas, original outputs drive you.', color:'#F0C93A'},
+      analytical: {label:'Analytical', desc:'You understand systems. You want to know how and why things work.', color:'#ACD8F0'},
+      physical: {label:'Physical', desc:'You learn through your body. Doing, moving, and making with your hands.', color:'#B8D96E'},
+      expressive: {label:'Expressive', desc:'You communicate through your work. Emotion, story, and voice matter most.', color:'#F4A261'},
+      social: {label:'Social', desc:'Connection fuels you. Hobbies are better when shared.', color:'#6B4EFF'},
+    };
+    var demoTraits = {creative:78, analytical:52, physical:61, expressive:73, social:44};
+    var demoDims = [{a:'Visual',b:'Conceptual',val:7.8,color:'#F0C93A'},{a:'Solo',b:'Social',val:7.2,color:'#ACD8F0'},{a:'Deep',b:'Quick',val:6.5,color:'#B8D96E'},{a:'Indoor',b:'Outdoor',val:8.1,color:'#F4A261'}];
+    var sorted = Object.keys(demoTraits).sort(function(a,b){ return demoTraits[b]-demoTraits[a]; });
+    var top = sorted[0], topMeta = demoTraitMeta[top];
+    var barsHTML = sorted.map(function(k) {
+      var m = demoTraitMeta[k];
+      return '<div class="map-bar-row"><div class="map-bar-lbl">'+m.label+'</div><div class="map-bar-track"><div class="map-bar-fill" style="width:'+demoTraits[k]+'%;background:'+m.color+'"></div></div><div class="map-bar-val">'+demoTraits[k]+'</div></div>';
+    }).join('');
+    var dimsHTML = demoDims.map(function(d) {
+      return '<div class="map-dim-card"><div class="map-dim-pair"><div class="map-dim-a">'+d.a+'</div><div class="map-dim-b">'+d.b+'</div></div><div class="map-dim-slider"><div class="map-dim-thumb" style="left:'+(d.val*10)+'%;background:'+d.color+'"></div></div></div>';
+    }).join('');
+    var sugKeys = ['photography','baking','drawing','ceramics'];
+    var sugHTML = sugKeys.map(function(k) {
+      var hd = HOBBIES[k]; var art = HOBBY_ARTIFACTS[k];
+      if (!hd) return '';
+      return '<div class="map-suggestion" data-key="'+k+'" onclick="openHobby(this.dataset.key)"><div style="width:38px;height:38px;border-radius:10px;background:'+hd.color+';display:flex;align-items:center;justify-content:center;font-size:18px">'+hd.icon+'</div><div><div class="map-sug-name">'+k.toUpperCase()+'</div><div class="map-sug-why">'+(art?art.tagline:hd.tagline)+'</div></div><div style="margin-left:auto;color:rgba(255,255,255,.2);font-size:18px">›</div></div>';
+    }).join('');
+    el.innerHTML = '<div style="font-size:10px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,.25);margin-bottom:14px;display:flex;align-items:center;gap:8px">EXAMPLE PROFILE <span style="background:rgba(255,255,255,.06);border-radius:20px;padding:3px 10px;font-size:9px">Start a hobby to build yours</span></div>'
+      + '<div class="map-trait-card" style="margin-bottom:16px;background:rgba('+hexRGB(topMeta.color)+',.08);border-color:rgba('+hexRGB(topMeta.color)+',.2)"><div class="map-trait-label">Dominant trait</div><div class="map-trait-value" style="color:'+topMeta.color+'">'+topMeta.label.toUpperCase()+'</div><div class="map-trait-desc">'+topMeta.desc+'</div></div>'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px">Creative Traits</div>'
+      + barsHTML
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin:20px 0 12px">How You Create</div>'
+      + '<div class="map-dim-grid">'+dimsHTML+'</div>'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px">Start With These</div>'
+      + sugHTML;
     return;
   }
-  feedEl.innerHTML = entries.map(function(e) {
-    return '<div class="mem-entry" onclick="openHobby(\''+e.hobby+'\')">'
-      + '<div class="mem-hdr"><div class="mem-dot" style="background:'+e.hobbyColor+'"></div>'
-      + '<div class="mem-hobby" style="color:'+e.hobbyColor+'">'+e.hobby.toUpperCase()+'</div>'
-      + '<div class="mem-date">'+e.completedAt+'</div></div>'
-      + (e.image ? '<img class="mem-image" src="'+e.image+'" alt="'+e.hobby+' entry" onclick="event.stopPropagation()">' : '')
-      + '<div class="mem-concept">'+e.concept+'</div>'
-      + (e.reflection ? '<div class="mem-reflect">"'+e.reflection+'"</div>' : '')
-      + '<div class="mem-pills">'
-      + e.scores.map(function(s){ return '<div class="mem-pill" style="background:'+s.color+'22;color:'+s.color+'">'+s.label+' '+s.val+'</div>'; }).join('')
-      + (e.liked===false?'<div class="mem-pill" style="background:rgba(232,69,60,.1);color:#E8453C">Not for me</div>':'')
-      + '</div></div>';
-  }).join('')
-  + '<div class="mem-add" onclick="showView(\'explore\')">'
-  + '<div style="font-size:22px;margin-bottom:6px;color:rgba(255,255,255,.18)">\u2736</div>'
-  + '<div style="font-size:13px;font-weight:800;color:rgba(255,255,255,.4);margin-bottom:3px">Start a new hobby</div>'
-  + '<div style="font-size:11px;color:rgba(255,255,255,.22)">Add another chapter to your story</div>'
-  + '</div>';
+
+  // Compute averaged trait scores from HOBBY_TRAITS
+  var traits = {creative:0,analytical:0,physical:0,expressive:0,social:0};
+  var dims = {visual:0,solo:0,depth:0,indoor:0};
+  var count = 0;
+  keys.forEach(function(k) {
+    var t = HOBBY_TRAITS[k], d = HOBBY_DIMENSIONS[k];
+    if (t) { Object.keys(traits).forEach(function(x){ traits[x] += t[x]||0; }); }
+    if (d) { Object.keys(dims).forEach(function(x){ dims[x] += d[x]||0; }); }
+    count++;
+  });
+  if (count > 0) {
+    Object.keys(traits).forEach(function(k){ traits[k] = Math.round(traits[k]/count); });
+    Object.keys(dims).forEach(function(k){ dims[k] = Math.round(dims[k]/count); });
+  }
+
+  // Dominant trait labels
+  var traitMeta = {
+    creative: {label:'Creative', desc:'You make things. New combinations, novel ideas, original outputs drive you.', color:'#F0C93A'},
+    analytical: {label:'Analytical', desc:'You understand systems. You want to know how and why things work.', color:'#ACD8F0'},
+    physical: {label:'Physical', desc:'You learn through your body. Doing, moving, and making with your hands.', color:'#B8D96E'},
+    expressive: {label:'Expressive', desc:'You communicate through your work. Emotion, story, and voice matter most.', color:'#F4A261'},
+    social: {label:'Social', desc:'Connection fuels you. Hobbies are better when shared.', color:'#6B4EFF'},
+  };
+  var sorted = Object.keys(traits).sort(function(a,b){ return traits[b]-traits[a]; });
+  var top = sorted[0];
+  var topMeta = traitMeta[top];
+
+  // Trait bars
+  var barsHTML = sorted.map(function(k) {
+    var m = traitMeta[k];
+    return '<div class="map-bar-row">'
+      + '<div class="map-bar-lbl">'+m.label+'</div>'
+      + '<div class="map-bar-track"><div class="map-bar-fill" style="width:'+traits[k]+'%;background:'+m.color+'"></div></div>'
+      + '<div class="map-bar-val">'+traits[k]+'</div>'
+      + '</div>';
+  }).join('');
+
+  // Dimensions
+  var dimData = [
+    {a:'Visual',b:'Conceptual',val:dims.visual,color:'#F0C93A'},
+    {a:'Solo',b:'Social',val:dims.solo,color:'#ACD8F0'},
+    {a:'Deep',b:'Quick',val:dims.depth,color:'#B8D96E'},
+    {a:'Indoor',b:'Outdoor',val:dims.indoor,color:'#F4A261'},
+  ];
+  var dimsHTML = dimData.map(function(d) {
+    var pct = d.val * 10;
+    return '<div class="map-dim-card">'
+      + '<div class="map-dim-pair"><div class="map-dim-a">'+d.a+'</div><div class="map-dim-b">'+d.b+'</div></div>'
+      + '<div class="map-dim-slider"><div class="map-dim-thumb" style="left:'+pct+'%;background:'+d.color+'"></div></div>'
+      + '</div>';
+  }).join('');
+
+  // Suggestions — find hobbies not done yet, closest in trait profile
+  var notDone = HOBBY_ORDER.filter(function(k){ return !completed[k] && HOBBY_TRAITS[k]; });
+  var scored = notDone.map(function(k) {
+    var t = HOBBY_TRAITS[k];
+    var score = 0;
+    sorted.slice(0,2).forEach(function(trait) { score += (t[trait]||0); });
+    return {key:k, score:score};
+  });
+  scored.sort(function(a,b){ return b.score - a.score; });
+  var suggestions = scored.slice(0,4);
+
+  var sugHTML = suggestions.map(function(s) {
+    var hd = HOBBIES[s.key];
+    var art = HOBBY_ARTIFACTS ? HOBBY_ARTIFACTS[s.key] : null;
+    var why = 'Matches your ' + sorted.slice(0,2).map(function(t){ return traitMeta[t].label.toLowerCase(); }).join(' & ') + ' profile';
+    return '<div class="map-suggestion" onclick="openHobby(\'' + s.key + '\')">'
+      + '<div class="map-sug-icon" style="width:38px;height:38px;border-radius:10px;background:'+hd.color+';display:flex;align-items:center;justify-content:center;font-size:18px">'+hd.icon+'</div>'
+      + '<div><div class="map-sug-name">'+s.key.toUpperCase()+'</div>'
+      + '<div class="map-sug-why">'+why+(art?' · '+art.tagline:'')+'</div></div>'
+      + '<div style="margin-left:auto;color:rgba(255,255,255,.2);font-size:18px">›</div>'
+      + '</div>';
+  }).join('');
+
+  el.innerHTML = '<div class="map-trait-card" style="margin-bottom:16px;background:rgba('+hexRGB(topMeta.color)+',.08);border-color:rgba('+hexRGB(topMeta.color)+',.2)">'
+    + '<div class="map-trait-label">Your dominant trait</div>'
+    + '<div class="map-trait-value" style="color:'+topMeta.color+'">'+topMeta.label.toUpperCase()+'</div>'
+    + '<div class="map-trait-desc">'+topMeta.desc+'</div>'
+    + '</div>'
+    + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px">Creative Traits</div>'
+    + barsHTML
+    + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin:20px 0 12px">How You Create</div>'
+    + '<div class="map-dim-grid">'+dimsHTML+'</div>'
+    + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px">Suggested Next Hobbies</div>'
+    + (suggestions.length > 0 ? sugHTML : '<div style="color:rgba(255,255,255,.3);font-size:13px">You\'ve tried them all! 🎉</div>');
+}
+
+// ══════════════════════════════════════════════════════════════
+// KEEP LEARNING
+// ══════════════════════════════════════════════════════════════
+var _klSelected = null;
+
+function buildKeepLearning() {
+  var el = document.getElementById('kl-hobby-select');
+  if (!el) return;
+  var completed = window.completedChapters || {};
+  var done = Object.keys(completed);
+  if (done.length === 0) {
+    var demoHd = HOBBIES['photography'] || {color:'#ACD8F0', textColor:'#0E0D0B', icon:'📷'};
+    el.innerHTML = '<div style="font-size:10px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,.22);margin-bottom:14px;text-transform:uppercase">Example Preview — complete a chapter to unlock yours</div>'
+      + '<div class="kl-hobby-grid">'
+      + '<div class="kl-hobby-card" style="background:'+demoHd.color+';opacity:.65;pointer-events:none">'
+      + '<div class="kl-hc-icon">'+demoHd.icon+'</div>'
+      + '<div class="kl-hc-name" style="color:'+demoHd.textColor+'">PHOTOGRAPHY</div>'
+      + '<div class="kl-hc-done" style="color:rgba(0,0,0,.45)">3 ch done</div>'
+      + '</div>'
+      + '</div>';
+    var area = document.getElementById('kl-chapter-area');
+    var box  = document.getElementById('kl-chapter-box');
+    area.style.display = '';
+    box.innerHTML = '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px">'
+      + demoHd.icon + ' PHOTOGRAPHY · CHAPTER 4'
+      + ' <span style="font-size:9px;padding:2px 7px;background:rgba(255,255,255,.06);border-radius:4px;margin-left:6px;font-family:DM Sans,sans-serif">EXAMPLE</span></div>'
+      + '<div class="kl-chapter-title">THE DECISIVE MOMENT</div>'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px">THE LESSON</div>'
+      + '<div class="kl-chapter-lesson">Cartier-Bresson called it the decisive moment — the fraction of a second when all elements in a frame align into something unrepeatable. It isn\'t luck; it\'s sustained presence. You can\'t predict it, but you can position yourself to recognise it when it arrives.</div>'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px">THE CHALLENGE</div>'
+      + '<div class="kl-chapter-task">Spend 30 minutes in one location without moving. Wait for something to happen in your frame — a person passing, a light change, a bird. Only press the shutter when you feel the moment arrive, not before.</div>'
+      + '<div style="margin-top:14px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;font-style:italic;font-size:13px;color:rgba(255,255,255,.5)">"What did patience reveal that rushing would have missed?"</div>'
+      + '<div style="margin-top:18px;padding:14px 16px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.1);border-radius:12px;font-size:12px;color:rgba(255,255,255,.3);text-align:center;line-height:1.6">Finish a hobby chapter on any hobby to unlock AI-generated chapters personalised to your progress →</div>';
+    return;
+  }
+  var cardsHTML = '<div class="kl-hobby-grid">'
+    + done.map(function(k) {
+      var hd = HOBBIES[k];
+      if (!hd) return '';
+      var chCount = Object.keys(completed[k]||{}).length;
+      var w = hd.textColor === 'white';
+      return '<div class="kl-hobby-card" id="klc-'+k+'" data-key="'+k+'" style="background:'+hd.color+'" onclick="klSelectHobby(this.dataset.key)">'
+        + '<div class="kl-hc-icon">'+hd.icon+'</div>'
+        + '<div class="kl-hc-name" style="color:'+hd.textColor+'">'+k.toUpperCase()+'</div>'
+        + '<div class="kl-hc-done" style="color:'+(w?'rgba(255,255,255,.55)':'rgba(0,0,0,.45)')+'">'+chCount+' ch done</div>'
+        + '</div>';
+    }).join('')
+    + '</div>';
+  el.innerHTML = cardsHTML;
+  document.getElementById('kl-chapter-area').style.display = 'none';
+  _klSelected = null;
+}
+
+function klSelectHobby(key) {
+  _klSelected = key;
+  document.querySelectorAll('.kl-hobby-card').forEach(function(c){ c.classList.remove('selected'); });
+  var card = document.getElementById('klc-'+key);
+  if (card) card.classList.add('selected');
+  var area = document.getElementById('kl-chapter-area');
+  var box = document.getElementById('kl-chapter-box');
+  area.style.display = '';
+  var hd = HOBBIES[key];
+  var completed = window.completedChapters || {};
+  var chDone = Object.keys(completed[key]||{}).length;
+  box.innerHTML = '<div style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:14px">'+hd.icon+' <strong style="color:rgba(255,255,255,.8)">'+key.toUpperCase()+'</strong> · '+chDone+' chapters completed</div>'
+    + '<button class="kl-gen-btn" data-key="'+key+'" onclick="generateAdvancedChapter(this.dataset.key)">Generate Chapter '+(chDone+1)+' →</button>'
+}
+
+async function generateAdvancedChapter(key) {
+  var box = document.getElementById('kl-chapter-box');
+  var hd = HOBBIES[key];
+  var completed = window.completedChapters || {};
+  var chDone = Object.keys(completed[key]||{}).length;
+  var chNum = chDone + 1;
+
+  var btn = box.querySelector('.kl-gen-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
+
+  // Build context from what user already knows
+  var existingChapters = (HOBBY_CHAPTERS[key] || []).map(function(c){ return c.ccTitle; }).join(', ');
+
+  var prompt = 'You are a creative learning designer for the hobby: '+key+'. The learner has completed '+chDone+' chapters and already knows: '+existingChapters+'. Generate Chapter '+chNum+' as a JSON object with exactly these fields: {"title": "short catchy title in ALL CAPS", "lesson": "2-3 sentences explaining the core concept, specific and practical", "challenge": "one clear hands-on challenge they can do today in under 60 minutes", "reflect": "one reflection question in quotes"}. Return only valid JSON, no extra text.';
+
+  // Try Anthropic API if key available
+  var AKEY = '';
+  try { AKEY = (typeof ANTHROPIC_KEY !== 'undefined') ? ANTHROPIC_KEY : ''; } catch(e){}
+
+  if (!AKEY || AKEY === 'YOUR_ANTHROPIC_KEY') {
+    // Fallback: show a placeholder chapter
+    var fallback = {
+      title: 'GOING DEEPER INTO '+key.toUpperCase(),
+      lesson: 'At this stage in your '+key+' practice, the gap between technique and instinct is starting to close. The next challenge is not learning more rules — it\'s learning when to break them. This is where your personal style begins to emerge.',
+      challenge: 'Choose one thing you\'ve done before in this hobby and do it with a deliberate constraint: only use one tool, one material, or complete it in half the time you\'d normally take.',
+      reflect: '"What did the constraint force you to notice that you normally wouldn\'t?"'
+    };
+    renderKLChapter(key, chNum, fallback, hd);
+    return;
+  }
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': AKEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+    });
+    var data = await res.json();
+    var text = data?.content?.[0]?.text || '';
+    var json = JSON.parse(text.replace(/^```json\s*/,'').replace(/\s*```$/,''));
+    renderKLChapter(key, chNum, json, hd);
+  } catch(e) {
+    box.innerHTML = '<div style="color:rgba(255,255,255,.4);padding:20px;text-align:center">Could not generate chapter. Add your Anthropic API key to unlock this feature.</div>'
+      + '<button class="kl-gen-btn" data-key="'+key+'" onclick="klSelectHobby(this.dataset.key)">← Back</button>';
+  }
+}
+
+function renderKLChapter(key, chNum, ch, hd) {
+  var box = document.getElementById('kl-chapter-box');
+  box.innerHTML = '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px">'+hd.icon+' '+key.toUpperCase()+' · CHAPTER '+chNum+'</div>'
+    + '<div class="kl-chapter-title">'+ch.title+'</div>'
+    + '<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px">THE LESSON</div>'
+    + '<div class="kl-chapter-lesson">'+ch.lesson+'</div>'
+    + '<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px">THE CHALLENGE</div>'
+    + '<div class="kl-chapter-task">'+ch.challenge+'</div>'
+    + (ch.reflect ? '<div style="margin-top:14px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;font-style:italic;font-size:13px;color:rgba(255,255,255,.5)">'+ch.reflect+'</div>' : '')
+    + '<button class="kl-gen-btn" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);margin-top:14px" data-key="'+key+'" onclick="generateAdvancedChapter(this.dataset.key)">Generate Another →</button>';
+}
+
+// ══════════════════════════════════════════════════════════════
+// HOBBY TREE
+// ══════════════════════════════════════════════════════════════
+var _htSelected = null;
+
+function buildHobbyTree() {
+  var scroll = document.getElementById('ht-hobby-scroll');
+  var grid = document.getElementById('ht-niche-grid');
+  if (!scroll) return;
+
+  // Show all hobbies that have a tree entry
+  var treeHobbies = Object.keys(HOBBY_TREE);
+  scroll.innerHTML = treeHobbies.map(function(k) {
+    var hd = HOBBIES[k];
+    if (!hd) return '';
+    return '<button class="ht-pill" id="htp-'+k+'" data-key="'+k+'" onclick="htSelectHobby(this.dataset.key)">'
+      + '<span class="ht-pill-icon">'+hd.icon+'</span>'
+      + '<span>'+k+'</span>'
+      + '</button>';
+  }).join('');
+
+  // Default to first
+  if (treeHobbies.length > 0) htSelectHobby(treeHobbies[0]);
+}
+
+function htSelectHobby(key) {
+  _htSelected = key;
+  var hd = HOBBIES[key];
+  var niches = HOBBY_TREE[key] || [];
+
+  // Update pills
+  document.querySelectorAll('.ht-pill').forEach(function(p){ p.classList.remove('active'); p.style.background=''; p.style.color=''; p.style.borderColor=''; });
+  var pill = document.getElementById('htp-'+key);
+  if (pill && hd) {
+    pill.classList.add('active');
+    pill.style.background = hd.color;
+    pill.style.color = hd.textColor || '#0E0D0B';
+    pill.style.borderColor = hd.color;
+  }
+
+  var grid = document.getElementById('ht-niche-grid');
+  if (!grid) return;
+  grid.innerHTML = niches.map(function(n) {
+    return '<div class="ht-niche-card" data-key="'+key+'" data-niche="'+n.id+'" onclick="htOpenNiche(this.dataset.key, this.dataset.niche)">'
+      + '<div class="ht-nc-top"><div class="ht-nc-icon">'+n.icon+'</div><div class="ht-nc-label">'+n.label+'</div></div>'
+      + '<div class="ht-nc-desc">'+n.desc+'</div>'
+      + '</div>';
+  }).join('');
+}
+
+function htOpenNiche(hobby, niche) {
+  var hd = HOBBIES[hobby];
+  var niches = HOBBY_TREE[hobby] || [];
+  var n = niches.find(function(x){ return x.id === niche; });
+  if (!n || !hd) return;
+  // Open a quick modal/toast, or navigate into the hobby
+  showToast(hd.icon + ' ' + n.label + ' — try exploring this next when you open ' + hobby.toUpperCase());
+  // Open the hobby page so they can start
+  setTimeout(function(){ openHobby(hobby); }, 1200);
+}
+
+// ══════════════════════════════════════════════════════════════
+// WEEKLY PROMPT
+// ══════════════════════════════════════════════════════════════
+function getWeekNumber() {
+  var now = new Date();
+  var start = new Date(now.getFullYear(), 0, 1);
+  return Math.ceil(((now - start) / 86400000 + start.getDay() + 1) / 7);
+}
+
+function buildWeeklyPrompt() {
+  var el = document.getElementById('wp-content');
+  var labelEl = document.getElementById('wp-week-label');
+  if (!el) return;
+
+  var weekNum = getWeekNumber();
+  var year = new Date().getFullYear();
+  var prompt = WEEKLY_PROMPTS[(weekNum - 1) % WEEKLY_PROMPTS.length];
+  var storeKey = 'shrug_weekly_' + year + '_' + weekNum;
+  var submission = null;
+  try { submission = JSON.parse(localStorage.getItem(storeKey) || 'null'); } catch(e){}
+
+  if (labelEl) labelEl.textContent = 'Week ' + weekNum + ' of ' + year;
+
+  var colors = ['#F0C93A','#ACD8F0','#B8D96E','#F4A261','#6B4EFF','#E8453C','#C4916A'];
+  var bgColor = colors[(weekNum-1) % colors.length];
+  var isDark = bgColor === '#E8453C' || bgColor === '#6B4EFF' || bgColor === '#C4916A';
+  var textColor = isDark ? 'white' : '#0E0D0B';
+
+  el.innerHTML = '<div class="wp-card" style="background:'+bgColor+';color:'+textColor+'">'
+    + '<div class="wp-week-lbl">Week '+weekNum+'</div>'
+    + '<div class="wp-emoji">'+prompt.emoji+'</div>'
+    + '<div class="wp-title">'+prompt.title+'</div>'
+    + '<div class="wp-task">'+prompt.task+'</div>'
+    + '</div>'
+    + (submission
+      ? '<div class="wp-done-badge">✓ Submitted this week</div>'
+        + '<div class="wp-submit-box" style="opacity:.6">'
+        + '<div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:10px">Your response:</div>'
+        + '<div style="font-size:13px;color:rgba(255,255,255,.7);font-style:italic">"' + submission.text + '"</div>'
+        + '</div>'
+      : '<div class="wp-submit-box">'
+        + '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px">Your Response</div>'
+        + '<textarea class="wp-textarea" id="wp-response" placeholder="What did you make or try? A sentence is enough…"></textarea>'
+        + '<button class="wp-submit-btn" data-week="'+weekNum+'" data-year="'+year+'" data-key="'+storeKey+'" onclick="submitWeeklyPrompt(+this.dataset.week, +this.dataset.year, this.dataset.key)">Share with Community →</button>'
+        + '</div>');
+}
+
+function submitWeeklyPrompt(weekNum, year, storeKey) {
+  var text = (document.getElementById('wp-response')?.value || '').trim();
+  if (!text) { showToast('Write something first!'); return; }
+  var submission = { text: text, week: weekNum, year: year, ts: Date.now() };
+  localStorage.setItem(storeKey, JSON.stringify(submission));
+
+  // If Supabase configured, save to DB
+  if (_sb && SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co' && currentUser) {
+    try {
+      _sb.from('weekly_submissions').upsert({
+        user_id: currentUser.id,
+        week_num: weekNum, year: year,
+        text_content: text,
+      }).then(function(){});
+    } catch(e){}
+  }
+
+  showToast('Shared! ✓ See what others made in Community →');
+  buildWeeklyPrompt();
+}
+
+// ══════════════════════════════════════════════════════════════
+// COMMUNITY
+// ══════════════════════════════════════════════════════════════
+async function buildCommunity() {
+  var feed = document.getElementById('community-feed');
+  if (!feed) return;
+
+  var weekNum = getWeekNumber();
+  var year = new Date().getFullYear();
+  var prompt = WEEKLY_PROMPTS[(weekNum-1) % WEEKLY_PROMPTS.length];
+  var colors = ['#F0C93A','#ACD8F0','#B8D96E','#F4A261','#6B4EFF','#E8453C','#C4916A'];
+  var bgColor = colors[(weekNum-1) % colors.length];
+  var isDark = bgColor === '#E8453C' || bgColor === '#6B4EFF' || bgColor === '#C4916A';
+  var textColor = isDark ? 'white' : '#0E0D0B';
+
+  // Header card showing current prompt
+  var headerHTML = '<div class="wp-card" style="background:'+bgColor+';color:'+textColor+';margin-bottom:20px;padding:18px 20px">'
+    + '<div class="wp-week-lbl">This Week\'s Prompt</div>'
+    + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:4px">'+prompt.emoji+' '+prompt.title+'</div>'
+    + '<div style="font-size:11px;opacity:.7">Submit yours via Weekly Prompt</div>'
+    + '</div>';
+
+  var posts = [];
+
+  // Try to load from Supabase
+  if (_sb && SUPABASE_URL !== 'https://YOUR_PROJECT.supabase.co') {
+    try {
+      var res = await _sb.from('weekly_submissions')
+        .select('text_content, week_num, year, created_at, profiles(name, profile_type)')
+        .eq('week_num', weekNum).eq('year', year)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      if (res.data && res.data.length > 0) {
+        posts = res.data.map(function(r) {
+          var prof = PROFILES_DATA[(r.profiles?.profile_type)||'creative'];
+          return {name: r.profiles?.name || 'Explorer', emoji: prof?.emoji || '🎨', text: r.text_content, ts: r.created_at};
+        });
+      }
+    } catch(e){}
+  }
+
+  // Show local submission too
+  var storeKey = 'shrug_weekly_' + year + '_' + weekNum;
+  var localSub = null;
+  try { localSub = JSON.parse(localStorage.getItem(storeKey)||'null'); } catch(e){}
+  if (localSub && currentUser) {
+    var profMeta = PROFILES_DATA[currentUser.profile];
+    posts.unshift({name: currentUser.name, emoji: profMeta?.emoji||'🎨', text: localSub.text, ts: new Date().toISOString(), isYou: true});
+  }
+
+  // Demo fallback posts if no real posts
+  if (posts.length === 0) {
+    posts = [
+      {name:'Mia K.', emoji:'🎨', text:'I photographed the condensation on my coffee mug in morning light. The way it caught the window was something I\'ve seen a hundred times and never noticed.', imgSrc:'https://picsum.photos/seed/miak42/480/220'},
+      {name:'James T.', emoji:'⚡', text:'Drew the same chair six times from different angles. Got bored by the third one and started enjoying it by the fifth.', imgSrc:'https://picsum.photos/seed/jamest7/480/220'},
+      {name:'Sofia R.', emoji:'🌿', text:'Made a tiny herb garden using an old mug. Basil, rosemary, and mint. The constraint (one container) made the decision easier.', imgSrc:'https://picsum.photos/seed/sofiar3/480/220'},
+      {name:'Elliot N.', emoji:'🧠', text:'Wrote a letter to my 17-year-old self. Took 20 minutes and I cried twice. Didn\'t expect that.'},
+      {name:'Priya V.', emoji:'🎭', text:'Tried sourdough for the first time. It\'s alive. I named it. I\'m not okay about eventually baking it.', imgSrc:'https://picsum.photos/seed/priyav9/480/220'},
+      {name:'Leo B.', emoji:'🎸', text:'Played the same 4-bar loop for an hour. It finally felt like mine on the last run. Muscle memory is wild.', imgSrc:'https://picsum.photos/seed/leob11/480/220'},
+    ];
+  }
+
+  var postsHTML = posts.map(function(p) {
+    var initials = p.name.split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().slice(0,2);
+    var avatarColors = ['#F0C93A','#ACD8F0','#B8D96E','#F4A261','#6B4EFF'];
+    var ac = avatarColors[p.name.charCodeAt(0) % avatarColors.length];
+    var ats = p.ts ? new Date(p.ts).toLocaleDateString('en',{month:'short',day:'numeric'}) : 'this week';
+    return '<div class="comm-post">'
+      + (p.imgSrc ? '<img class="comm-post-img" src="'+p.imgSrc+'" alt="" loading="lazy" onerror="this.remove()">' : '')
+      + '<div class="comm-post-hdr" style="margin-top:'+(p.imgSrc?'12px':'0')+'">'
+      + '<div class="comm-avatar" style="background:'+ac+';color:#0E0D0B">'+initials+'</div>'
+      + '<div><div class="comm-post-name">'+p.name+(p.isYou?' (you)':'')+'</div>'
+      + '<div class="comm-post-meta">'+ats+' · '+prompt.emoji+' '+prompt.title+'</div></div>'
+      + '</div>'
+      + '<div class="comm-post-text">"'+p.text+'"</div>'
+      + '</div>';
+  }).join('');
+
+  feed.innerHTML = headerHTML + (posts.length > 0 ? postsHTML : '<div class="comm-empty">No submissions yet this week.<br>Be the first — share via Weekly Prompt.</div>');
+}
+
+// ══════════════════════════════════════════════════════════════
+// MATERIALS
+// ══════════════════════════════════════════════════════════════
+var _matTags = [];
+
+function buildMaterials() {
+  _matTags = [];
+  renderMatTags();
+  document.getElementById('mat-results').innerHTML = '';
+}
+
+function addMaterialTag() {
+  var input = document.getElementById('mat-input');
+  var val = (input.value || '').trim().toLowerCase();
+  if (!val || _matTags.indexOf(val) !== -1) { input.value = ''; return; }
+  _matTags.push(val);
+  input.value = '';
+  renderMatTags();
+}
+
+function removeMatTag(tag) {
+  _matTags = _matTags.filter(function(t){ return t !== tag; });
+  renderMatTags();
+}
+
+function renderMatTags() {
+  var el = document.getElementById('mat-tags');
+  if (!el) return;
+  el.innerHTML = _matTags.map(function(t) {
+    return '<span class="mat-tag" data-tag="'+t+'" onclick="removeMatTag(this.dataset.tag)" title="Remove">'+t+' <span class="mat-tag-x">✕</span></span>';
+  }).join('');
+}
+
+// Material keyword → hobby mapping
+var MAT_KEYWORDS = {
+  paper:['drawing','writing','collage','journaling'],
+  pencil:['drawing','journaling','sketching'],
+  paint:['painting','drawing','ceramics'],
+  watercolor:['painting'],
+  acrylic:['painting'],
+  canvas:['painting'],
+  brush:['painting','ceramics'],
+  yarn:['knitting'],
+  wool:['knitting'],
+  needle:['knitting'],
+  clay:['ceramics'],
+  wood:['woodworking'],
+  saw:['woodworking'],
+  chisel:['woodworking'],
+  flour:['baking','cooking'],
+  sugar:['baking','cooking'],
+  eggs:['baking','cooking'],
+  butter:['baking','cooking'],
+  camera:['photography','film','streetphoto'],
+  phone:['photography','film','streetphoto'],
+  sketchbook:['drawing','journaling'],
+  notebook:['journaling','writing'],
+  fabric:['fashion','knitting'],
+  scissors:['collage','fashion'],
+  soil:['gardening'],
+  seeds:['gardening'],
+  binoculars:['birdwatching','hiking'],
+  piano:['piano'],
+  keyboard:['piano'],
+  book:['reading','writing'],
+  magazine:['collage'],
+  thread:['knitting'],
+};
+
+async function suggestFromMaterials() {
+  var resultsEl = document.getElementById('mat-results');
+  if (!resultsEl) return;
+  if (_matTags.length === 0) { showToast('Add at least one material first!'); return; }
+
+  resultsEl.innerHTML = '<div style="color:rgba(255,255,255,.4);font-size:13px;padding:20px 0">Finding matches…</div>';
+
+  // Local keyword matching first
+  var hobbyScores = {};
+  _matTags.forEach(function(tag) {
+    var norm = tag.replace(/s$/, ''); // basic de-plural
+    Object.keys(MAT_KEYWORDS).forEach(function(kw) {
+      if (tag.indexOf(kw) !== -1 || kw.indexOf(tag) !== -1 || norm === kw) {
+        MAT_KEYWORDS[kw].forEach(function(h) {
+          hobbyScores[h] = (hobbyScores[h]||0) + 1;
+        });
+      }
+    });
+  });
+
+  var localMatches = Object.keys(hobbyScores).sort(function(a,b){ return hobbyScores[b]-hobbyScores[a]; }).slice(0,6);
+
+  // Try AI enhancement if API available
+  var AKEY = '';
+  try { AKEY = (typeof ANTHROPIC_KEY !== 'undefined') ? ANTHROPIC_KEY : ''; } catch(e){}
+
+  var aiMatches = [];
+  if (AKEY && AKEY !== 'YOUR_ANTHROPIC_KEY') {
+    try {
+      var matList = _matTags.join(', ');
+      var hobbiesList = HOBBY_ORDER.join(', ');
+      var prompt = 'Given these materials: '+matList+'. From this list of hobbies: '+hobbiesList+'. Return JSON array of up to 5 objects: [{hobby: "hobby_name", project: "specific one-sentence project idea using the listed materials", materials_used: ["mat1","mat2"]}]. Return only JSON.';
+      var res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'x-api-key': AKEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 500, messages: [{ role: 'user', content: prompt }] })
+      });
+      var data = await res.json();
+      var text = data?.content?.[0]?.text || '';
+      aiMatches = JSON.parse(text.replace(/^```json\s*/,'').replace(/\s*```$/,''));
+    } catch(e){}
+  }
+
+  if (aiMatches.length > 0) {
+    renderMatResults(aiMatches.map(function(m) {
+      var hd = HOBBIES[m.hobby] || {icon:'✨',color:'#F0C93A',textColor:'#0E0D0B'};
+      return {key:m.hobby, hd:hd, project:m.project, mats:m.materials_used||[], score:'AI match'};
+    }));
+  } else if (localMatches.length > 0) {
+    renderMatResults(localMatches.map(function(k) {
+      var hd = HOBBIES[k];
+      var art = HOBBY_ARTIFACTS ? HOBBY_ARTIFACTS[k] : null;
+      return {key:k, hd:hd, project:art ? art.desc.split('.')[0]+'.' : 'Start with the basics.', mats: _matTags.filter(function(t){ return Object.keys(MAT_KEYWORDS).some(function(kw){ return t.indexOf(kw)!==-1 && MAT_KEYWORDS[kw].indexOf(k)!==-1; }); }), score:hobbyScores[k]+' match'+(hobbyScores[k]>1?'es':'')};
+    }));
+  } else {
+    resultsEl.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:13px;text-align:center;padding:24px 0">No direct matches found. Try adding more materials — or <a onclick="showView(\'explore\');buildExploreGrid()" style="color:#F0C93A;cursor:pointer">explore all hobbies</a>.</div>';
+  }
+}
+
+function renderMatResults(items) {
+  var el = document.getElementById('mat-results');
+  if (!el) return;
+  el.innerHTML = '<div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:12px">Hobbies you can start today</div>'
+    + items.map(function(item) {
+      if (!item.hd) return '';
+      return '<div class="mat-result-card" onclick="openHobby(\'' + item.key + '\')">'
+        + '<div class="mat-rc-top">'
+        + '<div class="mat-rc-icon">'+item.hd.icon+'</div>'
+        + '<div class="mat-rc-hobby">'+item.key.toUpperCase()+'</div>'
+        + '<div class="mat-rc-match">'+item.score+'</div>'
+        + '</div>'
+        + '<div class="mat-rc-project">'+item.project+'</div>'
+        + (item.mats && item.mats.length > 0 ? '<div class="mat-rc-materials">'+item.mats.map(function(m){ return '<span class="mat-rc-mtag">'+m+'</span>'; }).join('')+'</div>' : '')
+        + '</div>';
+    }).join('');
+}
+
+function closeTrinketDetail() {
+  var drawer = document.getElementById('trinket-drawer');
+  if (drawer) drawer.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 
@@ -5617,7 +6802,7 @@ function renderPanelTab(tab) {
       <div style="border-radius:16px;padding:22px 20px 20px;background:${h.color};position:relative;overflow:hidden;margin-bottom:18px">
         <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
         <div style="font-size:10px;font-weight:800;letter-spacing:3px;color:${dark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.35)'};margin-bottom:5px">${p.num}</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;letter-spacing:1px;color:${h.textColor};margin-bottom:6px">${p.title.replace('\n',' ')}</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:32px;line-height:1;letter-spacing:1px;color:${h.textColor};margin-bottom:6px">${p.title.replace('\n',' ')}</div>
         <div style="font-size:12px;font-weight:600;color:${dark?'rgba(255,255,255,0.65)':'rgba(0,0,0,0.55)'};line-height:1.5">${p.desc}</div>
       </div>
       <div class="concept-card">
@@ -5826,7 +7011,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'painting') return `
     <div style="background:#1a1a2e;padding:20px;position:relative;overflow:hidden">
-      <div style="text-align:center;margin-bottom:14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(255,255,255,0.5)">TWO-COLOR MIXING</div>
+      <div style="text-align:center;margin-bottom:14px;font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:2px;color:rgba(255,255,255,0.5)">TWO-COLOR MIXING</div>
       <div style="display:flex;align-items:center;justify-content:center;gap:0;border-radius:16px;overflow:hidden;height:80px">
         <div id="paintA" style="flex:1;height:100%;background:#FF6B35;transition:flex 0.6s ease;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:white;letter-spacing:1px">ORANGE</div>
         <div id="paintMix" style="flex:1.2;height:100%;background:#9B4DCA;transition:background 0.8s ease"></div>
@@ -5842,7 +7027,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'writing') return `
     <div style="background:#1a1a1a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">SHOW DON'T TELL</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">SHOW DON'T TELL</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div id="wTell" onclick="wToggle()" style="background:#3a1a1a;border:1.5px solid #E8453C;border-radius:14px;padding:16px;cursor:pointer">
           <div style="font-size:10px;font-weight:800;letter-spacing:2px;color:#E8453C;margin-bottom:6px">TELL (WEAK)</div>
@@ -5858,7 +7043,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'cooking') return `
     <div style="background:#1a0a0a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:14px">SALT IN LAYERS</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:14px">SALT IN LAYERS</div>
       <div style="position:relative;background:#2a1a0a;border-radius:16px;padding:16px">
         <div style="display:flex;justify-content:space-between;margin-bottom:12px">
           <div style="text-align:center">
@@ -5881,7 +7066,7 @@ function getConceptVisual(key, h) {
           <div style="font-size:11px;color:rgba(255,255,255,0.5);font-family:'DM Sans',sans-serif;font-weight:600">FLAVOR SCORE</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
             <div style="flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden"><div id="saltBar" style="height:100%;background:linear-gradient(90deg,#E8453C,#F0C93A);border-radius:4px;width:0%;transition:width 0.7s ease"></div></div>
-            <div id="saltPct" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#F0C93A;min-width:36px">0%</div>
+            <div id="saltPct" style="font-family:Bebas Neue,sans-serif;font-size:18px;color:#F0C93A;min-width:36px">0%</div>
           </div>
         </div>
         <div style="display:flex;gap:8px">
@@ -5894,7 +7079,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'baking') return `
     <div style="background:#1a0f05;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">YEAST + TIME = RISE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">YEAST + TIME = RISE</div>
       <div style="background:#2a1a08;border-radius:16px;padding:16px;text-align:center">
         <div style="position:relative;margin:0 auto 14px;width:120px">
           <div style="width:120px;height:50px;background:#c4956a;border-radius:60px 60px 10px 10px;border:2px solid #a07050;position:relative;overflow:hidden">
@@ -5913,7 +7098,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'yoga') return `
     <div style="background:#0a1628;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">BREATH GUIDES THE POSE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">BREATH GUIDES THE POSE</div>
       <div style="display:flex;flex-direction:column;gap:10px">
         <div style="background:rgba(172,216,240,0.1);border-radius:14px;padding:16px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -5936,7 +7121,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'ceramics') return `
     <div style="background:#1a0f08;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">PINCH METHOD</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">PINCH METHOD</div>
       <div style="text-align:center">
         <svg width="240" height="140" viewBox="0 0 240 140" style="display:block;margin:0 auto 12px">
           <defs><radialGradient id="clayGrad" cx="50%" cy="40%"><stop offset="0%" stop-color="#D4956A"/><stop offset="100%" stop-color="#8B5A35"/></radialGradient></defs>
@@ -5961,7 +7146,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'gardening') return `
     <div style="background:#0a1a0a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">PLANT GROWTH STAGES</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">PLANT GROWTH STAGES</div>
       <div style="display:flex;align-items:flex-end;justify-content:space-around;height:110px;background:#0f2a0f;border-radius:14px;padding:12px 16px;margin-bottom:12px;position:relative">
         <div style="position:absolute;bottom:0;left:0;right:0;height:20px;background:#3d2010;border-radius:0 0 14px 14px"></div>
         ${[
@@ -5985,7 +7170,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'birdwatching') return `
     <div style="background:#0a150a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">IDENTIFY BY FEATURE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">IDENTIFY BY FEATURE</div>
       <div style="position:relative;background:#0f200f;border-radius:14px;padding:16px">
         <svg width="100%" height="120" viewBox="0 0 300 120">
           <!-- Branch -->
@@ -6020,7 +7205,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'reading') return `
     <div style="background:#1a0a1a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">ACTIVE VS PASSIVE READING</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">ACTIVE VS PASSIVE READING</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="background:#2a1a2a;border-radius:14px;padding:16px;border-left:3px solid #E76F8A">
           <div style="font-size:10px;font-weight:800;letter-spacing:2px;color:#E76F8A;margin-bottom:8px">PASSIVE — Eyes moving, mind elsewhere</div>
@@ -6037,7 +7222,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'piano') return `
     <div style="background:#0a0a0a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">THE PENTATONIC SCALE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">THE PENTATONIC SCALE</div>
       <div style="background:#1a1a1a;border-radius:14px;padding:16px">
         <div style="display:flex;gap:3px;height:70px;align-items:flex-end;justify-content:center;margin-bottom:14px;position:relative">
           ${['C','D','E','F','G','A','B','C'].map((n,i)=>`
@@ -6055,7 +7240,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'collage') return `
     <div style="background:#1a1500;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">JUXTAPOSITION CREATES MEANING</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">JUXTAPOSITION CREATES MEANING</div>
       <div style="background:#2a2500;border-radius:14px;padding:14px">
         <div style="display:flex;gap:10px;margin-bottom:14px" id="collageArea">
           <div id="colImg1" onclick="swapCollage(0)" style="flex:1;aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#E8453C,#F0C93A);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;transition:transform 0.2s">🦁</div>
@@ -6073,7 +7258,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'drawing') return `
     <div style="background:#0f0f1a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">CONTOUR VS SYMBOL DRAWING</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">CONTOUR VS SYMBOL DRAWING</div>
       <div style="display:flex;gap:10px">
         <div style="flex:1;background:#1a1a2a;border-radius:14px;padding:14px;border-top:3px solid #E8453C">
           <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#E8453C;margin-bottom:10px">SYMBOL</div>
@@ -6107,7 +7292,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'fitness') return `
     <div style="background:#1a0505;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">PACE ZONES — WHERE YOU SHOULD BE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">PACE ZONES — WHERE YOU SHOULD BE</div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
         ${[
           {label:'Zone 1 · Recovery',color:'#ACD8F0',pct:20,desc:'Full conversation possible'},
@@ -6132,7 +7317,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'dancing') return `
     <div style="background:#1a0510;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">FEEL THE BEAT STRUCTURE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">FEEL THE BEAT STRUCTURE</div>
       <div style="background:#2a0a1a;border-radius:14px;padding:16px">
         <div style="display:flex;gap:4px;margin-bottom:14px;align-items:flex-end;justify-content:center" id="beatViz">
           ${Array(8).fill(0).map((_,i)=>`<div class="beat-block" data-beat="${i}" onclick="tapBeat(${i})" style="flex:1;height:${i%4===0?44:i%2===0?32:20}px;background:${i%4===0?'#F472B6':i%2===0?'rgba(244,114,182,0.5)':'rgba(244,114,182,0.2)'};border-radius:4px 4px 0 0;cursor:pointer;transition:all 0.3s;position:relative">
@@ -6147,7 +7332,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'knitting') return `
     <div style="background:#0f0a1a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">KNIT STITCH — 4 STEPS</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">KNIT STITCH — 4 STEPS</div>
       <div style="background:#1a1228;border-radius:14px;padding:16px">
         <div style="display:flex;justify-content:space-between;margin-bottom:14px" id="knitSteps">
           ${['In','Over','Through','Off'].map((s,i)=>`
@@ -6167,7 +7352,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'journaling') return `
     <div style="background:#051a10;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">HOW WRITING CLEARS THE MIND</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">HOW WRITING CLEARS THE MIND</div>
       <div style="background:#0a2a18;border-radius:14px;padding:16px">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
           <div style="flex:1">
@@ -6193,7 +7378,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'woodworking') return `
     <div style="background:#0f0805;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">SANDING GRITS — FEEL THE DIFFERENCE</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">SANDING GRITS — FEEL THE DIFFERENCE</div>
       <div style="background:#1a1008;border-radius:14px;padding:16px">
         <svg width="100%" height="80" viewBox="0 0 300 80" style="display:block;margin-bottom:14px">
           <defs>
@@ -6227,7 +7412,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'film') return `
     <div style="background:#050510;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">CAMERA ANGLE = EMOTION</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">CAMERA ANGLE = EMOTION</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         ${[
           {label:'LOW ANGLE', desc:'Character feels powerful, dominant, threatening', color:'#E8453C', angle:'↗', scene:'Camera below looking up'},
@@ -6247,7 +7432,7 @@ function getConceptVisual(key, h) {
 
   if(key === 'language') return `
     <div style="background:#030f1a;padding:20px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">SPACED REPETITION — HOW MEMORY WORKS</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px">SPACED REPETITION — HOW MEMORY WORKS</div>
       <div style="background:#051828;border-radius:14px;padding:16px">
         <svg width="100%" height="100" viewBox="0 0 300 100" style="display:block;margin-bottom:12px">
           <!-- Forgetting curve -->
@@ -6281,7 +7466,7 @@ function getConceptVisual(key, h) {
     </div>`;
 
   // fallback
-  return `<div style="background:${c};padding:20px;text-align:center"><div style="font-size:48px;margin-bottom:8px">${h.icon}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${tc}">${h.tagline.toUpperCase()}</div></div>`;
+  return `<div style="background:${c};padding:20px;text-align:center"><div style="font-size:48px;margin-bottom:8px">${h.icon}</div><div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:${tc}">${h.tagline.toUpperCase()}</div></div>`;
 }
 
 // ====== VISUAL INTERACTION HANDLERS ======
@@ -6641,7 +7826,7 @@ async function submitSignup() {
         resultBox.innerHTML = `
           <div style="text-align:center;padding:40px 20px">
             <div style="font-size:48px;margin-bottom:16px">✉️</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;margin-bottom:12px">CHECK YOUR EMAIL</div>
+            <div style="font-family:Bebas Neue,sans-serif;font-size:32px;letter-spacing:1px;margin-bottom:12px">CHECK YOUR EMAIL</div>
             <div style="font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:24px">
               We sent a magic link to <strong style="color:var(--off)">${email}</strong>.<br>
               Click it to sign in — no password needed.
@@ -6703,7 +7888,7 @@ async function submitLogin() {
         box.innerHTML = `
           <div style="text-align:center;padding:20px 0">
             <div style="font-size:40px;margin-bottom:12px">✉️</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:10px">CHECK YOUR EMAIL</div>
+            <div style="font-family:Bebas Neue,sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:10px">CHECK YOUR EMAIL</div>
             <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6">
               Magic link sent to <strong style="color:var(--off)">${email}</strong>.<br>Click it to sign in instantly.
             </div>
@@ -6855,11 +8040,10 @@ function buildHomeDashboard(user) {
   if (card && hd) {
     const w = hd.textColor === 'white';
     const _aRGB = hexRGB(hd.color);
-    card.style.background = hd.color;
-    card.style.backgroundImage = 'linear-gradient(rgba('+_aRGB+',.65),rgba('+_aRGB+',.82)),url('+hobbyImg(HOBBY_KEYWORDS[firstKey]||firstKey,600,400)+')';
-    card.style.backgroundSize = 'cover';
-    card.style.backgroundPosition = 'center';
+    card.style.background = 'linear-gradient(145deg,'+hd.color+',rgba('+_aRGB+',.6))';
+    card.style.backgroundImage = '';
     card.innerHTML = '<div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07)"></div>'
+      + '<div style="position:absolute;bottom:-20px;right:20px;font-size:80px;opacity:.12;line-height:1">'+hd.icon+'</div>'
       + '<div class="hw-eye" style="color:'+(w?'rgba(255,255,255,.5)':'rgba(0,0,0,.4)')+'">'+hd.icon+' Active hobby</div>'
       + '<div class="hw-hobby" style="color:'+hd.textColor+'">'+firstKey.toUpperCase()+'</div>'
       + '<div class="hw-concept" style="color:'+(w?'rgba(255,255,255,.6)':'rgba(0,0,0,.5)')+'">'+hd.project.ccTitle+'</div>'
@@ -7365,13 +8549,38 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
     </button>
     <button class="sb-item" id="nav-memoir" onclick="showView('memoir');buildMemoirView()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-      Memoir
+      Your Shelf
+    </button>
+    <button class="sb-item" id="nav-journeys" onclick="showView('journeys');buildJourneysView()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 3a3 3 0 0 0-3 3l-7 3.5a3 3 0 1 0 0 5L15 18a3 3 0 1 0 .9-1.9l-7-3.5a3 3 0 0 0 0-2.2l7-3.5A3 3 0 1 0 18 3z"/></svg>
+      Creative Journeys
     </button>
     <div class="sb-divider"></div>
-    <button class="sb-item" id="nav-quiz" onclick="openQuizModal()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
-      Take the Quiz
+    <button class="sb-item" id="nav-map" onclick="showView('map');buildHobbyMap()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      My Creative Map
     </button>
+    <button class="sb-item" id="nav-keep-learning" onclick="showView('keep-learning');buildKeepLearning()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Keep Learning
+    </button>
+    <button class="sb-item" id="nav-hobby-tree" onclick="showView('hobby-tree');buildHobbyTree()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Hobby Tree
+    </button>
+    <button class="sb-item" id="nav-weekly" onclick="showView('weekly');buildWeeklyPrompt()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Weekly Prompt
+    </button>
+    <button class="sb-item" id="nav-community" onclick="showView('community');buildCommunity()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Community
+    </button>
+    <button class="sb-item" id="nav-materials" onclick="showView('materials');buildMaterials()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Materials
+    </button>
+
     <button class="sb-item" id="nav-mood" onclick="openMoodModal()" style="display:none">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
       Mood
@@ -7396,7 +8605,7 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
   <div class="section">
     <div id="webHomeGreet">
       <div style="font-size:11px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Good morning,</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:1px;margin-bottom:28px">— 👋</div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:48px;letter-spacing:1px;margin-bottom:28px">— 👋</div>
     </div>
     <div class="home-layout">
       <div>
@@ -7441,7 +8650,7 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
           <div id="home-profile-widget" style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px">
             <div style="font-size:26px" id="home-prof-emoji">🎨</div>
             <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px" id="home-prof-type">—</div>
+              <div style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:1px" id="home-prof-type">—</div>
               <div style="font-size:10px;color:rgba(255,255,255,0.28)" id="home-prof-stats">Just getting started</div>
             </div>
           </div>
@@ -7463,10 +8672,6 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
     <div class="sec-head">
       <div><div class="sec-title">EXPLORE</div></div>
     </div>
-    <div class="explore-tabs" id="explore-tab-bar">
-      <button class="explore-tab active" onclick="switchExploreTab('hobbies',this)">Explore Hobbies</button>
-      <button class="explore-tab" onclick="switchExploreTab('journeys',this)">Creative Journeys</button>
-    </div>
     <div id="explore-hobbies-panel">
       <div class="hobby-grid" id="webHobbyGrid"></div>
     </div>
@@ -7480,60 +8685,109 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
 <div class="view" id="view-memoir">
   <div class="section">
     <div class="sec-head">
-      <div><div class="sec-title">MEMOIR</div><div class="sec-sub" id="memoirCount">Your journey so far · 0 chapters written</div></div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">03</div>
-    </div>
-    <div class="memoir-layout">
-      <div id="memoirFeed">
-        <div class="mem-entry" onclick="openHobby('photography')">
-          <div class="mem-hdr"><div class="mem-dot" style="background:#F0C93A"></div><div class="mem-hobby" style="color:#F0C93A">PHOTOGRAPHY</div><div class="mem-date">Feb 14</div></div>
-          <div class="mem-concept">Rule of Thirds</div>
-          <div class="mem-reflect">"The morning light made the cup look almost alive. I didn't expect to feel that way about a coffee mug."</div>
-          <div class="mem-pills">
-            <div class="mem-pill" style="background:#F0C93A22;color:#c8a420">Comp 8/10</div>
-            <div class="mem-pill" style="background:#ACD8F022;color:#4a90b0">Light 9/10</div>
-            <div class="mem-pill" style="background:#B8D96E22;color:#5a8020">Story 8/10</div>
-          </div>
-        </div>
-        <div class="mem-entry" onclick="openHobby('cooking')">
-          <div class="mem-hdr"><div class="mem-dot" style="background:#E8453C"></div><div class="mem-hobby" style="color:#E8453C">COOKING</div><div class="mem-date">Feb 7</div></div>
-          <div class="mem-concept">Salting &amp; Flavor</div>
-          <div class="mem-reflect">"I finally understand why restaurant food tastes different. It was always the salt. I feel robbed of years."</div>
-          <div class="mem-pills">
-            <div class="mem-pill" style="background:#E8453C22;color:#b03020">Flavor 9/10</div>
-            <div class="mem-pill" style="background:#F0C93A22;color:#c8a420">Technique 7/10</div>
-          </div>
-        </div>
-        <div class="mem-entry" onclick="openHobby('writing')">
-          <div class="mem-hdr"><div class="mem-dot" style="background:#B8D96E"></div><div class="mem-hobby" style="color:#B8D96E">WRITING</div><div class="mem-date">Feb 1</div></div>
-          <div class="mem-concept">Your First Paragraph</div>
-          <div class="mem-reflect">"I rewrote the same opening 6 times and the last one was actually good. That surprised me more than anything."</div>
-          <div class="mem-pills">
-            <div class="mem-pill" style="background:#B8D96E22;color:#5a8020">Voice 8/10</div>
-            <div class="mem-pill" style="background:#ACD8F022;color:#4a90b0">Clarity 7/10</div>
-          </div>
-        </div>
-        <div class="mem-add" onclick="showView('explore')">
-          <div style="font-size:22px;margin-bottom:6px;color:rgba(255,255,255,0.18)">✦</div>
-          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.4);margin-bottom:3px">Start a new hobby</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.22)">Add another chapter to your story</div>
-        </div>
+      <div>
+        <div class="sec-title">YOUR SHELF</div>
+        <div class="sec-sub" id="memoirCount">0 artifacts collected</div>
       </div>
-      <div class="mem-aside">
-        <div class="mem-aside-card" id="memoir-aside-profile">
-          <div style="font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:14px">Your Profile</div>
-          <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:12px">
-            <div style="font-size:26px" id="memoir-aside-emoji">🎨</div>
-            <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px" id="memoir-aside-type">—</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.28)" id="memoir-aside-stats">Just getting started</div>
-            </div>
-          </div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.3);line-height:1.65;margin-bottom:12px" id="memoir-aside-desc"></div>
-          <button class="btn btn-full btn-outline-full" onclick="showView('explore')">Explore More →</button>
-        </div>
-      </div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">✦</div>
     </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.28);margin-bottom:20px;line-height:1.6">Every hobby leaves something behind. Tap any trinket to see what you made — or what you could.</div>
+    <div id="memoirFeed"></div>
+  </div>
+</div>
+
+<!-- CREATIVE JOURNEYS -->
+<div class="view" id="view-journeys">
+  <div class="section">
+    <div class="sec-head">
+      <div>
+        <div class="sec-title">CREATIVE JOURNEYS</div>
+        <div class="sec-sub">Multi-hobby projects that build something real</div>
+      </div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">↗</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.28);margin-bottom:24px;line-height:1.6">Each journey links 3–4 hobbies into one project. You'll end up with something you actually made.</div>
+    <div class="journey-grid" id="webJourneyGridFull"></div>
+  </div>
+</div>
+
+<!-- MY CREATIVE MAP -->
+<div class="view" id="view-map">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">MY CREATIVE MAP</div><div class="sec-sub">How you create — built from your activity</div></div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">◎</div>
+    </div>
+    <div id="map-content"><div style="padding:40px 20px;text-align:center;color:rgba(255,255,255,.25);font-size:14px">Complete a few hobby chapters to see your creative profile emerge.</div></div>
+  </div>
+</div>
+
+<!-- KEEP LEARNING -->
+<div class="view" id="view-keep-learning">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">KEEP LEARNING</div><div class="sec-sub">AI-generated next chapters for hobbies you love</div></div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">+</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.28);margin-bottom:20px;line-height:1.6">Pick a hobby you've already started. We'll generate a new chapter — a lesson, a challenge, and a prompt you haven't seen yet.</div>
+    <div id="kl-hobby-select"></div>
+    <div id="kl-chapter-area" style="display:none">
+      <div id="kl-chapter-box" class="kl-chapter-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOBBY TREE -->
+<div class="view" id="view-hobby-tree">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">HOBBY TREE</div><div class="sec-sub">Go deeper into any hobby's niche branches</div></div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">🌿</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.28);margin-bottom:16px;line-height:1.6">Every hobby has rabbit holes. Pick one and see where it leads.</div>
+    <div class="ht-hobby-scroll" id="ht-hobby-scroll"></div>
+    <div class="ht-niche-grid" id="ht-niche-grid"></div>
+  </div>
+</div>
+
+<!-- WEEKLY PROMPT -->
+<div class="view" id="view-weekly">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">WEEKLY PROMPT</div><div class="sec-sub" id="wp-week-label">This week's challenge</div></div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">7</div>
+    </div>
+    <div id="wp-content"></div>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<div class="view" id="view-community">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">COMMUNITY</div><div class="sec-sub">What everyone made this week</div></div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">◉</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.28);margin-bottom:20px;line-height:1.6">See how others responded to the same weekly prompt. Submit yours from the Weekly Prompt page.</div>
+    <div id="community-feed" class="comm-feed"></div>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<div class="view" id="view-materials">
+  <div class="section">
+    <div class="sec-head">
+      <div><div class="sec-title">MATERIALS</div><div class="sec-sub">What can you make with what you have?</div></div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:80px;color:rgba(255,255,255,0.03);line-height:1">⬡</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.28);margin-bottom:20px;line-height:1.6">Tell us what's around you — art supplies, food, tools, materials — and we'll suggest hobbies and projects you can start today.</div>
+    <div class="mat-input-row">
+      <input class="mat-input" id="mat-input" placeholder="e.g. watercolors, a sketchbook, some yarn..." onkeydown="if(event.key==='Enter')addMaterialTag()">
+      <button class="mat-go-btn" onclick="addMaterialTag()">Add +</button>
+    </div>
+    <div id="mat-tags" style="margin-bottom:16px;min-height:28px"></div>
+    <button class="mat-go-btn" style="width:100%;margin-bottom:20px" onclick="suggestFromMaterials()">Find Hobbies for Me →</button>
+    <div id="mat-results"></div>
   </div>
 </div>
 
@@ -7542,7 +8796,7 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
   <div class="prof-wrap fade-in">
     <button class="fb-back" onclick="showView('home')">← Back to home</button>
     <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.22);margin-bottom:6px">Your Curiosity Profile</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:1px;line-height:1;margin-bottom:28px" id="webProfTypeBig">CALM CREATOR</div>
+    <div style="font-family:Bebas Neue,sans-serif;font-size:64px;letter-spacing:1px;line-height:1;margin-bottom:28px" id="webProfTypeBig">CALM CREATOR</div>
     <div class="prof-grid">
       <div class="prof-card">
         <div class="prof-eyebrow">Profile</div>
@@ -7686,13 +8940,13 @@ function closeQuizModal() { var m = document.getElementById('appQuizModal'); if(
 </div>
 
 <!-- CHAPTER PAGE — full screen overlay over hobby page -->
-<div id="chapter-page" class="open">
-  <div id="cp-header" style="background: rgb(244, 114, 182); color: white;">
+<div id="chapter-page">
+  <div id="cp-header">
     <button class="cp-back" onclick="closeChapterPage()">← Back</button>
-    <div id="cp-hobby-name">DANCING</div>
+    <div id="cp-hobby-name"></div>
   </div>
-  <div class="cp-tabs-bar" id="cp-tabs-bar"><button class="cp-tab">CH 1</button><button class="cp-tab">CH 2</button><button class="cp-tab active">CH 3</button></div>
-  <div id="cp-body" class="cp-body"><div class="hp-section-label" style="margin-bottom:24px">CHALLENGE 03 · Your Mini Choreography</div><div class="ch-section"><div class="ch-sec-hdr">THE LESSON</div><div class="ch-lesson-title">Choreography Is Personal Handwriting</div><p class="ch-lesson-para">Choreography is not copying steps — it's translating music into body language that means something to you. When you choreograph, you make choices: which part of the song gets big movement, which part gets stillness, when to face forward versus turn away. Every choice expresses something.</p><p class="ch-lesson-para">A mini choreography of 16–32 counts (4–8 bars of music) is a complete, performable thing. It has a beginning, a middle, and an end. It doesn't need to be complex — a simple routine done with conviction is more powerful than a complex one done tentatively.</p></div><div class="ch-section"><div class="ch-sec-hdr">THE TIP</div><div class="ch-tip-title">Creating Your Choreography</div><ol class="ch-tip-steps"><li>Choose a section of a song you love — 16 to 32 counts. Pick something that makes you want to move.</li><li>Listen to that section 5 times without moving. Notice where the energy builds, where it releases.</li><li>Map the big moments: what movement happens at the loudest beat? At the drop? At the quiet part?</li><li>Build in layers: create the footwork first, then add arm movements, then add facing changes.</li><li>Run it 10 times in a row. Repetition is how choreography becomes yours.</li></ol></div><div class="ch-section"><div class="ch-sec-hdr">TRY IT</div><div class="ch-task-text">Create and perform an original mini choreography of 16–32 counts to a song of your choice.</div><div class="ch-task-detail">Your choreography should use the step pattern from Chapter 2 plus at least 2 additional moves. Know it well enough to perform without stopping.</div><div class="ch-time-badge">⏱ 45–60 minutes</div></div><div class="ch-section"><div class="ch-sec-hdr">SAVE IT</div><p class="ch-lesson-para">Video of your complete choreography performance — one take, start to finish.</p><div class="ch-upload-area" id="ch-upload-area" onclick="document.getElementById('ch-upload-input').click()"><span class="ch-upload-icon">??</span><div class="ch-upload-label">Tap to add a photo of your work</div><div class="ch-upload-sub">Stays on this device · used for AI analysis</div><input type="file" id="ch-upload-input" accept="image/*" capture="environment" style="display:none" onchange="previewChapterMedia(this)"></div><div id="ch-upload-preview" style="display:none"></div></div><div class="ch-section"><div class="ch-sec-hdr">AI RESPONSE</div><p class="ch-lesson-para">After you submit, your work will be analyzed for:</p><div class="ch-criteria-row"><span class="ch-criteria-pill">Musical interpretation</span><span class="ch-criteria-pill">Choreographic creativity</span><span class="ch-criteria-pill">Performance confidence</span></div><div class="reflect-box" style="margin-top:20px"><div class="reflect-lbl">Your reflection</div><div class="reflect-q">"What does your choreography say about how you experience this song?"</div><textarea id="hp-reflection-text" placeholder="Write anything... even one sentence counts." style="width:100%;margin-top:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;color:var(--off);font-family:'DM Sans',sans-serif;font-size:13px;resize:vertical;min-height:80px;outline:none;box-sizing:border-box"></textarea></div><button id="hp-submit-btn" style="width:100%;margin-top:16px;padding:16px;background:var(--off);color:var(--ink);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer">Analyze My Work →</button></div></div>
+  <div class="cp-tabs-bar" id="cp-tabs-bar"></div>
+  <div id="cp-body" class="cp-body"></div>
 </div>
 
 <!-- ARTIFACT PAGE — full screen artifact submission -->
@@ -8203,6 +9457,12 @@ async function submitArtifact(key) {
       Don't have an account? <button onclick="closeLoginModal();openQuiz()">Take the quiz to join free</button>
     </div>
   </div>
+</div>
+
+<!-- TRINKET DRAWER -->
+<div id="trinket-drawer">
+  <div class="td-backdrop" onclick="closeTrinketDetail()"></div>
+  <div class="td-card"></div>
 </div>
 
 </body></html>
