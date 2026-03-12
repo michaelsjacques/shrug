@@ -681,6 +681,18 @@
     // Show success
     if (successEl) successEl.classList.add('visible');
     if (submitBtn) submitBtn.style.display = 'none';
+    if (text) text.disabled = true;
+
+    // Show "add photo later" option if no photo was included
+    if (!imageFile) {
+      var photoLabel = document.getElementById('p' + phaseIdx + '-photo-label');
+      if (photoLabel) {
+        photoLabel.innerHTML =
+          '<span>📷 Add a photo to this entry</span>' +
+          '<input type="file" accept="image/*" class="submission-photo-input" id="p' + phaseIdx + '-photo-late" onchange="addPhotoLater(' + phaseIdx + ')">';
+        photoLabel.style.display = 'inline-flex';
+      }
+    }
 
     // Get AI feedback if photo uploaded + logged in
     if (imagePath) {
@@ -713,6 +725,54 @@
       nextFooter.innerHTML = buildSubmissionForm(phaseIdx + 1);
     }
   }
+
+  window.addPhotoLater = async function(phaseIdx) {
+    var input = document.getElementById('p' + phaseIdx + '-photo-late');
+    var preview = document.getElementById('p' + phaseIdx + '-preview');
+    if (!input || !input.files || !input.files[0]) return;
+
+    var file = input.files[0];
+
+    // Show preview immediately
+    if (preview) {
+      var reader = new FileReader();
+      reader.onload = function(e) { preview.src = e.target.result; preview.style.display = 'block'; };
+      reader.readAsDataURL(file);
+    }
+
+    // Upload if logged in
+    var user = await getCurrentUser();
+    if (user && supabaseClient) {
+      var photoLabel = document.getElementById('p' + phaseIdx + '-photo-label');
+      if (photoLabel) photoLabel.innerHTML = '<span style="color:var(--gold)">Uploading…</span>';
+
+      var path = user.id + '/' + key + '/phase' + (phaseIdx - 1) + '-' + Date.now();
+      var uploadResult = await supabaseClient.storage
+        .from('memoir-images')
+        .upload(path, file, { upsert: false });
+
+      if (!uploadResult.error) {
+        if (photoLabel) photoLabel.innerHTML = '<span style="color:var(--gold)">✓ Photo saved</span>';
+
+        // Get AI feedback
+        var feedbackEl = document.getElementById('p' + phaseIdx + '-ai-feedback');
+        var aiTextEl = document.getElementById('p' + phaseIdx + '-ai-text');
+        if (feedbackEl && aiTextEl) {
+          aiTextEl.textContent = 'Analyzing…';
+          feedbackEl.classList.add('visible');
+          var feedback = await getAIFeedback(key, path);
+          if (feedback) { aiTextEl.textContent = feedback; }
+          else { feedbackEl.classList.remove('visible'); }
+        }
+      } else {
+        if (photoLabel) photoLabel.innerHTML = '<span style="color:var(--coral)">Upload failed — try again</span>';
+      }
+    } else {
+      // Not logged in — just show preview locally
+      var photoLabel = document.getElementById('p' + phaseIdx + '-photo-label');
+      if (photoLabel) photoLabel.innerHTML = '<span style="color:var(--gold)">✓ Photo added locally</span>';
+    }
+  };
 
   // ── Generate challenge ────────────────────────────────────
   function buildGeneratedCard(project, index) {
@@ -808,12 +868,13 @@
     var phaseName  = phaseNames[phaseIdx] || ('Phase ' + phaseIdx);
     return '<div class="account-gate" id="phase' + phaseIdx + '-gate">' +
       '<div class="account-gate-lock">🔒</div>' +
-      '<div class="account-gate-heading">Create your free account</div>' +
+      '<div class="account-gate-heading">Sign in or create account</div>' +
       '<div class="account-gate-sub">Unlock ' + phaseName + ', save your progress,<br>and start building your hobby shelf.</div>' +
       '<div class="account-gate-form">' +
         '<input class="account-gate-email" id="gate' + phaseIdx + '-email" type="email" placeholder="your@email.com">' +
         '<button class="account-gate-btn" onclick="gateSignUp(' + phaseIdx + ')">Send magic link →</button>' +
       '</div>' +
+      '<div class="account-gate-note">New or returning — same magic link, no password needed.</div>' +
       '<div class="account-gate-msg" id="gate' + phaseIdx + '-msg"></div>' +
       '<button class="account-gate-skip" onclick="gateSkip(' + phaseIdx + ')">Skip for now — explore without saving</button>' +
     '</div>';
