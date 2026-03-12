@@ -610,6 +610,10 @@
   function cap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
 
   // ── Submission form builder ───────────────────────────────────────────────
+  window.buildSubmissionForm = buildSubmissionForm;
+  window.submitPhase = submitPhase;
+  window.previewPhoto = previewPhoto;
+
   function buildSubmissionForm(phaseIdx) {
     return '<div class="submission-form" id="p' + phaseIdx + '-submit">' +
       '<div class="submission-label">Record your attempt</div>' +
