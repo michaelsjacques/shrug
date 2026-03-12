@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHRUG — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111110">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="supabase.js"></script>
+  <script src="db.js"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottom-nav">
+  <a href="index.html" class="bnav-item" data-page="discover"><span class="bnav-icon">🧭</span><span class="bnav-label">Discover</span></a>
+  <a href="#" class="bnav-item active" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
+  <a href="shelf.html" class="bnav-item" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
+  <a href="map.html" class="bnav-item" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
+  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+</nav>
+
+<!-- TOP NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SHRUG</a>
+    <div id="nav-user"></div>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page-hero">
+  <div class="page-hero-label">Welcome back</div>
+  <div class="page-hero-heading" id="dash-greeting">YOUR DASHBOARD</div>
+  <div class="page-hero-sub" id="dash-sub">Loading your progress…</div>
+</div>
+
+<div class="page-content">
+  <!-- Current hobby arc -->
+  <div style="padding: 32px 0 0">
+    <div class="sec-hdr mt-0" style="margin-bottom:16px">Your current arc</div>
+    <div id="dash-hobby-card">
+      <div style="color:var(--mid);font-size:14px;padding:20px 0">No active hobby yet. <a href="quiz.html" style="color:var(--gold)">Take the quiz →</a></div>
+    </div>
+  </div>
+
+  <!-- Recent journal entry -->
+  <div style="padding: 32px 0 0">
+    <div class="sec-hdr mt-0" style="margin-bottom:16px">Recent journal entry</div>
+    <div id="dash-recent-entry">
+      <div style="color:var(--mid);font-size:14px;padding:20px 0">No entries yet. Complete a challenge to see it here.</div>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div style="padding: 32px 0 40px">
+    <div class="sec-hdr mt-0" style="margin-bottom:16px">Quick links</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a href="explore.html" class="btn-ghost" style="text-align:center">🌿 Explore hobby niches</a>
+      <a href="map.html" class="btn-ghost" style="text-align:center">🗺️ View your creative map</a>
+      <a href="community.html" class="btn-ghost" style="text-align:center">👥 This week's community challenge</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+
+  // Auth gate — redirect if not logged in
+  getCurrentUser().then(async function(user) {
+    if (!user) {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // Update greeting
+    var email = user.email || '';
+    var name = email.split('@')[0];
+    document.getElementById('dash-greeting').textContent = 'HEY, ' + name.toUpperCase();
+    document.getElementById('dash-sub').textContent = 'Here\'s where you left off.';
+    document.getElementById('nav-user').innerHTML = '<button onclick="signOut()" class="nav-signout">Sign out</button>';
+
+    // Load current hobby from session storage or DB
+    var currentKey = null;
+    var results = null;
+    try { results = JSON.parse(sessionStorage.getItem('shrugResults')); } catch(e) {}
+    if (results && results.ranked && results.ranked.length) {
+      currentKey = results.ranked[0].key;
+    }
+
+    // Update My Arc nav link
+    var arcEl = document.getElementById('bnav-arc');
+    if (arcEl && currentKey) arcEl.href = 'hobby.html?key=' + currentKey;
+
+    // Show hobby card if we have a current hobby
+    if (currentKey && HOBBIES && HOBBIES[currentKey]) {
+      var h = HOBBIES[currentKey];
+      var phases = await getCompletedPhases(user.id, currentKey);
+      var p1done = phases.indexOf(0) !== -1;
+      var p2done = phases.indexOf(1) !== -1;
+      var p3done = phases.indexOf(2) !== -1;
+
+      var cardHTML = '<div class="dashboard-hobby-card">';
+      cardHTML += '<div class="dashboard-hobby-accent" style="background:' + (h.color || 'var(--gold)') + '"></div>';
+      cardHTML += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">';
+      cardHTML += '<span style="font-size:32px">' + (h.icon || '') + '</span>';
+      cardHTML += '<div><div style="font-family:var(--font-display);font-size:24px;letter-spacing:0.03em;color:var(--off)">' + (currentKey.charAt(0).toUpperCase() + currentKey.slice(1)) + '</div>';
+      cardHTML += '<div style="font-size:13px;color:var(--mid)">' + (h.tagline || '') + '</div></div></div>';
+
+      // Phase progress dots
+      cardHTML += '<div class="dashboard-phase-progress">';
+      var phases3 = ['Week 1', 'Weeks 2–3', 'Month 1+'];
+      phases3.forEach(function(label, i) {
+        var cls = 'phase-dot';
+        if (phases.indexOf(i) !== -1) cls += ' done';
+        else if (i === 0 || phases.indexOf(i-1) !== -1) cls += ' active';
+        cardHTML += '<div class="' + cls + '" title="' + label + '"></div>';
+      });
+      cardHTML += '</div>';
+      cardHTML += '<div style="margin-top:12px"><a href="hobby.html?key=' + currentKey + '" class="btn-primary" style="display:block;text-align:center">Continue your arc →</a></div>';
+      cardHTML += '</div>';
+      document.getElementById('dash-hobby-card').innerHTML = cardHTML;
+    }
+
+    // Load recent journal entry
+    var entries = await loadJournalEntries(user.id);
+    if (entries && entries.length) {
+      var e = entries[0];
+      var hobbyData = HOBBIES && e.hobby_key ? HOBBIES[e.hobby_key] : null;
+      var phaseLabels = ['Week 1', 'Weeks 2–3', 'Month 1+'];
+      var html = '<div class="journal-entry">';
+      html += '<div class="journal-entry-header">';
+      if (hobbyData) html += '<span class="journal-hobby-pill">' + (hobbyData.icon || '') + ' ' + (e.hobby_key.charAt(0).toUpperCase() + e.hobby_key.slice(1)) + '</span>';
+      html += '<span class="journal-phase-badge">' + (phaseLabels[e.chapter_idx] || 'Phase ' + (e.chapter_idx + 1)) + '</span>';
+      var date = e.completed_at ? new Date(e.completed_at).toLocaleDateString() : '';
+      if (date) html += '<span class="journal-date">' + date + '</span>';
+      html += '</div>';
+      var text = e.reflection || e.text || '';
+      if (text) html += '<div class="journal-text">' + text.slice(0, 160) + (text.length > 160 ? '…' : '') + '</div>';
+      html += '<a href="journal.html" style="font-size:13px;color:var(--gold)">View all entries →</a>';
+      html += '</div>';
+      document.getElementById('dash-recent-entry').innerHTML = html;
+    }
+  });
+
+  // Nav scroll shadow
+  var navEl = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    navEl.classList.toggle('stuck', window.scrollY > 10);
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>

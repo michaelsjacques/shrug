@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHRUG — Creative Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111110">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="supabase.js"></script>
+  <script src="db.js"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+
+<nav class="bottom-nav" id="bottom-nav">
+  <a href="index.html" class="bnav-item" data-page="discover"><span class="bnav-icon">🧭</span><span class="bnav-label">Discover</span></a>
+  <a href="results.html" class="bnav-item" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
+  <a href="shelf.html" class="bnav-item" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
+  <a href="map.html" class="bnav-item active" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
+  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+</nav>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SHRUG</a>
+    <div id="nav-user"></div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-label">Your creative DNA</div>
+  <div class="page-hero-heading">CREATIVE MAP</div>
+  <div class="page-hero-sub">Your personality across five creative dimensions, built from the hobbies you explore.</div>
+</div>
+
+<div class="page-content">
+  <div style="padding-top:32px" id="map-content">
+    <div style="color:var(--mid);font-size:14px">Loading…</div>
+  </div>
+</div>
+
+<script>
+(async function() {
+  var navEl = document.getElementById('nav');
+  window.addEventListener('scroll', function() { navEl.classList.toggle('stuck', window.scrollY > 10); }, { passive: true });
+
+  var TRAIT_META = {
+    creative:   { label: 'Creative',    color: '#F0C93A', desc: 'Making things exist that didn\'t before.' },
+    analytical: { label: 'Analytical',  color: '#ACD8F0', desc: 'Finding patterns, solving problems.' },
+    physical:   { label: 'Physical',    color: '#B8D96E', desc: 'Using your body as the instrument.' },
+    expressive: { label: 'Expressive',  color: '#F4A261', desc: 'Communicating feeling without words.' },
+    social:     { label: 'Social',      color: '#6B4EFF', desc: 'Better with others around.' },
+  };
+
+  // Demo traits for unauthenticated users
+  var DEMO_TRAITS = { creative: 78, analytical: 42, physical: 55, expressive: 81, social: 38 };
+
+  function renderMap(traits, isDemo) {
+    var dims = Object.keys(TRAIT_META);
+    var dominant = dims.reduce(function(best, d) { return traits[d] > traits[best] ? d : best; }, dims[0]);
+    var meta = TRAIT_META[dominant];
+
+    var html = '';
+
+    // Dominant trait hero
+    html += '<div class="trait-dominant-card" style="background:' + meta.color + '20;border:1px solid ' + meta.color + '40;color:var(--off)">';
+    html += '<div class="trait-dominant-label" style="color:' + meta.color + '">Dominant trait</div>';
+    html += '<div class="trait-dominant-name" style="color:' + meta.color + '">' + meta.label.toUpperCase() + '</div>';
+    html += '<div class="trait-dominant-desc">' + meta.desc + '</div>';
+    html += '</div>';
+
+    // All 5 trait bars
+    var barsHTML = '';
+    dims.forEach(function(d) {
+      var m = TRAIT_META[d];
+      var val = traits[d] || 0;
+      barsHTML += '<div class="trait-row">';
+      barsHTML += '<div class="trait-header"><span class="trait-name">' + m.label + '</span><span class="trait-value" style="color:' + m.color + '">' + val + '%</span></div>';
+      barsHTML += '<div class="trait-bar-bg"><div class="trait-bar-fill" style="width:' + val + '%;background:' + m.color + '"></div></div>';
+      barsHTML += '</div>';
+    });
+
+    if (isDemo) {
+      html += '<div class="demo-overlay">';
+      html += '<div class="demo-content">' + barsHTML + '</div>';
+      html += '<div class="demo-overlay-label">Complete challenges to build your real map<br><a href="results.html?prompt=save" style="color:var(--gold);font-weight:700">Create account →</a></div>';
+      html += '</div>';
+    } else {
+      html += barsHTML;
+    }
+
+    // Suggested hobbies based on dominant trait
+    if (typeof HOBBIES !== 'undefined' && typeof HOBBY_TRAITS !== 'undefined') {
+      var scored = Object.keys(HOBBY_TRAITS).map(function(key) {
+        var t = HOBBY_TRAITS[key];
+        var score = dims.reduce(function(sum, d) { return sum + (t[d] || 0) * (traits[d] || 0); }, 0);
+        return { key: key, score: score };
+      }).sort(function(a, b) { return b.score - a.score; }).slice(0, 5);
+
+      html += '<div class="sec-hdr mt-32" style="margin-top:32px;margin-bottom:16px">Hobbies that match your profile</div>';
+      html += '<div style="display:flex;flex-direction:column;gap:10px">';
+      scored.forEach(function(r) {
+        var h = HOBBIES[r.key];
+        if (!h) return;
+        html += '<a href="hobby.html?key=' + r.key + '" style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border:1px solid var(--bd);border-radius:10px;text-decoration:none">';
+        html += '<span style="font-size:24px">' + (h.icon || '') + '</span>';
+        html += '<div><div style="font-weight:700;color:var(--off)">' + (r.key.charAt(0).toUpperCase() + r.key.slice(1)) + '</div>';
+        html += '<div style="font-size:12px;color:var(--mid)">' + (h.tagline || '') + '</div></div>';
+        html += '<span style="margin-left:auto;color:var(--gold);font-size:18px">→</span>';
+        html += '</a>';
+      });
+      html += '</div>';
+    }
+
+    document.getElementById('map-content').innerHTML = html;
+  }
+
+  var user = await getCurrentUser();
+  if (user) {
+    document.getElementById('nav-user').innerHTML = '<button onclick="signOut()" class="nav-signout">Sign out</button>';
+    var traits = await getTraitProfile(user.id);
+    if (traits) {
+      renderMap(traits, false);
+    } else {
+      // No completed hobbies yet — show demo + prompt
+      document.getElementById('map-content').innerHTML =
+        '<div class="auth-gate-banner"><p>Complete at least one challenge to build your real creative map.</p>' +
+        '<a href="results.html" class="btn-primary">Find a hobby →</a></div>';
+      renderMap(DEMO_TRAITS, true);
+    }
+  } else {
+    renderMap(DEMO_TRAITS, true);
+    document.getElementById('map-content').insertAdjacentHTML('afterbegin',
+      '<div class="auth-gate-banner"><p>Sign up to build your real creative map from the hobbies you explore.</p>' +
+      '<a href="results.html?prompt=save" class="btn-primary">Create account →</a></div>');
+  }
+
+  // Update My Arc nav
+  var arcEl = document.getElementById('bnav-arc');
+  var results = null;
+  try { results = JSON.parse(sessionStorage.getItem('shrugResults')); } catch(e) {}
+  if (arcEl && results && results.ranked && results.ranked.length) {
+    arcEl.href = 'hobby.html?key=' + results.ranked[0].key;
+  }
+})();
+</script>
+</body>
+</html>

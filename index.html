@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHRUG — Find a hobby that actually fits your life</title>
+  <meta name="description" content="5 honest questions. No fluff. Get matched to hobbies that fit your real constraints — time, budget, social style, and patience.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111110">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="supabase.js"></script>
+  <script src="db.js"></script>
+  <style>
+    /* Index-specific styles */
+    .strip-section { padding: 48px 0 56px; }
+    .strip-section-hdr {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: 0 var(--page-pad);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .strip-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      letter-spacing: 0.03em;
+      color: var(--off);
+    }
+    .strip-count { font-size: 13px; color: var(--mid); }
+
+    .how-section { padding: 56px var(--page-pad) 72px; border-top: 1px solid var(--bd); }
+    .how-section-inner { max-width: var(--page-max); margin: 0 auto; }
+    .how-eyebrow {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 32px;
+    }
+    .footer {
+      border-top: 1px solid var(--bd);
+      padding: 28px var(--page-pad);
+      text-align: center;
+    }
+    .footer-inner { max-width: var(--page-max); margin: 0 auto; }
+    .footer-text  { font-size: 13px; color: var(--mid); }
+  </style>
+</head>
+<body>
+
+<nav class="bottom-nav" id="bottom-nav">
+  <a href="index.html" class="bnav-item active" data-page="discover"><span class="bnav-icon">🧭</span><span class="bnav-label">Discover</span></a>
+  <a href="results.html" class="bnav-item" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
+  <a href="shelf.html" class="bnav-item" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
+  <a href="map.html" class="bnav-item" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
+  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+</nav>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <span class="nav-logo">SHRUG</span>
+    <a href="quiz.html" class="nav-cta">Take the quiz →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ Hobby Discovery</div>
+  <h1 class="hero-title">Find a hobby that actually fits your life.</h1>
+  <p class="hero-sub">5 honest questions about your real constraints — not your dream self.</p>
+  <div class="hero-actions">
+    <a href="quiz.html" class="btn btn-primary">Take the quiz →</a>
+    <a href="#hobbies" class="btn btn-ghost">Browse all hobbies</a>
+  </div>
+</section>
+
+<!-- HOBBY STRIP -->
+<section class="strip-section" id="hobbies">
+  <div class="strip-section-hdr">
+    <span class="strip-title">All Hobbies</span>
+    <span class="strip-count" id="strip-count"></span>
+  </div>
+  <div class="hobby-strip-wrap">
+    <div class="hobby-strip" id="hobby-strip"></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="how-section-inner">
+    <div class="how-eyebrow">How it works</div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">01</div>
+        <div class="how-step-title">Answer 5 real constraints</div>
+        <div class="how-step-desc">Time, patience, social style, motivation, and budget. Not "do you like being outdoors?"</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">02</div>
+        <div class="how-step-title">Get your ranked matches</div>
+        <div class="how-step-desc">Every hobby scored against your actual answers. Tap "Not for me" to keep refining.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">03</div>
+        <div class="how-step-title">Follow the 30-day arc</div>
+        <div class="how-step-desc">Week 1 free. Weeks 2–3 optional first spend. Month 1+ what it looks like when you're hooked.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-text">SHRUG — built for people who are serious about finding something worth their time.</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+  // Build hobby strip
+  (function() {
+    var strip = document.getElementById('hobby-strip');
+    var count = document.getElementById('strip-count');
+    var keys = HOBBY_ORDER;
+    count.textContent = keys.length + ' hobbies';
+
+    keys.forEach(function(key) {
+      var h = HOBBIES[key];
+      if (!h) return;
+      var c = HOBBY_CONSTRAINTS[key];
+
+      var card = document.createElement('a');
+      card.className = 'hobby-card';
+      card.href = 'hobby.html?key=' + key;
+      card.style.background = h.color || '#1A1917';
+
+      var isDark = h.textColor === 'white' || (h.color && isColorDark(h.color));
+      var textCol = h.textColor || (isDark ? '#F0EDE8' : '#0E0D0B');
+      var tagCol  = isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.45)';
+
+      card.innerHTML =
+        '<div class="hobby-card-top">' +
+          '<div class="hobby-card-icon">' + (h.icon || '🎯') + '</div>' +
+          '<div class="hobby-card-name" style="color:' + textCol + '">' + key.charAt(0).toUpperCase() + key.slice(1) + '</div>' +
+          '<div class="hobby-card-tag" style="color:' + tagCol + '">' + (h.tagline || '') + '</div>' +
+        '</div>';
+
+      strip.appendChild(card);
+    });
+
+    function isColorDark(hex) {
+      var r, g, b;
+      hex = hex.replace('#','');
+      if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+      r = parseInt(hex.substr(0,2),16);
+      g = parseInt(hex.substr(2,2),16);
+      b = parseInt(hex.substr(4,2),16);
+      return (r*0.299 + g*0.587 + b*0.114) < 140;
+    }
+  })();
+
+  // Nav scroll shadow
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('stuck', window.scrollY > 10);
+  }, { passive: true });
+</script>
+</body>
+</html>

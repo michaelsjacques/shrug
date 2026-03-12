@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">SHRUG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111110">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="supabase.js"></script>
+  <script src="db.js"></script>
+  <style>
+    /* Hobby hero colored bar */
+    .hobby-hero { position: relative; }
+    .hobby-hero-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+    }
+
+    /* Overview */
+    .overview-section {
+      padding: 40px var(--page-pad);
+      border-bottom: 1px solid var(--bd);
+    }
+    .overview-text {
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(240,237,232,0.85);
+      max-width: 700px;
+    }
+    .overview-text strong { color: var(--off); font-weight: 700; }
+
+    /* Content area */
+    .hobby-content {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: 0 var(--page-pad);
+    }
+
+    /* Arc phase blocks */
+    .arc-phase {
+      padding: 48px 0 56px;
+      border-bottom: 1px solid var(--bd);
+    }
+    .arc-phase:last-of-type { border-bottom: none; }
+
+    .arc-label-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      border: 1px solid;
+    }
+    .arc-label-pill.free  { background: rgba(200,240,96,0.1);  border-color: rgba(200,240,96,0.3);  color: var(--lime); }
+    .arc-label-pill.spend { background: rgba(240,201,58,0.1);  border-color: rgba(240,201,58,0.3);  color: var(--gold); }
+    .arc-label-pill.deep  { background: rgba(172,216,240,0.1); border-color: rgba(172,216,240,0.3); color: var(--sky);  }
+
+    .arc-heading {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 6vw, 52px);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      color: var(--off);
+      margin-bottom: 8px;
+    }
+    .arc-sub {
+      font-size: 15px;
+      color: var(--mid);
+      margin-bottom: 32px;
+      line-height: 1.55;
+      max-width: 560px;
+    }
+
+    /* Lesson card */
+    .lesson-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--bd2);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin: 28px 0;
+    }
+    .lesson-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 10px;
+    }
+    .lesson-heading {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 4vw, 32px);
+      letter-spacing: 0.03em;
+      color: var(--off);
+      margin-bottom: 14px;
+    }
+    .lesson-body {
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(240,237,232,0.78);
+    }
+    .lesson-body + .lesson-body { margin-top: 12px; }
+    .lesson-body strong { color: var(--off); }
+
+    /* Empty phase */
+    .arc-phase-empty {
+      background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      color: var(--mid);
+      font-size: 14px;
+    }
+
+    /* Careers */
+    .careers-section {
+      padding: 48px 0 64px;
+      border-top: 1px solid var(--bd);
+    }
+
+    /* Back / nav footer */
+    .page-nav {
+      border-top: 1px solid var(--bd);
+      padding: 24px 0 40px;
+    }
+    .page-nav-inner {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: 0 var(--page-pad);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .page-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mid);
+      transition: color 0.15s;
+    }
+    .page-nav-link:hover { color: var(--off); }
+  </style>
+</head>
+<body>
+
+<nav class="bottom-nav" id="bottom-nav">
+  <a href="index.html" class="bnav-item" data-page="discover"><span class="bnav-icon">🧭</span><span class="bnav-label">Discover</span></a>
+  <a href="results.html" class="bnav-item active" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
+  <a href="shelf.html" class="bnav-item" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
+  <a href="map.html" class="bnav-item" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
+  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+</nav>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SHRUG</a>
+    <a href="quiz.html" class="nav-cta">Take the quiz →</a>
+  </div>
+</nav>
+
+<!-- HOBBY HERO (colored top bar + name) -->
+<div class="hobby-hero" id="hobby-hero">
+  <div class="hobby-hero-bar" id="hobby-hero-bar"></div>
+  <div style="max-width:var(--page-max);margin:0 auto;padding:40px var(--page-pad) 36px;">
+    <div class="hobby-hero-icon" id="hobby-icon"></div>
+    <div class="hobby-hero-name" id="hobby-name"></div>
+    <div class="hobby-hero-tag" id="hobby-tagline"></div>
+    <div class="constraint-badges" id="constraint-badges"></div>
+    <div class="stat-strip" id="stat-strip"></div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="overview-section">
+  <div style="max-width:var(--page-max);margin:0 auto;">
+    <div class="overview-text" id="overview-text"></div>
+  </div>
+</div>
+
+<!-- NICHE FOCUS BANNER (hidden unless ?niche= param present) -->
+<div id="niche-focus-banner" style="display:none"></div>
+
+<!-- HOBBY CONTENT (arc phases) -->
+<div class="hobby-content">
+
+  <!-- PHASE 1: THIS WEEK — START FREE -->
+  <div class="arc-phase" id="phase1">
+    <div class="arc-label-pill free">🆓 Week 1 · Start free</div>
+    <div class="arc-heading" id="p1-heading"></div>
+    <div class="arc-sub" id="p1-sub"></div>
+
+    <!-- Free tools -->
+    <div class="sec-hdr">What you need to start</div>
+    <div class="tools-grid" id="p1-tools"></div>
+
+    <!-- Lesson -->
+    <div class="lesson-card" id="p1-lesson"></div>
+
+    <!-- The challenge -->
+    <div class="sec-hdr mt-32">Your first challenge</div>
+    <div class="challenge-card" id="p1-challenge"></div>
+
+    <!-- Steps -->
+    <div class="sec-hdr mt-32">How to do it</div>
+    <ol class="steps-list" id="p1-steps"></ol>
+
+    <!-- Invest section (below fold) -->
+    <div class="invest-section" id="p1-invest"></div>
+  <div id="p1-content-footer"></div>
+  </div>
+
+  <!-- PHASE 2: WEEKS 2–3 -->
+  <div class="arc-phase" id="phase2">
+    <div class="arc-label-pill spend">💳 Weeks 2–3 · If you're still in</div>
+    <div class="arc-heading" id="p2-heading"></div>
+    <div class="arc-sub" id="p2-sub"></div>
+  <div class="phase-nudge" id="p2-nudge" style="display:none">
+    <span>Complete your Week 1 challenge first to unlock this phase.</span>
+  </div>
+    <div id="p2-content"></div>
+  <div id="p2-content-footer"></div>
+  </div>
+
+  <!-- PHASE 3: MONTH 1+ -->
+  <div class="arc-phase" id="phase3">
+    <div class="arc-label-pill deep">🔥 Month 1+ · When you're hooked</div>
+    <div class="arc-heading" id="p3-heading"></div>
+    <div class="arc-sub" id="p3-sub"></div>
+  <div class="phase-nudge" id="p3-nudge" style="display:none">
+    <span>Complete your Week 2–3 challenge first to unlock this phase.</span>
+  </div>
+    <div id="p3-content"></div>
+  <div id="p3-content-footer"></div>
+    <!-- Friction -->
+    <div id="p3-friction"></div>
+  </div>
+
+  <!-- CAREERS -->
+  <div class="careers-section" id="careers-section"></div>
+
+</div>
+
+<!-- GENERATE MORE CHALLENGES -->
+<div class="hobby-content" id="generate-section">
+  <div style="padding:40px 0 56px;border-top:1px solid var(--bd)">
+    <div class="arc-label-pill spend" style="margin-bottom:20px">✦ Go further</div>
+    <div class="arc-heading" style="font-size:clamp(28px,5vw,42px);margin-bottom:8px">Want a fresh challenge?</div>
+    <div class="arc-sub" style="margin-bottom:28px">Generate a new project for this hobby — tailored to where you are now.</div>
+    <button class="btn-generate" id="btn-generate" onclick="generateChallenge()">✦ Generate a challenge</button>
+    <div id="generated-challenges" style="display:none"></div>
+  </div>
+</div>
+
+<!-- PAGE NAV -->
+<div class="page-nav">
+  <div class="page-nav-inner" id="page-nav-links"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="quiz.js"></script>
+<script>
+(function() {
+  // ── Read URL param ────────────────────────────────────────
+  var params    = new URLSearchParams(window.location.search);
+  var key       = params.get('key');
+  var nicheId   = params.get('niche') || null;
+  var nicheData = null;
+  if (nicheId && typeof HOBBY_TREE !== 'undefined' && HOBBY_TREE[key]) {
+    nicheData = HOBBY_TREE[key].find(function(n) { return n.id === nicheId; }) || null;
+  }
+
+  if (!key || !HOBBIES[key]) {
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:40px"><div><div style="font-size:48px;margin-bottom:16px">🤷</div><p style="font-size:20px;color:var(--mid)">Hobby not found.</p><a href="index.html" style="display:inline-block;margin-top:24px;color:var(--off);font-weight:700">← Back to SHRUG</a></div></div>';
+    return;
+  }
+
+  var h          = HOBBIES[key];
+  var chapters   = HOBBY_CHAPTERS[key] || [];
+  var steps      = PROJECT_STEPS[key]  || [];
+  var friction   = HOBBY_FRICTION[key] || [];
+  var freeTools  = HOBBY_TOOLS_FREE[key] || [];
+  var kit        = HOBBY_STARTER_KIT[key] || null;
+  var constraint = HOBBY_CONSTRAINTS[key];
+
+  // ── Page title ────────────────────────────────────────────
+  var nichePrefix = nicheData ? nicheData.label + ' ' : '';
+  document.getElementById('page-title').textContent =
+    'SHRUG — ' + nichePrefix + key.charAt(0).toUpperCase() + key.slice(1);
+
+  // ── Hero ──────────────────────────────────────────────────
+  document.getElementById('hobby-hero-bar').style.background = h.color || 'var(--gold)';
+  document.getElementById('hobby-icon').textContent    = nicheData ? (nicheData.icon || h.icon || '🎯') : (h.icon || '🎯');
+  document.getElementById('hobby-name').textContent    = nicheData ? nicheData.label : (key.charAt(0).toUpperCase() + key.slice(1));
+  // Name always white — page bg is dark, hobby color only used as accent bar
+  document.getElementById('hobby-tagline').textContent = nicheData ? (nicheData.desc || h.tagline || '') : (h.tagline || '');
+
+  // Constraint badges
+  if (constraint) {
+    var timeLabels  = { low:'≤2 hrs/week', medium:'3–5 hrs/week', high:'6+ hrs/week' };
+    var speedLabels = { fast:'Quick results', medium:'Weeks to click', slow:'Months to bloom' };
+    var socialLabels= { solo:'Solo', mixed:'Solo or social', group:'Group activity' };
+    var badges = [
+      { icon:'⏱', text: timeLabels[constraint.timeRequirement] },
+      { icon:'📈', text: speedLabels[constraint.resultsSpeed] },
+      { icon:'👤', text: socialLabels[constraint.social] },
+      { icon:'🎯', text: constraint.motivations.map(cap).join(' · ') },
+      { icon:'💰', text: constraint.budgetMin === 0 ? 'Free to start' : '$' + constraint.budgetMin + '+ to start' }
+    ];
+    var badgeHTML = badges.map(function(b) {
+      return '<span class="cbadge"><span class="cbadge-icon">' + b.icon + '</span>' + b.text + '</span>';
+    }).join('');
+    document.getElementById('constraint-badges').innerHTML = badgeHTML;
+  }
+
+  // Stats
+  if (h.stats && h.stats.length) {
+    var statsHTML = h.stats.map(function(s) {
+      return '<div class="stat-item">' +
+        '<div class="stat-num" style="color:' + (s.color || 'var(--gold)') + '">' + s.num + '</div>' +
+        '<div class="stat-lbl">' + s.label + '</div>' +
+      '</div>';
+    }).join('');
+    document.getElementById('stat-strip').innerHTML = statsHTML;
+  }
+
+  // ── Overview ──────────────────────────────────────────────
+  document.getElementById('overview-text').innerHTML = h.overview || '';
+
+  // ── Niche focus banner ────────────────────────────────────
+  if (nicheData) {
+    var bannerEl = document.getElementById('niche-focus-banner');
+    if (bannerEl) {
+      bannerEl.style.display = 'block';
+      bannerEl.innerHTML =
+        '<div class="niche-focus-banner">' +
+          '<div class="niche-focus-top">' +
+            '<span class="niche-focus-icon">' + (nicheData.icon || '') + '</span>' +
+            '<a href="hobby.html?key=' + key + '" class="niche-focus-back">← All of ' + cap(key) + '</a>' +
+          '</div>' +
+          '<div class="niche-focus-label">Niche focus</div>' +
+          '<div class="niche-focus-name">' + nicheData.label + ' ' + cap(key) + '</div>' +
+          '<div class="niche-focus-desc">' + (nicheData.desc || '') + '</div>' +
+        '</div>';
+    }
+  }
+
+  // ── PHASE 1: THIS WEEK — START FREE ──────────────────────
+  var proj = h.project || {};
+
+  document.getElementById('p1-heading').textContent = 'Start today. Spend nothing.';
+  document.getElementById('p1-sub').textContent =
+    'Everything you need to try ' + key + ' this week exists on your phone or costs under $5. Do this first before spending anything.';
+
+  // Free tools
+  var toolsHTML = '';
+  if (freeTools && freeTools.length) {
+    freeTools.forEach(function(t) {
+      toolsHTML += '<div class="tool-card">' +
+        '<div class="tool-card-name">' + t.name + '</div>' +
+        '<div class="tool-card-note">' + (t.note || t.desc || '') + '</div>' +
+        '<span class="tool-source-badge ' + (t.source || 'home') + '">' + (t.source || 'at home') + '</span>' +
+      '</div>';
+    });
+  } else {
+    toolsHTML = '<div class="tool-card"><div class="tool-card-name">No special tools needed</div><div class="tool-card-note">Start with what you already own</div></div>';
+  }
+  document.getElementById('p1-tools').innerHTML = toolsHTML;
+
+  // Lesson card (from chapter 1 concept)
+  if (proj.ccTitle || proj.lessonTitle) {
+    var lessonHTML = '<div class="lesson-title">' + (proj.ccType || 'The concept') + '</div>';
+    lessonHTML += '<div class="lesson-heading">' + (proj.lessonTitle || proj.ccTitle || '') + '</div>';
+    if (proj.lessonParas && proj.lessonParas.length) {
+      proj.lessonParas.forEach(function(p) {
+        lessonHTML += '<div class="lesson-body">' + p + '</div>';
+      });
+    } else if (proj.ccBody) {
+      lessonHTML += '<div class="lesson-body">' + proj.ccBody + '</div>';
+    }
+    document.getElementById('p1-lesson').innerHTML = lessonHTML;
+  } else {
+    document.getElementById('p1-lesson').style.display = 'none';
+  }
+
+  // Challenge card
+  if (proj.chTask) {
+    var challengeHTML =
+      '<div class="challenge-card-label">Your challenge</div>' +
+      '<div class="challenge-card-task">' + proj.chTask + '</div>' +
+      (proj.chDetail ? '<div class="challenge-card-detail">' + proj.chDetail + '</div>' : '') +
+      (proj.tryItTime ? '<div class="challenge-card-time">⏱ ' + proj.tryItTime + '</div>' : '');
+    document.getElementById('p1-challenge').innerHTML = challengeHTML;
+  } else {
+    document.getElementById('p1-challenge').style.display = 'none';
+  }
+
+  // Steps
+  var stepItems = (steps && steps.length) ? steps
+    : (proj.tipSteps && proj.tipSteps.length) ? proj.tipSteps
+    : (proj.tips && proj.tips.length) ? proj.tips.map(function(t){ return t.t || t; })
+    : [];
+
+  if (stepItems.length) {
+    document.getElementById('p1-steps').innerHTML = stepItems.map(function(s, i) {
+      return '<li class="step-item">' +
+        '<span class="step-num">' + (i + 1) + '</span>' +
+        '<span class="step-txt">' + s + '</span>' +
+      '</li>';
+    }).join('');
+  } else {
+    document.getElementById('p1-steps').previousElementSibling.style.display = 'none';
+    document.getElementById('p1-steps').style.display = 'none';
+  }
+
+  // Invest section (starter kit, below fold)
+  var investEl = document.getElementById('p1-invest');
+  var kitItems = (kit && kit.items && kit.items.length) ? kit.items : null;
+  // Fallback: use freeTools' store-sourced items
+  if (!kitItems && freeTools) {
+    var storeItems = freeTools.filter(function(t) { return t.source === 'store'; });
+    if (storeItems.length) kitItems = storeItems.map(function(t) { return { name: t.name, price: t.price || '~$5–15', note: t.note || t.desc || '', url: null }; });
+  }
+  if (kitItems && kitItems.length) {
+    var investHTML = '<div class="invest-section-label">Ready to invest? Here\'s what\'s worth it</div>';
+    investHTML += '<div class="kit-items">';
+    kitItems.forEach(function(item) {
+      var tag = item.url ? 'a href="' + item.url + '" target="_blank" rel="noopener"' : 'div';
+      var closeTag = item.url ? 'a' : 'div';
+      investHTML += '<' + tag + ' class="kit-item">' +
+        '<span class="kit-price">' + (item.price || '') + '</span>' +
+        '<div>' +
+          '<div class="kit-name">' + item.name + '</div>' +
+          (item.note ? '<div class="kit-note">' + item.note + '</div>' : '') +
+        '</div>' +
+        (item.url ? '<span class="kit-arrow">↗</span>' : '') +
+      '</' + closeTag + '>';
+    });
+    investHTML += '</div>';
+    investEl.innerHTML = investHTML;
+  } else {
+    investEl.style.display = 'none';
+  }
+
+  // Phase 1 submission form
+  document.getElementById('p1-content-footer').innerHTML =
+    buildSubmissionForm(1);
+
+  // ── PHASE 2: WEEKS 2–3 ───────────────────────────────────
+  var ch2 = chapters[0] || null;
+
+  if (ch2) {
+    document.getElementById('p2-heading').textContent = ch2.title ? ch2.title.replace(/\n/g, ' ') : 'Build on week 1';
+    document.getElementById('p2-sub').textContent =
+      'You\'ve done the free version. Here\'s where it gets interesting — and where the first optional spend makes sense.';
+
+    var p2HTML = '';
+
+    // Lesson
+    if (ch2.lessonTitle || ch2.ccTitle) {
+      p2HTML += '<div class="lesson-card">';
+      p2HTML += '<div class="lesson-title">' + (ch2.ccType || 'The concept') + '</div>';
+      p2HTML += '<div class="lesson-heading">' + (ch2.lessonTitle || ch2.ccTitle || '') + '</div>';
+      if (ch2.lessonParas && ch2.lessonParas.length) {
+        ch2.lessonParas.forEach(function(p) { p2HTML += '<div class="lesson-body">' + p + '</div>'; });
+      } else if (ch2.ccBody) {
+        p2HTML += '<div class="lesson-body">' + ch2.ccBody + '</div>';
+      }
+      p2HTML += '</div>';
+    }
+
+    // Challenge
+    if (ch2.chTask) {
+      p2HTML += '<div class="challenge-card" style="margin-top:24px">' +
+        '<div class="challenge-card-label">Your challenge</div>' +
+        '<div class="challenge-card-task">' + ch2.chTask + '</div>' +
+        (ch2.chDetail ? '<div class="challenge-card-detail">' + ch2.chDetail + '</div>' : '') +
+      '</div>';
+    }
+
+    // Tips
+    if (ch2.tips && ch2.tips.length) {
+      p2HTML += '<div class="tips-grid" style="margin-top:20px">';
+      ch2.tips.forEach(function(t) {
+        p2HTML += '<div class="tip-item">' +
+          '<span class="tip-icon">' + (t.i || '💡') + '</span>' +
+          '<span class="tip-text">' + (t.t || t) + '</span>' +
+        '</div>';
+      });
+      p2HTML += '</div>';
+    }
+
+    document.getElementById('p2-content').innerHTML = p2HTML;
+  } else {
+    document.getElementById('p2-heading').textContent = 'Keep the streak alive';
+    document.getElementById('p2-sub').textContent =
+      'Repeat the week 1 challenge with a twist. Change the location, the subject, or the constraint.';
+    document.getElementById('p2-content').innerHTML =
+      '<div class="arc-phase-empty">More challenges are being added for this hobby. For now — go deeper on week 1.</div>';
+  }
+
+  // ── PHASE 3: MONTH 1+ ────────────────────────────────────
+  var ch3 = chapters[1] || null;
+
+  if (ch3) {
+    document.getElementById('p3-heading').textContent = ch3.title ? ch3.title.replace(/\n/g, ' ') : 'You\'re hooked now';
+    document.getElementById('p3-sub').textContent =
+      'This is what the hobby actually feels like when it\'s part of your life.';
+
+    var p3HTML = '';
+
+    if (ch3.lessonTitle || ch3.ccTitle) {
+      p3HTML += '<div class="lesson-card">';
+      p3HTML += '<div class="lesson-title">' + (ch3.ccType || 'The concept') + '</div>';
+      p3HTML += '<div class="lesson-heading">' + (ch3.lessonTitle || ch3.ccTitle || '') + '</div>';
+      if (ch3.lessonParas && ch3.lessonParas.length) {
+        ch3.lessonParas.forEach(function(p) { p3HTML += '<div class="lesson-body">' + p + '</div>'; });
+      } else if (ch3.ccBody) {
+        p3HTML += '<div class="lesson-body">' + ch3.ccBody + '</div>';
+      }
+      p3HTML += '</div>';
+    }
+
+    if (ch3.chTask) {
+      p3HTML += '<div class="challenge-card" style="margin-top:24px">' +
+        '<div class="challenge-card-label">Your challenge</div>' +
+        '<div class="challenge-card-task">' + ch3.chTask + '</div>' +
+        (ch3.chDetail ? '<div class="challenge-card-detail">' + ch3.chDetail + '</div>' : '') +
+      '</div>';
+    }
+
+    document.getElementById('p3-content').innerHTML = p3HTML;
+  } else {
+    document.getElementById('p3-heading').textContent = 'The long game';
+    document.getElementById('p3-sub').textContent =
+      'By now you know if this is for you. Here\'s the honest picture of where it goes.';
+    document.getElementById('p3-content').innerHTML = '';
+  }
+
+  // Friction section
+  if (friction && friction.length) {
+    var frictionHTML = '<div class="sec-hdr mt-32">What nobody tells you</div>';
+    frictionHTML += '<div class="friction-list">';
+    friction.forEach(function(f) {
+      frictionHTML += '<div class="friction-item">' +
+        '<span class="friction-dot">●</span>' +
+        '<span class="friction-text">' + f + '</span>' +
+      '</div>';
+    });
+    frictionHTML += '</div>';
+    document.getElementById('p3-friction').innerHTML = frictionHTML;
+  }
+
+  // ── CAREERS ──────────────────────────────────────────────
+  if (h.careers) {
+    var careersHTML =
+      '<div class="sec-hdr">Where this can take you</div>' +
+      '<div class="career-roles">' +
+        (h.careers.roles || []).map(function(r) {
+          return '<span class="career-role">' + r + '</span>';
+        }).join('') +
+      '</div>' +
+      (h.careers.desc ? '<p class="body-sm" style="max-width:640px;margin-top:16px">' + h.careers.desc + '</p>' : '');
+    document.getElementById('careers-section').innerHTML = careersHTML;
+  } else {
+    document.getElementById('careers-section').style.display = 'none';
+  }
+
+  // ── PAGE NAV ──────────────────────────────────────────────
+  var results = loadResults();
+  var navLinks = '';
+
+  if (results && results.ranked && results.ranked.length) {
+    navLinks += '<a href="results.html" class="page-nav-link">← Back to matches</a>';
+    // Next recommended hobby
+    var others = results.ranked.filter(function(r) { return r.key !== key; });
+    if (others.length) {
+      navLinks += '<a href="hobby.html?key=' + others[0].key + '" class="page-nav-link" style="margin-left:auto">' +
+        'Next match: ' + cap(others[0].key) + ' →</a>';
+    }
+  } else {
+    navLinks += '<a href="index.html" class="page-nav-link">← All hobbies</a>';
+    navLinks += '<a href="quiz.html" class="page-nav-link" style="margin-left:auto">Take the quiz →</a>';
+  }
+
+  document.getElementById('page-nav-links').innerHTML = navLinks;
+
+  // ── NAV scroll ───────────────────────────────────────────
+  var navEl = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    navEl.classList.toggle('stuck', window.scrollY > 10);
+  }, { passive: true });
+
+  function cap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
+
+  // ── Submission form builder ───────────────────────────────────────────────
+  function buildSubmissionForm(phaseIdx) {
+    return '<div class="submission-form" id="p' + phaseIdx + '-submit">' +
+      '<div class="submission-label">Record your attempt</div>' +
+      '<textarea class="submission-text" id="p' + phaseIdx + '-text" placeholder="What did you try? What happened?"></textarea>' +
+      '<div class="submission-footer">' +
+        '<label class="submission-photo-label" id="p' + phaseIdx + '-photo-label">' +
+          '<span>📷 Add a photo (optional)</span>' +
+          '<input type="file" accept="image/*" class="submission-photo-input" id="p' + phaseIdx + '-photo" onchange="previewPhoto(' + phaseIdx + ')">' +
+        '</label>' +
+        '<button class="btn-submit-phase" onclick="submitPhase(' + phaseIdx + ')">Save to journal →</button>' +
+      '</div>' +
+      '<img class="submission-photo-preview" id="p' + phaseIdx + '-preview">' +
+      '<div class="submission-success" id="p' + phaseIdx + '-success"><span>✓</span><span>Saved to your journal!</span></div>' +
+      '<div class="submission-feedback" id="p' + phaseIdx + '-ai-feedback"><div class="submission-feedback-label">AI feedback</div><div id="p' + phaseIdx + '-ai-text"></div></div>' +
+    '</div>';
+  }
+
+  function previewPhoto(phaseIdx) {
+    var input = document.getElementById('p' + phaseIdx + '-photo');
+    var preview = document.getElementById('p' + phaseIdx + '-preview');
+    if (input && input.files && input.files[0] && preview) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  async function submitPhase(phaseIdx) {
+    var text = document.getElementById('p' + phaseIdx + '-text');
+    var photoInput = document.getElementById('p' + phaseIdx + '-photo');
+    var successEl = document.getElementById('p' + phaseIdx + '-success');
+    var submitBtn = document.querySelector('#p' + phaseIdx + '-submit .btn-submit-phase');
+
+    if (!text || !text.value.trim()) {
+      text.style.borderColor = 'var(--coral)';
+      setTimeout(function() { text.style.borderColor = ''; }, 1500);
+      return;
+    }
+
+    if (submitBtn) submitBtn.disabled = true;
+    var imageFile = photoInput && photoInput.files[0] ? photoInput.files[0] : null;
+
+    // Save locally regardless
+    var localEntry = { hobby_key: key, phase_idx: phaseIdx, text: text.value.trim(), submitted_at: new Date().toISOString() };
+    var localKey = 'shrug_journal_anon';
+    var existing = [];
+    try { existing = JSON.parse(localStorage.getItem(localKey)) || []; } catch(e) {}
+    existing.unshift(localEntry);
+    localStorage.setItem(localKey, JSON.stringify(existing));
+
+    // Mark phase complete in localStorage
+    localStorage.setItem('shrug_phase_' + key + '_' + (phaseIdx - 1), '1');
+
+    // Try DB save if logged in
+    var user = await getCurrentUser();
+    var imagePath = null;
+    if (user) {
+      var result = await saveMemoirEntry(user.id, key, phaseIdx - 1, text.value.trim(), imageFile);
+      imagePath = result && result.imagePath ? result.imagePath : null;
+    }
+
+    // Show success
+    if (successEl) successEl.classList.add('visible');
+    if (submitBtn) submitBtn.style.display = 'none';
+
+    // Get AI feedback if photo uploaded + logged in
+    if (imagePath) {
+      var feedbackEl = document.getElementById('p' + phaseIdx + '-ai-feedback');
+      var aiTextEl = document.getElementById('p' + phaseIdx + '-ai-text');
+      if (feedbackEl && aiTextEl) {
+        aiTextEl.textContent = 'Analyzing…';
+        feedbackEl.classList.add('visible');
+        var feedback = await getAIFeedback(key, imagePath);
+        if (feedback) {
+          aiTextEl.textContent = feedback;
+        } else {
+          feedbackEl.classList.remove('visible');
+        }
+      }
+    }
+
+    // Unlock next phase nudge
+    if (phaseIdx === 1) {
+      var nudge = document.getElementById('p2-nudge');
+      if (nudge) nudge.style.display = 'none';
+    } else if (phaseIdx === 2) {
+      var nudge = document.getElementById('p3-nudge');
+      if (nudge) nudge.style.display = 'none';
+    }
+
+    // Add submission form to next phase
+    var nextFooter = document.getElementById('p' + (phaseIdx + 1) + '-content-footer');
+    if (nextFooter && !nextFooter.innerHTML.trim()) {
+      nextFooter.innerHTML = buildSubmissionForm(phaseIdx + 1);
+    }
+  }
+
+  // ── Generate challenge ────────────────────────────────────
+  function buildGeneratedCard(project, index) {
+    var num = index ? ' #' + index : '';
+    return '<div class="generated-challenge-card">' +
+      '<div class="generated-challenge-header">' +
+        '<span class="generated-badge">✦ AI GENERATED' + num + '</span>' +
+        (project.duration ? '<span class="generated-duration">⏱ ' + project.duration + '</span>' : '') +
+      '</div>' +
+      '<div class="generated-title">' + (project.title || 'New Challenge') + '</div>' +
+      '<div class="generated-task">' + (project.task || '') + '</div>' +
+      (project.tips && project.tips.length
+        ? '<ul class="generated-tips">' + project.tips.map(function(t) { return '<li>' + t + '</li>'; }).join('') + '</ul>'
+        : '') +
+    '</div>';
+  }
+
+  // Demo challenges per hobby — shown when Supabase not yet configured
+  var DEMO_CHALLENGES = {
+    photography: { title: 'The One-Spot, Many-Frames Challenge', task: 'Pick a single location and photograph it at least 20 different ways without moving your feet. Only perspective, timing, and framing change.', duration: '1 hour', tips: ['Try portrait + landscape orientation for each idea', 'Shoot during the first 5 minutes then wait 30 — see how light shifts', 'The last 5 frames are usually the best'] },
+    painting:    { title: 'Monochrome Value Study', task: 'Pick one color and paint the same simple subject three times, changing only how much white or black you add. Study how value alone shifts the mood.', duration: '45 min', tips: ['Start mid-tone, go lighter, then darker', 'Keep the same composition each time', 'Compare them side-by-side when dry'] },
+    writing:     { title: 'The Villain\'s Memoir', task: 'Rewrite a familiar story entirely from the antagonist\'s point of view. Same events — but now they\'re the hero of their own story.', duration: '30 min', tips: ['Don\'t change what happened — only who\'s narrating it', 'Make the villain fully believe they were right', 'Read it aloud to catch where the voice slips'] },
+    baking:      { title: 'The Substitution Lab', task: 'Make a recipe you know well, but replace one key ingredient with something unexpected. Document the difference in texture, flavor, and structure.', duration: '2 hours', tips: ['Photograph the result next to the original if you have one', 'Note the substitution ratio in writing', 'Would you use the substitution on purpose next time?'] },
+    drawing:     { title: 'Non-Dominant Hand Sprint', task: 'Draw the same subject twice — once slowly with your dominant hand, once quickly with your non-dominant hand. Compare what each version reveals.', duration: '20 min', tips: ['No erasing on either drawing', 'The "worse" drawing often has more life in it', 'Ask: which one looks more like how it felt to draw?'] },
+    cooking:     { title: 'The Mise en Place Experiment', task: 'Cook a meal you already know, but prepare and measure every single ingredient before you touch the stove. Track what changes about the experience.', duration: '45 min', tips: ['Photograph your setup before you start', 'Note which steps felt different', 'Did the food taste different too?'] },
+    yoga:        { title: 'The Slow-Flow Rewire', task: 'Do your usual sequence but hold every pose for 10 full breaths instead of 5. Notice which postures your mind wants to rush through — those are the ones to stay in.', duration: '30 min', tips: ['Use a timer so your mind can stop counting', 'Soften your face intentionally in the hard holds', 'Journal one sentence after you finish'] },
+    drawing:     { title: 'Contour Only', task: 'Draw three objects using only continuous contour lines — no lifting the pen, no interior detail, no shading. Train your eye to lead your hand.', duration: '20 min', tips: ['Look at the object 90% of the time, paper 10%', 'Speed doesn\'t matter — accuracy of observation does', 'The messiness is the point'] },
+  };
+
+  var genCount = 0;
+
+  window.generateChallenge = async function() {
+    var btn = document.getElementById('btn-generate');
+    var container = document.getElementById('generated-challenges');
+    if (!btn || !container) return;
+
+    var prevText = btn.textContent;
+    btn.textContent = 'Generating…';
+    btn.disabled = true;
+
+    genCount++;
+
+    // Demo mode: Supabase not yet configured
+    if (typeof _shrugIsConfigured === 'undefined' || !_shrugIsConfigured) {
+      var demo = DEMO_CHALLENGES[key] || {
+        title: 'The Constraint Challenge',
+        task: 'Complete your next full session with one strict creative constraint of your choice — one color, one tool, one subject, one angle. Constraints force creativity.',
+        duration: '1 session',
+        tips: ['Pick a constraint that feels uncomfortable', 'Stick with it even when it fights you', 'Write down what the constraint forced you to discover']
+      };
+      container.innerHTML += buildGeneratedCard(demo, genCount);
+      container.style.display = 'block';
+      btn.textContent = '✦ Generate another';
+      btn.disabled = false;
+      return;
+    }
+
+    // Live API call via Supabase edge function
+    try {
+      var result = await supabaseClient.functions.invoke('generate-project', {
+        body: { hobby_key: key, niche_id: nicheId || null, phase_num: 2 }
+      });
+      if (result.data && result.data.project) {
+        container.insertAdjacentHTML('beforeend', buildGeneratedCard(result.data.project, genCount));
+        container.style.display = 'block';
+        btn.textContent = '✦ Generate another';
+        btn.disabled = false;
+      } else {
+        btn.textContent = prevText;
+        btn.disabled = false;
+      }
+    } catch(e) {
+      btn.textContent = prevText;
+      btn.disabled = false;
+    }
+  };
+
+  function bypassNudge(nudgeId, phaseIdx) {
+    var el = document.getElementById(nudgeId);
+    if (el) el.style.display = 'none';
+    // Mark as bypassed
+    localStorage.setItem('shrug_bypass_' + key + '_' + nudgeId, '1');
+    // Show submission form for this phase
+    var footer = document.getElementById('p' + phaseIdx + '-content-footer');
+    if (footer && !footer.innerHTML.trim()) {
+      footer.innerHTML = buildSubmissionForm(phaseIdx);
+    }
+  }
+
+  // ── Account gate builder ──────────────────────────────────────────────────
+  function buildAccountGate(phaseIdx) {
+    var phaseNames = ['', 'Week 1', 'Weeks 2–3', 'Month 1+'];
+    var phaseName  = phaseNames[phaseIdx] || ('Phase ' + phaseIdx);
+    return '<div class="account-gate" id="phase' + phaseIdx + '-gate">' +
+      '<div class="account-gate-lock">🔒</div>' +
+      '<div class="account-gate-heading">Create your free account</div>' +
+      '<div class="account-gate-sub">Unlock ' + phaseName + ', save your progress,<br>and start building your hobby shelf.</div>' +
+      '<div class="account-gate-form">' +
+        '<input class="account-gate-email" id="gate' + phaseIdx + '-email" type="email" placeholder="your@email.com">' +
+        '<button class="account-gate-btn" onclick="gateSignUp(' + phaseIdx + ')">Send magic link →</button>' +
+      '</div>' +
+      '<div class="account-gate-msg" id="gate' + phaseIdx + '-msg"></div>' +
+      '<button class="account-gate-skip" onclick="gateSkip(' + phaseIdx + ')">Skip for now — explore without saving</button>' +
+    '</div>';
+  }
+
+  window.gateSignUp = async function(phaseIdx) {
+    var emailEl = document.getElementById('gate' + phaseIdx + '-email');
+    var msgEl   = document.getElementById('gate' + phaseIdx + '-msg');
+    var btn     = document.querySelector('#phase' + phaseIdx + '-gate .account-gate-btn');
+    var email   = emailEl ? emailEl.value.trim() : '';
+    if (!email || !email.includes('@')) {
+      if (emailEl) { emailEl.style.borderColor = 'var(--coral)'; setTimeout(function() { emailEl.style.borderColor = ''; }, 1500); }
+      return;
+    }
+    if (btn) btn.disabled = true;
+    if (msgEl) msgEl.textContent = 'Sending…';
+    var result = await sendMagicLink(email);
+    if (result && result.error) {
+      if (msgEl) msgEl.textContent = result.error.message;
+      if (btn) btn.disabled = false;
+    } else {
+      if (msgEl) msgEl.innerHTML = '✓ Check your inbox — your link is on the way.';
+      if (emailEl) emailEl.disabled = true;
+      if (btn) btn.style.display = 'none';
+    }
+  };
+
+  window.gateSkip = function(phaseIdx) {
+    localStorage.setItem('shrug_bypass_' + key + '_p' + phaseIdx + '-nudge', '1');
+    var gateEl = document.getElementById('phase' + phaseIdx + '-gate');
+    if (gateEl && gateEl.parentNode) {
+      gateEl.parentNode.innerHTML = buildSubmissionForm(phaseIdx);
+    }
+  };
+
+  // ── Phase gating on load (async — checks auth state) ────────────────────
+  (async function() {
+    var p1done = !!localStorage.getItem('shrug_phase_' + key + '_0');
+    var p2done = !!localStorage.getItem('shrug_phase_' + key + '_1');
+    var p3done = !!localStorage.getItem('shrug_phase_' + key + '_2');
+
+    // Sync DB completion state first
+    var user = await getCurrentUser();
+    if (user) {
+      var dbPhases = await getCompletedPhases(user.id, key);
+      if (dbPhases.indexOf(0) !== -1) { localStorage.setItem('shrug_phase_' + key + '_0', '1'); p1done = true; }
+      if (dbPhases.indexOf(1) !== -1) { localStorage.setItem('shrug_phase_' + key + '_1', '1'); p2done = true; }
+      if (dbPhases.indexOf(2) !== -1) { localStorage.setItem('shrug_phase_' + key + '_2', '1'); p3done = true; }
+      document.getElementById('nav-user').innerHTML = '<button onclick="signOut()" class="nav-signout">Sign out</button>';
+    }
+
+    // ── Phase 1 ──
+    var p1footer = document.getElementById('p1-content-footer');
+    if (p1footer) {
+      if (p1done) {
+        p1footer.innerHTML =
+          '<div class="submission-success visible">' +
+            '<span>✓</span>' +
+            '<span>Phase 1 done! <a href="shelf.html" style="color:var(--gold);text-decoration:none;font-weight:700;margin-left:8px">View on your shelf →</a></span>' +
+          '</div>';
+      } else {
+        p1footer.innerHTML = buildSubmissionForm(1);
+      }
+    }
+
+    // ── Phase 2 ──
+    var p2nudge  = document.getElementById('p2-nudge');
+    var p2content = document.getElementById('p2-content');
+    var p2footer = document.getElementById('p2-content-footer');
+
+    if (!p1done) {
+      // Must complete Phase 1 first
+      if (p2nudge) p2nudge.style.display = 'flex';
+    } else if (!user) {
+      // Phase 1 done but no account → replace Phase 2 content with account gate
+      if (p2nudge) p2nudge.style.display = 'none';
+      if (p2content) p2content.innerHTML = buildAccountGate(2);
+      if (p2footer) p2footer.innerHTML = '';
+    } else {
+      // Logged in → full access
+      if (p2nudge) p2nudge.style.display = 'none';
+      if (p2footer) {
+        p2footer.innerHTML = p2done
+          ? '<div class="submission-success visible"><span>✓</span><span>Phase 2 completed!</span></div>'
+          : buildSubmissionForm(2);
+      }
+    }
+
+    // ── Phase 3 ──
+    var p3nudge   = document.getElementById('p3-nudge');
+    var p3content = document.getElementById('p3-content');
+    var p3footer  = document.getElementById('p3-content-footer');
+
+    if (!user) {
+      // No account → Phase 3 also gated (same gate, same ask)
+      if (p3nudge) p3nudge.style.display = 'none';
+      if (p3content) p3content.innerHTML = buildAccountGate(3);
+      if (p3footer) p3footer.innerHTML = '';
+    } else if (!p2done) {
+      // Logged in, but Phase 2 not done yet → show nudge
+      if (p3nudge) p3nudge.style.display = 'flex';
+    } else {
+      if (p3nudge) p3nudge.style.display = 'none';
+      if (p3footer) {
+        p3footer.innerHTML = p3done
+          ? '<div class="submission-success visible"><span>✓</span><span>Arc complete! <a href="shelf.html" style="color:var(--gold);text-decoration:none;font-weight:700;margin-left:8px">View on your shelf →</a></span></div>'
+          : buildSubmissionForm(3);
+      }
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>

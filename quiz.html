@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHRUG — Find your hobby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111110">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="supabase.js"></script>
+  <script src="db.js"></script>
+  <style>
+    body { display: flex; flex-direction: column; }
+
+    .quiz-header-inner {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .quiz-step-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .quiz-logo {
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--off);
+    }
+    .quiz-step-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .quiz-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px var(--page-pad) 80px;
+    }
+
+    .quiz-question-area {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .quiz-q {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 6vw, 46px);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      color: var(--off);
+      margin-bottom: 10px;
+      text-align: left;
+    }
+    .quiz-sub {
+      font-size: 14px;
+      color: var(--mid);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .quiz-back {
+      position: fixed;
+      bottom: 28px;
+      left: var(--page-pad);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mid);
+      padding: 10px 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s;
+      font-family: var(--font-body);
+    }
+    .quiz-back:hover { color: var(--off); }
+    .quiz-back.hidden { opacity: 0; pointer-events: none; }
+
+    /* Scoring overlay */
+    .scoring-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .scoring-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .scoring-text {
+      font-family: var(--font-display);
+      font-size: 36px;
+      letter-spacing: 0.04em;
+      color: var(--off);
+      animation: pulse 1s ease infinite;
+    }
+    .scoring-sub {
+      font-size: 14px;
+      color: var(--mid);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="bottom-nav" id="bottom-nav" style="display:none"></nav>
+
+<!-- PROGRESS HEADER -->
+<header class="quiz-header" id="quiz-header">
+  <div class="quiz-header-inner">
+    <div class="quiz-step-row">
+      <span class="quiz-logo">SHRUG</span>
+      <span class="quiz-step-label" id="step-label">1 of 5</span>
+    </div>
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+</header>
+
+<!-- QUIZ AREA -->
+<main class="quiz-wrap">
+  <div class="quiz-question-area" id="question-area"></div>
+</main>
+
+<!-- BACK BUTTON -->
+<button class="quiz-back hidden" id="back-btn" onclick="goBack()">← Back</button>
+
+<!-- SCORING OVERLAY -->
+<div class="scoring-overlay" id="scoring-overlay">
+  <div class="scoring-text">Scoring…</div>
+  <div class="scoring-sub">Matching against 28 hobbies</div>
+</div>
+
+<script src="data.js"></script>
+<script src="quiz.js"></script>
+<script>
+  var currentQ = 0;
+  var answers  = {};
+  var selected = null;
+  var advancing = false;
+
+  function renderQuestion(idx) {
+    advancing = false;
+    selected  = null;
+    var q = QUIZ_QUESTIONS[idx];
+    var area = document.getElementById('question-area');
+
+    // Progress
+    var pct = Math.round((idx / QUIZ_QUESTIONS.length) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('step-label').textContent = (idx + 1) + ' of ' + QUIZ_QUESTIONS.length;
+
+    // Back button
+    var backBtn = document.getElementById('back-btn');
+    backBtn.classList.toggle('hidden', idx === 0);
+
+    // Build HTML
+    var html = '<div class="anim-in">';
+    html += '<div class="quiz-q">' + q.q + '</div>';
+    if (q.sub) html += '<div class="quiz-sub">' + q.sub + '</div>';
+    html += '<div class="quiz-options">';
+
+    q.opts.forEach(function(opt) {
+      var alreadySelected = answers[q.id] === opt.value;
+      html += '<button class="quiz-option' + (alreadySelected ? ' selected' : '') + '" ' +
+              'onclick="selectOption(\'' + q.id + '\',' +
+              (typeof opt.value === 'string' ? '\'' + opt.value + '\'' : opt.value) +
+              ')">' +
+              '<span class="quiz-opt-emoji">' + opt.emoji + '</span>' +
+              '<span class="quiz-opt-text">' + opt.label + '</span>' +
+              '</button>';
+    });
+
+    html += '</div></div>';
+    area.innerHTML = html;
+  }
+
+  function selectOption(questionId, value) {
+    if (advancing) return;
+    advancing = true;
+    answers[questionId] = value;
+
+    // Highlight
+    var opts = document.querySelectorAll('.quiz-option');
+    opts.forEach(function(el) { el.classList.remove('selected'); });
+    // Find the clicked one by matching value display
+    var q = QUIZ_QUESTIONS[currentQ];
+    q.opts.forEach(function(opt, i) {
+      if (opt.value === value) {
+        if (opts[i]) opts[i].classList.add('selected');
+      }
+    });
+
+    setTimeout(function() {
+      if (currentQ < QUIZ_QUESTIONS.length - 1) {
+        currentQ++;
+        renderQuestion(currentQ);
+      } else {
+        finishQuiz();
+      }
+    }, 280);
+  }
+
+  function goBack() {
+    if (currentQ <= 0) return;
+    currentQ--;
+    renderQuestion(currentQ);
+  }
+
+  function finishQuiz() {
+    // Show scoring overlay
+    document.getElementById('scoring-overlay').classList.add('show');
+
+    // Small delay for UX feel, then score and redirect
+    setTimeout(function() {
+      var ranked = rankHobbies(answers, []);
+      saveResults(answers, ranked);
+      window.location.href = 'results.html';
+    }, 700);
+  }
+
+  // Init
+  renderQuestion(0);
+</script>
+</body>
+</html>

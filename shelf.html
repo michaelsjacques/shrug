@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHRUG — Your Shelf</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#111110">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="supabase.js"></script>
+  <script src="db.js"></script>
+  <script src="data.js"></script>
+</head>
+<body>
+
+<nav class="bottom-nav" id="bottom-nav">
+  <a href="index.html" class="bnav-item" data-page="discover"><span class="bnav-icon">🧭</span><span class="bnav-label">Discover</span></a>
+  <a href="results.html" class="bnav-item" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
+  <a href="shelf.html" class="bnav-item active" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
+  <a href="map.html" class="bnav-item" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
+  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+</nav>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">SHRUG</a>
+    <div id="nav-user"></div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-label">Your creative record</div>
+  <div class="page-hero-heading">YOUR SHELF</div>
+  <div class="page-hero-sub">Every entry is proof you showed up.</div>
+</div>
+
+<div class="page-content">
+  <div id="shelf-content" style="padding-top:8px">
+    <div style="color:var(--mid);font-size:14px;padding:32px 0">Loading…</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var navEl = document.getElementById('nav');
+  window.addEventListener('scroll', function() { navEl.classList.toggle('stuck', window.scrollY > 10); }, { passive: true });
+
+  var PHASE_LABELS = ['Week 1', 'Weeks 2–3', 'Month 1+'];
+
+  // Build a shelf card for a hobby group
+  function buildShelfCard(hobbyKey, entries, completedPhases) {
+    var h = HOBBIES && HOBBIES[hobbyKey] ? HOBBIES[hobbyKey] : null;
+    var icon = h ? (h.icon || '🎯') : '🎯';
+    var color = h ? (h.color || 'var(--gold)') : 'var(--gold)';
+    var name  = hobbyKey.charAt(0).toUpperCase() + hobbyKey.slice(1);
+    var tagline = h ? (h.tagline || '') : '';
+
+    var phaseDone = [
+      completedPhases.indexOf(0) !== -1,
+      completedPhases.indexOf(1) !== -1,
+      completedPhases.indexOf(2) !== -1,
+    ];
+    var doneCount = phaseDone.filter(Boolean).length;
+    var isCompleted = phaseDone[2]; // Phase 3 done
+
+    // Latest entry
+    var latest = entries[0];
+    var latestText = latest ? (latest.reflection || latest.text || '') : '';
+    var latestPhase = latest ? (latest.chapter_idx !== undefined ? latest.chapter_idx : (latest.phase_idx || 0)) : 0;
+    var latestDate = latest ? (latest.completed_at || latest.submitted_at || '') : '';
+    if (latestDate) {
+      latestDate = new Date(latestDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    var latestImage = latest ? (latest.image_path || null) : null;
+
+    // Phase dots
+    var dots = phaseDone.map(function(done, i) {
+      return '<span class="shelf-dot' + (done ? ' done' : (i === 0 || phaseDone[i-1] ? ' active' : '')) + '"></span>';
+    }).join('');
+
+    if (isCompleted) {
+      // COMPLETED ARC — full banner card
+      return '<div class="shelf-card shelf-card-completed" style="--hcolor:' + color + '">' +
+        '<div class="shelf-card-color-bar" style="background:' + color + '"></div>' +
+        '<div class="shelf-card-body">' +
+          '<div class="shelf-card-header">' +
+            '<span class="shelf-card-icon">' + icon + '</span>' +
+            '<div>' +
+              '<div class="shelf-card-name">' + name + '</div>' +
+              (tagline ? '<div class="shelf-card-tagline">' + tagline + '</div>' : '') +
+            '</div>' +
+            '<span class="shelf-completed-badge">✦ Arc complete</span>' +
+          '</div>' +
+          (latestImage
+            ? '<div class="shelf-artifact-img-wrap"><img src="' + latestImage + '" class="shelf-artifact-img" alt="Your artifact"></div>'
+            : (latestText ? '<div class="shelf-artifact-text">"' + latestText.slice(0, 180) + (latestText.length > 180 ? '…' : '') + '"</div>' : '')) +
+          '<div class="shelf-card-footer">' +
+            '<div class="shelf-dots">' + dots + '</div>' +
+            '<a href="hobby.html?key=' + hobbyKey + '" class="shelf-card-link">View arc →</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    // IN-PROGRESS card
+    return '<div class="shelf-card" style="--hcolor:' + color + '">' +
+      '<div class="shelf-card-accent" style="background:' + color + '"></div>' +
+      '<div class="shelf-card-body">' +
+        '<div class="shelf-card-header">' +
+          '<span class="shelf-card-icon">' + icon + '</span>' +
+          '<div>' +
+            '<div class="shelf-card-name">' + name + '</div>' +
+            '<div class="shelf-card-tagline">' + PHASE_LABELS[latestPhase] + (latestDate ? ' · ' + latestDate : '') + '</div>' +
+          '</div>' +
+          '<div class="shelf-dots">' + dots + '</div>' +
+        '</div>' +
+        (latestImage
+          ? '<div class="shelf-artifact-img-wrap"><img src="' + latestImage + '" class="shelf-artifact-img" alt="Your artifact"></div>'
+          : (latestText ? '<div class="shelf-entry-text">' + latestText.slice(0, 120) + (latestText.length > 120 ? '…' : '') + '</div>' : '')) +
+        '<div class="shelf-card-footer">' +
+          (doneCount < 3
+            ? '<span class="shelf-phase-progress">' + doneCount + '/3 phases</span>'
+            : '') +
+          '<a href="hobby.html?key=' + hobbyKey + '" class="shelf-card-link">Continue →</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  async function load() {
+    var user = await getCurrentUser();
+    if (user) {
+      document.getElementById('nav-user').innerHTML = '<button onclick="signOut()" class="nav-signout">Sign out</button>';
+    }
+
+    // Load all journal entries
+    var userId = user ? user.id : null;
+    var entries = await loadJournalEntries(userId);
+
+    // Merge localStorage anonymous entries
+    var local = [];
+    try { local = JSON.parse(localStorage.getItem('shrug_journal_anon')) || []; } catch(e) {}
+    local.forEach(function(le) {
+      var exists = entries.some(function(e) {
+        return e.hobby_key === le.hobby_key && (e.chapter_idx === le.phase_idx || e.chapter_idx === le.chapter_idx);
+      });
+      if (!exists) entries.push(le);
+    });
+
+    // Get completed phases from localStorage for all hobbies
+    function getLocalPhases(hobbyKey) {
+      var phases = [];
+      for (var i = 0; i < 3; i++) {
+        if (localStorage.getItem('shrug_phase_' + hobbyKey + '_' + i)) phases.push(i);
+      }
+      return phases;
+    }
+
+    // Group entries by hobby_key
+    var byHobby = {};
+    entries.forEach(function(e) {
+      if (!e.hobby_key) return;
+      if (!byHobby[e.hobby_key]) byHobby[e.hobby_key] = [];
+      byHobby[e.hobby_key].push(e);
+    });
+
+    // Sort each group: most recent first
+    Object.keys(byHobby).forEach(function(k) {
+      byHobby[k].sort(function(a, b) {
+        var ta = a.completed_at || a.submitted_at || '';
+        var tb = b.completed_at || b.submitted_at || '';
+        return tb.localeCompare(ta);
+      });
+    });
+
+    // Also include hobbies with localStorage phase completions but no journal entries
+    Object.keys(localStorage).forEach(function(k) {
+      var m = k.match(/^shrug_phase_(.+)_\d$/);
+      if (m && !byHobby[m[1]]) byHobby[m[1]] = [];
+    });
+
+    var hobbyKeys = Object.keys(byHobby);
+
+    var container = document.getElementById('shelf-content');
+
+    if (hobbyKeys.length === 0) {
+      container.innerHTML =
+        '<div class="shelf-empty">' +
+          '<div class="shelf-empty-icon">🖼️</div>' +
+          '<div class="shelf-empty-heading">YOUR SHELF IS EMPTY</div>' +
+          '<div class="shelf-empty-sub">Complete your first challenge to add something here.</div>' +
+          '<a href="index.html" class="btn-primary" style="display:inline-block;margin-top:24px">Find a hobby →</a>' +
+        '</div>';
+      return;
+    }
+
+    // Separate completed arcs from in-progress
+    var completed = [];
+    var inProgress = [];
+
+    hobbyKeys.forEach(function(k) {
+      var phases = getLocalPhases(k);
+      if (phases.indexOf(2) !== -1) {
+        completed.push({ key: k, entries: byHobby[k], phases: phases });
+      } else {
+        inProgress.push({ key: k, entries: byHobby[k], phases: phases });
+      }
+    });
+
+    var html = '';
+
+    if (completed.length > 0) {
+      html += '<div class="sec-hdr mt-0" style="margin-bottom:16px">Completed arcs</div>';
+      completed.forEach(function(item) {
+        html += buildShelfCard(item.key, item.entries, item.phases);
+      });
+    }
+
+    if (inProgress.length > 0) {
+      if (completed.length > 0) html += '<div class="sec-hdr mt-32" style="margin-bottom:16px">In progress</div>';
+      inProgress.forEach(function(item) {
+        html += buildShelfCard(item.key, item.entries, item.phases);
+      });
+    }
+
+    // If not logged in, show upsell at the bottom
+    if (!user && hobbyKeys.length > 0) {
+      html += '<div class="shelf-upsell">' +
+        '<div class="shelf-upsell-heading">Save your shelf forever</div>' +
+        '<div class="shelf-upsell-sub">Create a free account to sync across devices, unlock Phase 2 & 3, and share your shelf.</div>' +
+        '<a href="results.html?prompt=save" class="btn-primary" style="display:inline-block;margin-top:16px">Create free account →</a>' +
+      '</div>';
+    }
+
+    container.innerHTML = html;
+
+    // Update My Arc nav
+    var arcEl = document.getElementById('bnav-arc');
+    var quizResults = null;
+    try { quizResults = JSON.parse(sessionStorage.getItem('shrugResults')); } catch(e) {}
+    if (arcEl && quizResults && quizResults.ranked && quizResults.ranked.length) {
+      arcEl.href = 'hobby.html?key=' + quizResults.ranked[0].key;
+    }
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
