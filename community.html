@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SHRUG — Community</title>
+  <title>SHRUG — Side Quests</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -23,7 +23,7 @@
   <a href="results.html" class="bnav-item" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
   <a href="shelf.html" class="bnav-item" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
   <a href="map.html" class="bnav-item" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
-  <a href="community.html" class="bnav-item active" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+  <a href="community.html" class="bnav-item active" data-page="community"><span class="bnav-icon">⚡</span><span class="bnav-label">Side Quests</span></a>
 </nav>
 
 <nav class="nav" id="nav">
@@ -35,31 +35,25 @@
 
 <div class="page-hero">
   <div class="page-hero-label" id="week-label">Week [N] · 2026</div>
-  <div class="page-hero-heading">THIS WEEK'S CHALLENGE</div>
-  <div class="page-hero-sub">Share what you tried. See what others made.</div>
+  <div class="page-hero-heading">SIDE QUESTS</div>
+  <div class="page-hero-sub">One weekend. A real deliverable. No hobby required.</div>
 </div>
 
 <div class="page-content">
-  <!-- Hobby selector -->
-  <div style="padding-top:24px">
-    <div class="sec-hdr mt-0" style="margin-bottom:12px">Pick a hobby</div>
-    <div class="hobby-pill-row" id="hobby-selector">
-      <!-- Populated by JS -->
-    </div>
+
+  <!-- Generate -->
+  <div style="padding-top:28px;padding-bottom:4px">
+    <button class="btn-generate-sq" id="btn-generate-sq" onclick="generateSideQuest()">✦ Generate a side quest for me</button>
+    <div id="generated-sidequests" style="margin-top:12px"></div>
   </div>
 
-  <!-- Current prompt card -->
-  <div id="prompt-section" style="padding-bottom:8px">
-    <!-- Populated by JS -->
+  <!-- All quests -->
+  <div style="padding-top:20px;padding-bottom:32px">
+    <div class="sec-hdr mt-0" style="margin-bottom:4px">All side quests</div>
+    <div style="font-size:13px;color:var(--mid);margin-bottom:16px">👍 like what you'd do · 👎 not your thing — we use it to improve your generations</div>
+    <div id="all-sidequests"></div>
   </div>
 
-  <!-- Community feed -->
-  <div style="padding:24px 0 16px">
-    <div class="sec-hdr mt-0" style="margin-bottom:16px">What people made this week</div>
-    <div id="community-feed">
-      <div style="color:var(--mid);font-size:14px">Loading…</div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -68,132 +62,151 @@
   window.addEventListener('scroll', function() { navEl.classList.toggle('stuck', window.scrollY > 10); }, { passive: true });
 
   var currentUser = null;
-  var currentKey = null;
   var WEEK_NUM = getISOWeek();
   var YEAR = new Date().getFullYear();
+  var PREFS_KEY = 'shrug_sq_prefs';
 
-  // Update week label
-  document.getElementById('week-label').textContent = 'Week ' + WEEK_NUM + ' · ' + YEAR;
+  document.getElementById('week-label').textContent = 'Week ' + WEEK_NUM + ' \u00b7 ' + YEAR;
 
-  // Demo feed entries for first launch
-  var DEMO_FEED = [
-    { hobby_key: 'photography', text: 'Tried the rule of thirds challenge — kept putting my cat in the center by habit!', icon: '📷' },
-    { hobby_key: 'baking', text: 'Made sourdough for the first time. It\'s alive now. Scary and exciting.', icon: '🥐' },
-    { hobby_key: 'drawing', text: 'Drew my hand 6 times. By attempt 5 it finally looked like a hand.', icon: '✏️' },
-    { hobby_key: 'yoga', text: 'Held warrior II for a full minute today. My legs disagreed.', icon: '🧘' },
-  ];
+  // ── Preference storage ────────────────────────────────────
+  function getPrefs() {
+    try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch(e) { return {}; }
+  }
+  function setVote(id, val) {
+    var prefs = getPrefs();
+    if (prefs[id] === val) { delete prefs[id]; } // toggle off
+    else { prefs[id] = val; }
+    localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+    renderVoteButtons(id, prefs[id]);
+  }
+  window.sqVote = function(id, val) { setVote(id, val); };
 
-  function renderFeed(entries, userSubmission) {
-    var feed = document.getElementById('community-feed');
-    var items = (entries && entries.length) ? entries : DEMO_FEED;
+  function renderVoteButtons(id, currentVal) {
+    var row = document.getElementById('sq-vote-' + id);
+    if (!row) return;
+    row.innerHTML =
+      '<button class="sq-vote-btn' + (currentVal === 1 ? ' active-like' : '') + '" onclick="sqVote(\'' + id + '\',1)">\uD83D\uDC4D</button>' +
+      '<button class="sq-vote-btn' + (currentVal === -1 ? ' active-dislike' : '') + '" onclick="sqVote(\'' + id + '\',-1)">\uD83D\uDC4E</button>';
+  }
 
-    feed.innerHTML = items.map(function(item, i) {
-      var isYours = userSubmission && item.text === userSubmission.text;
-      var hobbyData = HOBBIES && item.hobby_key ? HOBBIES[item.hobby_key] : null;
-      var hobbyLabel = hobbyData ? (hobbyData.icon || '') + ' ' + (item.hobby_key.charAt(0).toUpperCase() + item.hobby_key.slice(1)) : (item.hobby_key || '');
-      var avatarEmoji = (hobbyData && hobbyData.icon) ? hobbyData.icon : ['🌿','🎯','✨','🔥','💡'][i % 5];
+  // ── Card builder ──────────────────────────────────────────
+  function buildSideQuestCard(quest, opts) {
+    var full = opts && opts.showFull;
+    var prefs = getPrefs();
+    var vote = prefs[quest.id];
+    var likedClass = vote === 1 ? ' sq-card-liked' : '';
 
-      return '<div class="community-feed-item">' +
-        '<div class="community-feed-avatar">' + avatarEmoji + '</div>' +
-        '<div>' +
-          '<div class="community-feed-text">' + item.text + (isYours ? '<span class="community-yours-badge">you</span>' : '') + '</div>' +
-          '<div class="community-feed-meta">' + hobbyLabel + '</div>' +
+    return '<div class="sidequest-card' + likedClass + '" id="sqcard-' + quest.id + '">' +
+      '<div class="sidequest-header">' +
+        '<span class="sidequest-icon">' + quest.icon + '</span>' +
+        '<div style="flex:1">' +
+          '<div class="sidequest-duration">\u23f1 ' + quest.duration.toUpperCase() + '</div>' +
+          '<div class="sidequest-title">' + quest.title + '</div>' +
         '</div>' +
-      '</div>';
-    }).join('');
+        '<div class="sq-vote-row" id="sq-vote-' + quest.id + '">' +
+          '<button class="sq-vote-btn' + (vote === 1 ? ' active-like' : '') + '" onclick="sqVote(\'' + quest.id + '\',1)">\uD83D\uDC4D</button>' +
+          '<button class="sq-vote-btn' + (vote === -1 ? ' active-dislike' : '') + '" onclick="sqVote(\'' + quest.id + '\',-1)">\uD83D\uDC4E</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sidequest-goal">' + quest.goal + '</div>' +
+      (full
+        ? '<div class="sidequest-needs-label">WHAT YOU NEED</div>' +
+          '<ul class="sidequest-needs">' + quest.needs.map(function(n) { return '<li>' + n + '</li>'; }).join('') + '</ul>' +
+          '<div class="sidequest-steps-label">THE STEPS</div>' +
+          '<ol class="sidequest-steps">' + quest.steps.map(function(s) { return '<li>' + s + '</li>'; }).join('') + '</ol>' +
+          '<button class="sidequest-expand" onclick="collapseSideQuest(\'' + quest.id + '\')" style="margin-top:12px">Collapse \u2191</button>'
+        : '<button class="sidequest-expand" onclick="expandSideQuest(\'' + quest.id + '\')">See the steps \u2192</button>'
+      ) +
+    '</div>';
   }
 
-  async function selectHobbyForCommunity(key) {
-    currentKey = key;
-    document.querySelectorAll('.hobby-tree-pill').forEach(function(p) {
-      p.classList.toggle('active', p.getAttribute('data-key') === key);
-    });
+  window.expandSideQuest = function(id) {
+    var quests = (typeof SIDE_QUESTS !== 'undefined') ? SIDE_QUESTS : [];
+    var quest = quests.filter(function(q) { return q.id === id; })[0];
+    if (!quest) return;
+    var el = document.getElementById('sqcard-' + id);
+    if (el) el.outerHTML = buildSideQuestCard(quest, { showFull: true });
+  };
 
-    var h = HOBBIES && HOBBIES[key] ? HOBBIES[key] : null;
-    var project = h ? h.project : null;
-    var prompt = project ? (project.chTask || project.challenge || '') : '';
+  window.collapseSideQuest = function(id) {
+    var quests = (typeof SIDE_QUESTS !== 'undefined') ? SIDE_QUESTS : [];
+    var quest = quests.filter(function(q) { return q.id === id; })[0];
+    if (!quest) return;
+    var el = document.getElementById('sqcard-' + id);
+    if (el) el.outerHTML = buildSideQuestCard(quest, { showFull: false });
+  };
 
-    // Check if user already submitted this week
-    var alreadySubmitted = null;
-    if (currentUser) {
-      alreadySubmitted = await getUserWeeklySubmission(currentUser.id, key);
-    } else {
-      var localKey2 = 'shrug_weekly_anon';
-      try {
-        var local = JSON.parse(localStorage.getItem(localKey2)) || [];
-        alreadySubmitted = local.find(function(s) { return s.hobby_key === key && s.week_num === WEEK_NUM && s.year === YEAR; }) || null;
-      } catch(e) {}
-    }
+  // ── Generate side quest ───────────────────────────────────
+  window.generateSideQuest = async function() {
+    var btn = document.getElementById('btn-generate-sq');
+    var container = document.getElementById('generated-sidequests');
+    if (!btn || !container) return;
+    btn.textContent = 'Generating\u2026';
+    btn.disabled = true;
 
-    var promptSection = document.getElementById('prompt-section');
-    var html = '<div class="community-prompt-card">';
-    html += '<div class="community-week-label">Week ' + WEEK_NUM + ' · ' + (key.charAt(0).toUpperCase() + key.slice(1)) + '</div>';
-    html += '<div class="community-prompt-task">' + (prompt || 'Try the Week 1 challenge for this hobby.') + '</div>';
+    // Build preference context
+    var prefs = getPrefs();
+    var likedIds = Object.keys(prefs).filter(function(k) { return prefs[k] === 1; });
+    var dislikedIds = Object.keys(prefs).filter(function(k) { return prefs[k] === -1; });
+    var quests = (typeof SIDE_QUESTS !== 'undefined') ? SIDE_QUESTS : [];
 
-    if (alreadySubmitted) {
-      html += '<div style="background:rgba(200,240,96,0.08);border:1px solid rgba(200,240,96,0.2);border-radius:8px;padding:14px 16px;font-size:14px;color:var(--off)">';
-      html += '<span style="color:var(--lime);font-weight:700">✓ You shared this week:</span><br>' + alreadySubmitted.text + '</div>';
-    } else {
-      html += '<div class="submission-form" style="background:transparent;border:none;padding:0;margin-top:0">';
-      html += '<textarea class="submission-text" id="community-text" placeholder="What did you try? One sentence is fine."></textarea>';
-      html += '<div class="submission-footer">';
-      html += '<button class="btn-submit-phase" onclick="submitCommunity()">Share with community →</button>';
-      html += '</div>';
-      html += '<div class="submission-success" id="community-success"><span>✓</span><span>Shared! Thanks for contributing.</span></div>';
-      html += '</div>';
-    }
-    html += '</div>';
-    promptSection.innerHTML = html;
-
-    // Load community feed for this hobby
-    var feedEntries = await loadWeeklySubmissions(key);
-    renderFeed(feedEntries, alreadySubmitted);
-  }
-
-  window.selectHobbyForCommunity = selectHobbyForCommunity;
-
-  window.submitCommunity = async function() {
-    var textEl = document.getElementById('community-text');
-    var successEl = document.getElementById('community-success');
-    if (!textEl || !textEl.value.trim()) {
-      if (textEl) { textEl.style.borderColor = 'var(--coral)'; setTimeout(function() { textEl.style.borderColor = ''; }, 1500); }
+    if (typeof _shrugIsConfigured === 'undefined' || !_shrugIsConfigured) {
+      // Demo: pick a random un-disliked quest
+      var candidates = quests.filter(function(q) { return prefs[q.id] !== -1; });
+      if (!candidates.length) candidates = quests;
+      var sq = candidates[Math.floor(Math.random() * candidates.length)];
+      if (sq) {
+        var genQuest = Object.assign({}, sq, { id: 'gen-' + Date.now() });
+        container.insertAdjacentHTML('afterbegin', buildSideQuestCard(genQuest, { showFull: true }));
+      }
+      btn.textContent = '\u2726 Generate another';
+      btn.disabled = false;
       return;
     }
 
-    var userId = currentUser ? currentUser.id : null;
-    await saveWeeklySubmission(userId, currentKey, textEl.value.trim(), null);
-    if (successEl) successEl.classList.add('visible');
-    if (textEl) textEl.disabled = true;
-    document.querySelectorAll('.btn-submit-phase').forEach(function(b) { b.style.display = 'none'; });
+    try {
+      var likedTitles = likedIds.map(function(id) {
+        var q = quests.filter(function(x) { return x.id === id; })[0];
+        return q ? q.title : '';
+      }).filter(Boolean);
+      var result = await supabaseClient.functions.invoke('generate-project', {
+        body: {
+          type: 'sidequest',
+          liked: likedTitles.slice(0, 3),
+          disliked: dislikedIds.slice(0, 3)
+        }
+      });
+      if (result.data && result.data.quest) {
+        var q = result.data.quest;
+        q.id = 'gen-' + Date.now();
+        container.insertAdjacentHTML('afterbegin', buildSideQuestCard(q, { showFull: true }));
+      }
+    } catch(e) {}
+    btn.textContent = '\u2726 Generate another';
+    btn.disabled = false;
   };
 
-  // Build hobby selector pills
-  var HOBBY_ORDER_LOCAL = (typeof HOBBY_ORDER !== 'undefined') ? HOBBY_ORDER : Object.keys(HOBBIES || {});
-  var selector = document.getElementById('hobby-selector');
-  HOBBY_ORDER_LOCAL.slice(0, 12).forEach(function(key) {
-    var h = HOBBIES && HOBBIES[key] ? HOBBIES[key] : null;
-    if (!h) return;
-    var btn = document.createElement('button');
-    btn.className = 'hobby-tree-pill';
-    btn.setAttribute('data-key', key);
-    btn.onclick = function() { selectHobbyForCommunity(key); };
-    btn.textContent = (h.icon || '') + ' ' + (key.charAt(0).toUpperCase() + key.slice(1));
-    selector.appendChild(btn);
-  });
+  // ── Render all quests ─────────────────────────────────────
+  function renderAllQuests() {
+    var quests = (typeof SIDE_QUESTS !== 'undefined') ? SIDE_QUESTS : [];
+    var container = document.getElementById('all-sidequests');
+    if (!container || !quests.length) return;
+    container.innerHTML = quests.map(function(q) {
+      return buildSideQuestCard(q, { showFull: false });
+    }).join('');
+  }
 
-  // Initialize
-  getCurrentUser().then(async function(user) {
+  // ── Initialize ───────────────────────────────────────────
+  renderAllQuests();
+
+  getCurrentUser().then(function(user) {
     currentUser = user;
-    if (user) document.getElementById('nav-user').innerHTML = '<button onclick="signOut()" class="nav-signout">Sign out</button>';
-
-    // Auto-select first hobby or top match
-    var firstKey = null;
-    try {
-      var results = JSON.parse(sessionStorage.getItem('shrugResults'));
-      if (results && results.ranked && results.ranked.length) firstKey = results.ranked[0].key;
-    } catch(e) {}
-    if (!firstKey) firstKey = HOBBY_ORDER_LOCAL[0];
-    if (firstKey) selectHobbyForCommunity(firstKey);
+    var navUser = document.getElementById('nav-user');
+    if (navUser) {
+      navUser.innerHTML = user
+        ? '<button onclick="signOut()" class="nav-signout">Sign out</button>'
+        : '';
+    }
 
     // Update My Arc nav
     var arcEl = document.getElementById('bnav-arc');
@@ -203,6 +216,12 @@
       arcEl.href = 'hobby.html?key=' + results2.ranked[0].key;
     }
   });
+
+  function getISOWeek() {
+    var d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    var y = new Date(d.getFullYear(), 0, 1);
+    return Math.ceil(((d - y) / 86400000 + 1) / 7);
+  }
 })();
 </script>
 </body>

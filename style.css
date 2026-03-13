@@ -1749,3 +1749,229 @@ body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
   color: var(--mid);
   line-height: 1.6;
 }
+
+/* ── Lesson slide deck ─────────────────────────────────────────────────── */
+/* .lesson-deck and .lesson-slide animations defined below in immersive section */
+
+@keyframes slideInRight  { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:none; } }
+@keyframes slideInLeft   { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:none; } }
+@keyframes slideOutLeft  { to { opacity:0; transform:translateX(-28px); } }
+@keyframes slideOutRight { to { opacity:0; transform:translateX(28px); } }
+
+/* lesson-slide typography — see immersive section below */
+
+.lesson-deck-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px var(--page-pad);
+  margin: 0 calc(-1 * var(--page-pad));
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+  margin-bottom: 32px;
+}
+.deck-dots { display: flex; gap: 8px; }
+.deck-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--bd); transition: background 0.2s, transform 0.2s;
+}
+.deck-dot.active { background: var(--gold); transform: scale(1.25); }
+.deck-btn-back, .deck-btn-next {
+  background: none; border: 1px solid var(--bd);
+  border-radius: var(--radius-pill); color: var(--mid);
+  font-size: 13px; font-weight: 600; padding: 8px 20px;
+  cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em;
+}
+.deck-btn-next { color: var(--off); border-color: rgba(245,240,232,0.25); }
+.deck-btn-back:hover  { background: rgba(255,255,255,0.05); color: var(--off); }
+.deck-btn-next:hover  { background: rgba(255,255,255,0.07); }
+.btn-letsgo {
+  width: 100%; padding: 14px; background: var(--gold); border: none;
+  border-radius: var(--radius-pill); color: #111110;
+  font-size: 15px; font-weight: 800; cursor: pointer; letter-spacing: 0.04em;
+  transition: opacity 0.15s;
+}
+.btn-letsgo:hover { opacity: 0.88; }
+
+/* ── Side Quests ───────────────────────────────────────────────────────── */
+.sidequest-section-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
+  color: var(--mid); text-transform: uppercase; margin-bottom: 4px;
+}
+.sidequest-section-heading {
+  font-family: var(--font-display); font-size: 26px; letter-spacing: 0.03em;
+  color: var(--off); margin-bottom: 6px;
+}
+.sidequest-section-sub { font-size: 14px; color: var(--mid); margin-bottom: 20px; }
+.sidequest-card {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--bd);
+  border-radius: var(--radius-sm); padding: 20px; margin-bottom: 12px;
+}
+.sidequest-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; }
+.sidequest-icon { font-size: 28px; flex-shrink: 0; line-height: 1; padding-top: 2px; }
+.sidequest-duration {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 4px;
+}
+.sidequest-title { font-size: 16px; font-weight: 700; color: var(--off); line-height: 1.3; }
+.sidequest-goal { font-size: 14px; color: var(--mid); line-height: 1.55; margin-bottom: 14px; }
+.sidequest-needs-label, .sidequest-steps-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
+  color: var(--mid); text-transform: uppercase; margin: 16px 0 8px;
+}
+.sidequest-needs, .sidequest-steps { padding-left: 18px; margin: 0 0 4px; }
+.sidequest-needs li, .sidequest-steps li {
+  font-size: 14px; color: var(--off); line-height: 1.75;
+}
+.sidequest-expand {
+  background: none; border: none; color: var(--gold);
+  font-size: 13px; font-weight: 700; cursor: pointer; padding: 0;
+  letter-spacing: 0.02em;
+}
+.sidequest-expand:hover { opacity: 0.75; }
+.btn-generate-sq {
+  width: 100%; padding: 14px; margin-top: 4px;
+  background: none; border: 1px dashed rgba(240,201,58,0.35);
+  border-radius: var(--radius-sm); color: var(--gold);
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s;
+  letter-spacing: 0.04em;
+}
+.btn-generate-sq:hover { background: rgba(240,201,58,0.06); border-color: rgba(240,201,58,0.6); }
+.btn-generate-sq:disabled { opacity: 0.5; cursor: default; }
+.community-sq-heading {
+  font-family: var(--font-display); font-size: 20px; letter-spacing: 0.03em;
+  color: var(--off); margin-bottom: 16px;
+}
+.community-sq-week {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
+}
+
+/* ── Deck — full-bleed immersive ──────────────────────────────────────────── */
+.lesson-deck {
+  position: relative;
+  /* Break out of .hobby-content's side padding */
+  margin: 32px calc(-1 * var(--page-pad));
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  min-height: 0;
+}
+/* SLIDE BASE — tall, centered, full bleed */
+.lesson-slide {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 66vh;
+  padding: 52px var(--page-pad) 44px;
+}
+.lesson-slide.active {
+  display: flex;
+  animation: slideInRight 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.lesson-slide.exit-left  { display: flex; animation: slideOutLeft 0.24s forwards; pointer-events: none; }
+.lesson-slide.exit-right { display: flex; animation: slideOutRight 0.24s forwards; pointer-events: none; }
+.lesson-slide.enter-left { display: flex; animation: slideInLeft 0.3s cubic-bezier(0.4,0,0.2,1); }
+
+/* Slide 1 — THE CONCEPT */
+.lesson-slide[data-slide="0"] {
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+}
+/* Slide 2 — PRO TIPS (no special bg, tips cards do the work) */
+.lesson-slide[data-slide="1"] {
+  border-bottom: 1px solid var(--bd);
+}
+/* Slide 3 — YOUR CHALLENGE: gold-tinted panel */
+.lesson-slide[data-slide="2"] {
+  background: rgba(240,201,58,0.05);
+  border-top: 1px solid rgba(240,201,58,0.18);
+  border-bottom: 1px solid rgba(240,201,58,0.18);
+}
+
+.lesson-slide-label { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; color: var(--gold); text-transform: uppercase; margin-bottom: 18px; }
+.lesson-slide-heading {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 6vw, 54px);
+  letter-spacing: 0.02em;
+  color: var(--off);
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+.lesson-slide-body { font-size: 16px; line-height: 1.8; color: rgba(240,237,232,0.82); max-width: 620px; }
+.lesson-slide-body + .lesson-slide-body { margin-top: 14px; }
+
+/* Tips — 2-column grid with big emoji */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 4px 0 0;
+}
+.tip-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 18px;
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--bd);
+}
+.tip-icon { font-size: 36px; line-height: 1; }
+.tip-text { font-size: 14px; line-height: 1.6; color: rgba(240,237,232,0.8); font-weight: 500; }
+
+/* Challenge slide */
+.lesson-slide-task {
+  font-size: clamp(22px, 4vw, 34px);
+  font-weight: 800;
+  color: var(--off);
+  line-height: 1.35;
+  margin-bottom: 18px;
+  max-width: 600px;
+}
+.lesson-slide-detail { font-size: 15px; color: var(--mid); line-height: 1.7; margin-bottom: 32px; max-width: 560px; }
+
+/* ── Side quest promo banner (on hobby pages) ─────────────────────────────── */
+.sq-promo-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(240,201,58,0.06);
+  border: 1px solid rgba(240,201,58,0.22);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin: 0 0 4px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.sq-promo-banner:hover { background: rgba(240,201,58,0.1); border-color: rgba(240,201,58,0.4); }
+.sq-promo-icon { font-size: 26px; flex-shrink: 0; }
+.sq-promo-body { flex: 1; }
+.sq-promo-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 4px;
+}
+.sq-promo-text { font-size: 14px; color: var(--off); font-weight: 600; line-height: 1.4; }
+.sq-promo-arrow { font-size: 18px; color: var(--gold); flex-shrink: 0; }
+
+/* ── Side quest vote buttons ──────────────────────────────────────────────── */
+.sq-vote-row { display: flex; gap: 6px; flex-shrink: 0; align-items: flex-start; }
+.sq-vote-btn {
+  background: none;
+  border: 1px solid var(--bd);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.15s, border-color 0.15s, background 0.15s;
+  line-height: 1;
+}
+.sq-vote-btn:hover { opacity: 0.8; }
+.sq-vote-btn.active-like { opacity: 1; background: rgba(200,240,96,0.12); border-color: rgba(200,240,96,0.4); }
+.sq-vote-btn.active-dislike { opacity: 1; background: rgba(240,80,80,0.1); border-color: rgba(240,80,80,0.3); }
+.sq-card-liked { border-color: rgba(200,240,96,0.3); background: rgba(200,240,96,0.04); }

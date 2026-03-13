@@ -15,13 +15,73 @@
   <script src="supabase.js"></script>
   <script src="db.js"></script>
   <style>
-    /* Hobby hero colored bar */
-    .hobby-hero { position: relative; }
+    /* ── Hero: full-screen takeover ────────────────────────────── */
+    .hobby-hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 var(--page-pad) 52px;
+      overflow: hidden;
+    }
+    /* Color wash fills full hero */
     .hobby-hero-bar {
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 6px;
+      inset: 0;
+      height: 100%;
+      opacity: 0.10;
+      pointer-events: none;
     }
+    /* Gradient fade at bottom so content reads on dark bg */
+    .hobby-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 280px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Gradient at top to fade in */
+    .hobby-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(to top, transparent, rgba(17,17,16,0.6));
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* All hero children above the overlays */
+    .hobby-hero > * { position: relative; z-index: 2; }
+    /* Large icon */
+    .hobby-hero-icon-override { font-size: 80px; line-height: 1; margin-bottom: 24px; display: block; }
+    /* Giant name override */
+    .hobby-hero-name-override {
+      font-family: var(--font-display);
+      font-size: clamp(72px, 18vw, 130px);
+      letter-spacing: 0.01em;
+      line-height: 0.88;
+      color: var(--off);
+      margin-bottom: 14px;
+    }
+    /* Scroll cue at very bottom of hero */
+    .hero-scroll-cue {
+      position: absolute;
+      bottom: 18px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.4;
+      animation: bounceCue 2s ease-in-out infinite;
+    }
+    .hero-scroll-cue span { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--off); }
+    .hero-scroll-cue svg { width: 18px; height: 18px; stroke: var(--off); fill: none; stroke-width: 2; }
+    @keyframes bounceCue { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(5px); } }
 
     /* Overview */
     .overview-section {
@@ -164,26 +224,33 @@
   <a href="results.html" class="bnav-item active" id="bnav-arc" data-page="arc"><span class="bnav-icon">🎯</span><span class="bnav-label">My Arc</span></a>
   <a href="shelf.html" class="bnav-item" data-page="shelf"><span class="bnav-icon">🖼️</span><span class="bnav-label">Shelf</span></a>
   <a href="map.html" class="bnav-item" data-page="map"><span class="bnav-icon">🗺️</span><span class="bnav-label">Map</span></a>
-  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">👥</span><span class="bnav-label">Community</span></a>
+  <a href="community.html" class="bnav-item" data-page="community"><span class="bnav-icon">⚡</span><span class="bnav-label">Side Quests</span></a>
 </nav>
 
 <!-- NAV -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">SHRUG</a>
-    <a href="quiz.html" class="nav-cta">Take the quiz →</a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="nav-user"></div>
+      <a href="quiz.html" class="nav-cta">Take the quiz →</a>
+    </div>
   </div>
 </nav>
 
-<!-- HOBBY HERO (colored top bar + name) -->
+<!-- HOBBY HERO (full-screen takeover) -->
 <div class="hobby-hero" id="hobby-hero">
   <div class="hobby-hero-bar" id="hobby-hero-bar"></div>
-  <div style="max-width:var(--page-max);margin:0 auto;padding:40px var(--page-pad) 36px;">
-    <div class="hobby-hero-icon" id="hobby-icon"></div>
-    <div class="hobby-hero-name" id="hobby-name"></div>
+  <div style="max-width:var(--page-max);margin:0 auto;width:100%">
+    <div class="hobby-hero-icon-override" id="hobby-icon"></div>
+    <div class="hobby-hero-name-override" id="hobby-name"></div>
     <div class="hobby-hero-tag" id="hobby-tagline"></div>
     <div class="constraint-badges" id="constraint-badges"></div>
     <div class="stat-strip" id="stat-strip"></div>
+  </div>
+  <div class="hero-scroll-cue">
+    <span>Start here</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
 </div>
 
@@ -210,16 +277,8 @@
     <div class="sec-hdr">What you need to start</div>
     <div class="tools-grid" id="p1-tools"></div>
 
-    <!-- Lesson -->
-    <div class="lesson-card" id="p1-lesson"></div>
-
-    <!-- The challenge -->
-    <div class="sec-hdr mt-32">Your first challenge</div>
-    <div class="challenge-card" id="p1-challenge"></div>
-
-    <!-- Steps -->
-    <div class="sec-hdr mt-32">How to do it</div>
-    <ol class="steps-list" id="p1-steps"></ol>
+    <!-- Phase 1 interactive deck (concept → tips → challenge) -->
+    <div id="p1-content"></div>
 
     <!-- Invest section (below fold) -->
     <div class="invest-section" id="p1-invest"></div>
@@ -231,9 +290,6 @@
     <div class="arc-label-pill spend">💳 Weeks 2–3 · If you're still in</div>
     <div class="arc-heading" id="p2-heading"></div>
     <div class="arc-sub" id="p2-sub"></div>
-  <div class="phase-nudge" id="p2-nudge" style="display:none">
-    <span>Complete your Week 1 challenge first to unlock this phase.</span>
-  </div>
     <div id="p2-content"></div>
   <div id="p2-content-footer"></div>
   </div>
@@ -243,13 +299,20 @@
     <div class="arc-label-pill deep">🔥 Month 1+ · When you're hooked</div>
     <div class="arc-heading" id="p3-heading"></div>
     <div class="arc-sub" id="p3-sub"></div>
-  <div class="phase-nudge" id="p3-nudge" style="display:none">
-    <span>Complete your Week 2–3 challenge first to unlock this phase.</span>
-  </div>
     <div id="p3-content"></div>
   <div id="p3-content-footer"></div>
     <!-- Friction -->
     <div id="p3-friction"></div>
+  </div>
+
+  <!-- SIDE QUEST PROMO -->
+  <div class="sq-promo-banner" onclick="window.location.href='community.html'" role="button" tabindex="0">
+    <span class="sq-promo-icon">⚡</span>
+    <div class="sq-promo-body">
+      <div class="sq-promo-label">SIDE QUESTS</div>
+      <div class="sq-promo-text">Done with the arc? Try a one-weekend standalone challenge instead.</div>
+    </div>
+    <span class="sq-promo-arrow">→</span>
   </div>
 
   <!-- CAREERS -->
@@ -383,51 +446,19 @@
   }
   document.getElementById('p1-tools').innerHTML = toolsHTML;
 
-  // Lesson card (from chapter 1 concept)
-  if (proj.ccTitle || proj.lessonTitle) {
-    var lessonHTML = '<div class="lesson-title">' + (proj.ccType || 'The concept') + '</div>';
-    lessonHTML += '<div class="lesson-heading">' + (proj.lessonTitle || proj.ccTitle || '') + '</div>';
-    if (proj.lessonParas && proj.lessonParas.length) {
-      proj.lessonParas.forEach(function(p) {
-        lessonHTML += '<div class="lesson-body">' + p + '</div>';
-      });
-    } else if (proj.ccBody) {
-      lessonHTML += '<div class="lesson-body">' + proj.ccBody + '</div>';
-    }
-    document.getElementById('p1-lesson').innerHTML = lessonHTML;
-  } else {
-    document.getElementById('p1-lesson').style.display = 'none';
-  }
-
-  // Challenge card
-  if (proj.chTask) {
-    var challengeHTML =
-      '<div class="challenge-card-label">Your challenge</div>' +
-      '<div class="challenge-card-task">' + proj.chTask + '</div>' +
-      (proj.chDetail ? '<div class="challenge-card-detail">' + proj.chDetail + '</div>' : '') +
-      (proj.tryItTime ? '<div class="challenge-card-time">⏱ ' + proj.tryItTime + '</div>' : '');
-    document.getElementById('p1-challenge').innerHTML = challengeHTML;
-  } else {
-    document.getElementById('p1-challenge').style.display = 'none';
-  }
-
-  // Steps
-  var stepItems = (steps && steps.length) ? steps
-    : (proj.tipSteps && proj.tipSteps.length) ? proj.tipSteps
-    : (proj.tips && proj.tips.length) ? proj.tips.map(function(t){ return t.t || t; })
-    : [];
-
-  if (stepItems.length) {
-    document.getElementById('p1-steps').innerHTML = stepItems.map(function(s, i) {
-      return '<li class="step-item">' +
-        '<span class="step-num">' + (i + 1) + '</span>' +
-        '<span class="step-txt">' + s + '</span>' +
-      '</li>';
-    }).join('');
-  } else {
-    document.getElementById('p1-steps').previousElementSibling.style.display = 'none';
-    document.getElementById('p1-steps').style.display = 'none';
-  }
+  // Phase 1 deck — same shape as chapter data
+  var p1ChapterData = {
+    lessonTitle:  proj.lessonTitle || proj.ccTitle || '',
+    ccType:       proj.ccType || 'The concept',
+    lessonParas:  proj.lessonParas || (proj.ccBody ? [proj.ccBody] : []),
+    tips: (proj.tips && proj.tips.length) ? proj.tips
+          : (steps && steps.length) ? steps.map(function(s) { return { i: '▸', t: s }; })
+          : (proj.tipSteps && proj.tipSteps.length) ? proj.tipSteps.map(function(s) { return { i: '▸', t: s }; })
+          : [],
+    chTask:   proj.chTask   || '',
+    chDetail: proj.chDetail || (proj.tryItTime ? '⏱ ' + proj.tryItTime : ''),
+  };
+  document.getElementById('p1-content').innerHTML = buildLessonDeck(p1ChapterData, 1);
 
   // Invest section (starter kit, below fold)
   var investEl = document.getElementById('p1-invest');
@@ -458,9 +489,7 @@
     investEl.style.display = 'none';
   }
 
-  // Phase 1 submission form
-  document.getElementById('p1-content-footer').innerHTML =
-    buildSubmissionForm(1);
+  // Phase 1 footer — populated by unlockSubmission(1) or async gating below
 
   // ── PHASE 2: WEEKS 2–3 ───────────────────────────────────
   var ch2 = chapters[0] || null;
@@ -470,43 +499,7 @@
     document.getElementById('p2-sub').textContent =
       'You\'ve done the free version. Here\'s where it gets interesting — and where the first optional spend makes sense.';
 
-    var p2HTML = '';
-
-    // Lesson
-    if (ch2.lessonTitle || ch2.ccTitle) {
-      p2HTML += '<div class="lesson-card">';
-      p2HTML += '<div class="lesson-title">' + (ch2.ccType || 'The concept') + '</div>';
-      p2HTML += '<div class="lesson-heading">' + (ch2.lessonTitle || ch2.ccTitle || '') + '</div>';
-      if (ch2.lessonParas && ch2.lessonParas.length) {
-        ch2.lessonParas.forEach(function(p) { p2HTML += '<div class="lesson-body">' + p + '</div>'; });
-      } else if (ch2.ccBody) {
-        p2HTML += '<div class="lesson-body">' + ch2.ccBody + '</div>';
-      }
-      p2HTML += '</div>';
-    }
-
-    // Challenge
-    if (ch2.chTask) {
-      p2HTML += '<div class="challenge-card" style="margin-top:24px">' +
-        '<div class="challenge-card-label">Your challenge</div>' +
-        '<div class="challenge-card-task">' + ch2.chTask + '</div>' +
-        (ch2.chDetail ? '<div class="challenge-card-detail">' + ch2.chDetail + '</div>' : '') +
-      '</div>';
-    }
-
-    // Tips
-    if (ch2.tips && ch2.tips.length) {
-      p2HTML += '<div class="tips-grid" style="margin-top:20px">';
-      ch2.tips.forEach(function(t) {
-        p2HTML += '<div class="tip-item">' +
-          '<span class="tip-icon">' + (t.i || '💡') + '</span>' +
-          '<span class="tip-text">' + (t.t || t) + '</span>' +
-        '</div>';
-      });
-      p2HTML += '</div>';
-    }
-
-    document.getElementById('p2-content').innerHTML = p2HTML;
+    document.getElementById('p2-content').innerHTML = buildLessonDeck(ch2, 2);
   } else {
     document.getElementById('p2-heading').textContent = 'Keep the streak alive';
     document.getElementById('p2-sub').textContent =
@@ -523,29 +516,7 @@
     document.getElementById('p3-sub').textContent =
       'This is what the hobby actually feels like when it\'s part of your life.';
 
-    var p3HTML = '';
-
-    if (ch3.lessonTitle || ch3.ccTitle) {
-      p3HTML += '<div class="lesson-card">';
-      p3HTML += '<div class="lesson-title">' + (ch3.ccType || 'The concept') + '</div>';
-      p3HTML += '<div class="lesson-heading">' + (ch3.lessonTitle || ch3.ccTitle || '') + '</div>';
-      if (ch3.lessonParas && ch3.lessonParas.length) {
-        ch3.lessonParas.forEach(function(p) { p3HTML += '<div class="lesson-body">' + p + '</div>'; });
-      } else if (ch3.ccBody) {
-        p3HTML += '<div class="lesson-body">' + ch3.ccBody + '</div>';
-      }
-      p3HTML += '</div>';
-    }
-
-    if (ch3.chTask) {
-      p3HTML += '<div class="challenge-card" style="margin-top:24px">' +
-        '<div class="challenge-card-label">Your challenge</div>' +
-        '<div class="challenge-card-task">' + ch3.chTask + '</div>' +
-        (ch3.chDetail ? '<div class="challenge-card-detail">' + ch3.chDetail + '</div>' : '') +
-      '</div>';
-    }
-
-    document.getElementById('p3-content').innerHTML = p3HTML;
+    document.getElementById('p3-content').innerHTML = buildLessonDeck(ch3, 3);
   } else {
     document.getElementById('p3-heading').textContent = 'The long game';
     document.getElementById('p3-sub').textContent =
@@ -774,6 +745,92 @@
     }
   };
 
+  // ── Lesson deck ───────────────────────────────────────────
+  function buildLessonDeck(ch, phaseIdx) {
+    var titleText = ch.lessonTitle || ch.ccTitle || '';
+    var html = '<div class="lesson-deck" id="p' + phaseIdx + '-deck">';
+
+    // Slide 1 — THE CONCEPT
+    html += '<div class="lesson-slide active" data-slide="0">';
+    html += '<div class="lesson-slide-label">THE CONCEPT</div>';
+    if (titleText) html += '<div class="lesson-slide-heading">' + titleText + '</div>';
+    if (ch.lessonParas && ch.lessonParas.length) {
+      ch.lessonParas.forEach(function(p) { html += '<div class="lesson-slide-body">' + p + '</div>'; });
+    } else if (ch.ccBody) {
+      html += '<div class="lesson-slide-body">' + ch.ccBody + '</div>';
+    }
+    html += '</div>';
+
+    // Slide 2 — PRO TIPS
+    html += '<div class="lesson-slide" data-slide="1">';
+    html += '<div class="lesson-slide-label">PRO TIPS</div>';
+    if (ch.tips && ch.tips.length) {
+      html += '<div class="tips-grid">';
+      ch.tips.forEach(function(t) {
+        html += '<div class="tip-item"><span class="tip-icon">' + (t.i || '💡') + '</span><span class="tip-text">' + (t.t || t) + '</span></div>';
+      });
+      html += '</div>';
+    } else {
+      html += '<div class="lesson-slide-body" style="color:var(--mid)">Keep experimenting — every attempt teaches you something new.</div>';
+    }
+    html += '</div>';
+
+    // Slide 3 — YOUR CHALLENGE
+    html += '<div class="lesson-slide" data-slide="2">';
+    html += '<div class="lesson-slide-label">YOUR CHALLENGE</div>';
+    if (ch.chTask) {
+      html += '<div class="lesson-slide-task">' + ch.chTask + '</div>';
+      if (ch.chDetail) html += '<div class="lesson-slide-detail">' + ch.chDetail + '</div>';
+    }
+    html += '<button class="btn-letsgo" onclick="unlockSubmission(' + phaseIdx + ')">Let\'s go \u2192</button>';
+    html += '</div>';
+
+    html += '</div>'; // .lesson-deck
+
+    // Nav bar
+    html += '<div class="lesson-deck-nav" id="p' + phaseIdx + '-deck-nav">';
+    html += '<button class="deck-btn-back" onclick="deckNav(' + phaseIdx + ',-1)" style="visibility:hidden">\u2190 Back</button>';
+    html += '<div class="deck-dots"><span class="deck-dot active"></span><span class="deck-dot"></span><span class="deck-dot"></span></div>';
+    html += '<button class="deck-btn-next" onclick="deckNav(' + phaseIdx + ',1)">Next \u2192</button>';
+    html += '</div>';
+
+    return html;
+  }
+
+  window.deckNav = function(phaseIdx, dir) {
+    var deck = document.getElementById('p' + phaseIdx + '-deck');
+    var nav  = document.getElementById('p' + phaseIdx + '-deck-nav');
+    if (!deck || !nav) return;
+    var slides = deck.querySelectorAll('.lesson-slide');
+    var dots   = nav.querySelectorAll('.deck-dot');
+    var current = 0;
+    slides.forEach(function(s, i) { if (s.classList.contains('active')) current = i; });
+    var next = Math.max(0, Math.min(slides.length - 1, current + dir));
+    if (next === current) return;
+    // Exit current
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : 'exit-right');
+    // Enter next with correct direction class
+    slides[next].classList.add(dir > 0 ? 'active' : 'enter-left');
+    if (dir < 0) { setTimeout(function() { slides[next].classList.remove('enter-left'); slides[next].classList.add('active'); }, 10); }
+    // Update dots + nav buttons
+    if (dots[current]) dots[current].classList.remove('active');
+    if (dots[next]) dots[next].classList.add('active');
+    nav.querySelector('.deck-btn-back').style.visibility = next === 0 ? 'hidden' : 'visible';
+    nav.querySelector('.deck-btn-next').style.visibility = next === slides.length - 1 ? 'hidden' : 'visible';
+    setTimeout(function() { slides[current].classList.remove('exit-left', 'exit-right'); }, 300);
+  };
+
+  window.unlockSubmission = function(phaseIdx) {
+    var footer = document.getElementById('p' + phaseIdx + '-content-footer');
+    if (footer) {
+      if (!footer.innerHTML.trim()) footer.innerHTML = buildSubmissionForm(phaseIdx);
+      footer.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Side quests live on the Community tab — see community.html
+
   // ── Generate challenge ────────────────────────────────────
   function buildGeneratedCard(project, index) {
     var num = index ? ' #' + index : '';
@@ -923,10 +980,18 @@
       if (dbPhases.indexOf(0) !== -1) { localStorage.setItem('shrug_phase_' + key + '_0', '1'); p1done = true; }
       if (dbPhases.indexOf(1) !== -1) { localStorage.setItem('shrug_phase_' + key + '_1', '1'); p2done = true; }
       if (dbPhases.indexOf(2) !== -1) { localStorage.setItem('shrug_phase_' + key + '_2', '1'); p3done = true; }
-      document.getElementById('nav-user').innerHTML = '<button onclick="signOut()" class="nav-signout">Sign out</button>';
+    }
+
+    // Update nav — show Sign out if logged in, Sign in hint if not
+    var navUserEl = document.getElementById('nav-user');
+    if (navUserEl) {
+      navUserEl.innerHTML = user
+        ? '<button onclick="signOut()" class="nav-signout">Sign out</button>'
+        : '<span style="font-size:12px;color:var(--mid)">Not signed in</span>';
     }
 
     // ── Phase 1 ──
+    // Deck content always visible; footer revealed by unlockSubmission(1) or shown here
     var p1footer = document.getElementById('p1-content-footer');
     if (p1footer) {
       if (p1done) {
@@ -935,54 +1000,30 @@
             '<span>✓</span>' +
             '<span>Phase 1 done! <a href="shelf.html" style="color:var(--gold);text-decoration:none;font-weight:700;margin-left:8px">View on your shelf →</a></span>' +
           '</div>';
-      } else {
-        p1footer.innerHTML = buildSubmissionForm(1);
       }
+      // If !p1done, footer stays empty — unlockSubmission(1) populates it when user clicks "Let's go"
     }
 
-    // ── Phase 2 ──
-    var p2nudge  = document.getElementById('p2-nudge');
-    var p2content = document.getElementById('p2-content');
+    // ── Phase 2 — deck always visible; only gate the submission form ──
     var p2footer = document.getElementById('p2-content-footer');
-
-    if (!p1done) {
-      // Must complete Phase 1 first
-      if (p2nudge) p2nudge.style.display = 'flex';
-    } else if (!user) {
-      // Phase 1 done but no account → replace Phase 2 content with account gate
-      if (p2nudge) p2nudge.style.display = 'none';
-      if (p2content) p2content.innerHTML = buildAccountGate(2);
-      if (p2footer) p2footer.innerHTML = '';
-    } else {
-      // Logged in → full access
-      if (p2nudge) p2nudge.style.display = 'none';
-      if (p2footer) {
-        p2footer.innerHTML = p2done
-          ? '<div class="submission-success visible"><span>✓</span><span>Phase 2 completed!</span></div>'
-          : buildSubmissionForm(2);
+    if (p2footer && !p2footer.innerHTML.trim()) {
+      if (!user) {
+        p2footer.innerHTML = buildAccountGate(2);
+      } else if (p2done) {
+        p2footer.innerHTML = '<div class="submission-success visible"><span>✓</span><span>Phase 2 completed!</span></div>';
       }
+      // If logged in + !p2done: footer stays empty — unlockSubmission(2) populates on "Let's go"
     }
 
-    // ── Phase 3 ──
-    var p3nudge   = document.getElementById('p3-nudge');
-    var p3content = document.getElementById('p3-content');
-    var p3footer  = document.getElementById('p3-content-footer');
-
-    if (!user) {
-      // No account → Phase 3 also gated (same gate, same ask)
-      if (p3nudge) p3nudge.style.display = 'none';
-      if (p3content) p3content.innerHTML = buildAccountGate(3);
-      if (p3footer) p3footer.innerHTML = '';
-    } else if (!p2done) {
-      // Logged in, but Phase 2 not done yet → show nudge
-      if (p3nudge) p3nudge.style.display = 'flex';
-    } else {
-      if (p3nudge) p3nudge.style.display = 'none';
-      if (p3footer) {
-        p3footer.innerHTML = p3done
-          ? '<div class="submission-success visible"><span>✓</span><span>Arc complete! <a href="shelf.html" style="color:var(--gold);text-decoration:none;font-weight:700;margin-left:8px">View on your shelf →</a></span></div>'
-          : buildSubmissionForm(3);
+    // ── Phase 3 — deck always visible; only gate the submission form ──
+    var p3footer = document.getElementById('p3-content-footer');
+    if (p3footer && !p3footer.innerHTML.trim()) {
+      if (!user) {
+        p3footer.innerHTML = buildAccountGate(3);
+      } else if (p3done) {
+        p3footer.innerHTML = '<div class="submission-success visible"><span>✓</span><span>Arc complete! <a href="shelf.html" style="color:var(--gold);text-decoration:none;font-weight:700;margin-left:8px">View on your shelf →</a></span></div>';
       }
+      // If logged in + !p3done: footer stays empty — unlockSubmission(3) populates on "Let's go"
     }
   })();
 
